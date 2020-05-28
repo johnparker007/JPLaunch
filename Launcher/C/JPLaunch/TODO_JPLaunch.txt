@@ -1,0 +1,82 @@
+
+
+** New option for config menu:
+
+Joystick: Kempston (Sinclair/Cursor/Disabled/etc)
+
+
+
+=================================================================
+Notes - z88dk building with different Nirvana rows - keep:
+----------------------------------------------------------
+Config Nirvana row count (eg. 7 or 23) in z88dk before build:
+
+c:/z88dk/libsrc/_DEVELOPMENT/target/zx/config/config_nirvanap.m4
+
+Then, run from commandline: (in path C:\z88dk\libsrc\_DEVELOPMENT>)
+
+Winmake.bat ZX
+
+(zx is paramater for winmake)
+
+Then build from my build.bat (also of course using the correct compiled Nirvana engine to match the row count)
+=================================================================
+
+
+
+
+
+
+
+
+Detect 'search result not found':  *** Use row count bits - set row count bits to zero before trying to load search result screen.  If after load, row cunt bits == 0, load must have failed ***
+
+set one of the invisible bytes on the top bar to be 0 before attempting to load search result (on all generated .scr files, that byte should then always be set to 255).  If the byte  is still 0 after trying to load, we know the load failed (eg. search result not found).  Then do alternative logic flow.  If space if tight, this could be a single bit, rather than a whole byte, which is a little wasteful (wrt future use of the top bar for other stuff not yet though of).
+
+
+
+Get installer to make the numbered .TAP files in a folder to copy to SD
+
+Implement cursor key/joystick controls instead of qaop
+
+
+
+
+
+Get NIVRNANAP_stop/start working for fast screen redraw 
+
+Design/implement some kind of Options menu (from symbol shift key?)in the launcher (Credits, kempston controls, other misc config options)
+
+Design implement first part of Search system, second part pending Daniel A Nagy work on OPEN command
+
+
+Compile to .sna as well/instead of .tap
+
+Organise memory management
+
+Smoothly scroll truncated names into view
+
+Swicthable to 64 column mode frm display prefs.
+FZX proportional font. z88dk already includes extensive support for FZX.
+
+Screensaver to stop phosphor burn
+
+Beeper sound fx for typing search chars etc
+
+128k sound/music options?
+
+Custom font(s) - original ZX ROM font, wide ZX ROM font, C64, Amstrad CPC, DOS PC (fonts available here: https://damieng.com/blog/2011/02/20/typography-in-8-bits-system-fonts 
+
+Color schemes (C64, Amstrad green screen, vanilla ZX white paper, custom rainbow bar etc)
+
+Streaming data from database - pending Daniel A Nagy work on the OPEN dot command (seek functionality)
+
+Desktop Installer:  
+- options to include .sna,.z80,.tap, others formats?
+- option to set as autoboot
+- option to only take first matching file from each subfolder (to fix where I have multiple .taps of same game in game folder)
+- test mac and Linux versions
+
+Alpha/beta testing:  Günter Brütting, Cristián González from DivMMC fb group volunteered for testing
+
+Open source project: When codebase stable make one (or two, one for Installer, one for Launcher?) or two github repos.

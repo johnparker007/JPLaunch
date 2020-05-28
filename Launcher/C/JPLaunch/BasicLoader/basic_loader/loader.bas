@@ -1,0 +1,9 @@
+10 CLEAR VAL "32767"
+20 LOAD "NIRVANA+" CODE
+30 LOAD "" CODE
+40 LOAD "" CODE
+50 LET r = USR VAL "32768"
+70 IF r = 0 THEN GO TO 100
+80 REM tapein command here with 0000.TAP
+90 LOAD ""
+100 REM stream next block here
