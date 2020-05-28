@@ -1,0 +1,52 @@
+My Installation Instructions
+----------------------------
+
+1. Extract the z88dk folder to C:\
+
+2. Environment Variables
+
+	PATH
+	Very little to say, just note that as for almost every programming kit z88dk requires the PATH environment variable to include the <application root>\z88dk\bin directory.
+
+	ZCCCFG
+	It is used by ZCC to find the target dependent configuration files. It should be set to point to <application root>\z88dk\lib\config\. The trailing 'slash' (or backslash) character matters.
+
+	Z80_OZFILES
+	It is the root path for the library files. It should be set to point to <application root>\z88dk\lib\. 
+
+3. From the C:\z88dk\libsrc\_DEVELOPMENT\EXAMPLES\zx\demo_nirvanap folder (SDCC + New C Library seems to make a smaller tap file, guessing it's most efficient? Need to check if faster/slower when running though):
+
+/* ----------------------------------------------------------------
+ * NIRVANA+ ENGINE DEMO - converted to z88dk C Compiler
+ *
+ * This program can be compiled as follows:
+ *
+ * 1. SCCZ80 + New C Library
+ *
+ *    zcc +zx -vn -startup=1 -clib=new nirvanadem.c btile.asm -o nirvanadem
+ *    appmake +zx -b nirvanadem_CODE.bin -o nirvanadem.tap --noloader --org 32768 --blockname nirvanadem
+ *    copy /B loader.tap+nirvanadem.tap demo.tap
+ *
+ * 2. SDCC + New C Library
+ *
+ *    zcc +zx -vn -SO3 -startup=1 -clib=sdcc_iy --max-allocs-per-node200000 nirvanadem.c btile.asm -o nirvanadem
+ *    appmake +zx -b nirvanadem_CODE.bin -o nirvanadem.tap --noloader --org 32768 --blockname nirvanadem
+ *    copy /B loader.tap+nirvanadem.tap demo.tap
+ *
+ * After compiling, a binary "nirvanadem_CODE.bin" containing the program is produced.
+ * appmake is run to turn that portion into a CODE-only tap file.
+ * Windows "copy" is used to concatenate that tap to the end of "loader.tap" to form the final tap file "demo.tap"
+ *
+ * "loader.tap" contains this basic loader:
+ *
+ * 10 CLEAR VAL "32767"
+ * 20 LOAD "NIRVANA+"CODE
+ * 30 LOAD ""CODE
+ * 40 RANDOMIZE USR VAL "32768"
+ *
+ * followed by the NIRVANA+ engine code.  This engine code is supplied separately from z88dk (and is contained in this tap file).
+ *
+ * Thanks to Timmy for the first conversion to C of this demo.
+ *
+ * ----------------------------------------------------------------
+ */
