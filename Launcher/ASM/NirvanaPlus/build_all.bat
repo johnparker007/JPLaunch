@@ -1,0 +1,2 @@
+call _compile_7_ROWS_CHAR_ADDR_54275.bat
+call _compile_23_ROWS_CHAR_ADDR_54275.bat

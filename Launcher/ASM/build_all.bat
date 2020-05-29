@@ -10,3 +10,6 @@ cd ChDir
 call build.bat
 cd..
 
+cd NirvanaPlus
+call build_all.bat
+cd..
