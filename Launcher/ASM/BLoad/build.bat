@@ -1,0 +1,1 @@
+pasmo simplified.asm bload
