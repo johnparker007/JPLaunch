@@ -1,10 +1,6 @@
 #ifndef __APP_H__
 #define __APP_H__
 
-#define kAppStateFrontend	(0)
-#define kAppStateGame		(1)
-#define kAppStateGameOver	(2)
-
 #define kRoutineChDirBaseAddress (43500)
 #define kRoutineChDirPathOffset (10)
 #define kRoutineChDirPathAddress (kRoutineChDirBaseAddress + kRoutineChDirPathOffset)
@@ -35,10 +31,6 @@
 //const unsigned int kHighByteAddress = 43000 + 18;
 //const unsigned int kLowByteAddress = 43000 + 17;
 
-
-unsigned char _appState;
-
-void AppSetState(unsigned char state);
 
 void AppLoadResources();
 

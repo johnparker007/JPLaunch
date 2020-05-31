@@ -14,7 +14,7 @@ __asm
 		push    bc
 		push    de
 		push    hl
-		ex      af, af'
+;	//	ex      af, af'
 		exx
 		push    af
 		push    bc
@@ -26,15 +26,15 @@ __asm
 	; call start address of recompiled routine
 		CALL 43000; // kRoutineBLoadBaseAddress
 
-	; restore all registers
-		pop     iy
-		pop     ix
-		pop     hl
-		pop     de
-		pop     bc
-		pop     af
-		exx
-		ex      af, af'
+		; restore all registers
+			pop     iy
+			pop     ix
+			pop     hl
+			pop     de
+			pop     bc
+			pop     af
+			exx
+			;	//	ex      af, af'
 		pop     hl
 		pop     de
 		pop     bc
@@ -60,7 +60,7 @@ void IOSaveBytes(void * pathString, unsigned char pathStringLength, unsigned int
 		push    bc
 		push    de
 		push    hl
-		ex      af, af'
+		; //		ex      af, af'
 		exx
 		push    af
 		push    bc
@@ -72,15 +72,15 @@ void IOSaveBytes(void * pathString, unsigned char pathStringLength, unsigned int
 	; call start address of recompiled routine
 		CALL 44000; // kRoutineBSaveBaseAddress
 
-	; restore all registers
-		pop     iy
-		pop     ix
-		pop     hl
-		pop     de
-		pop     bc
-		pop     af
-		exx
-		ex      af, af'
+		; restore all registers
+			pop     iy
+			pop     ix
+			pop     hl
+			pop     de
+			pop     bc
+			pop     af
+			exx
+			; // ex      af, af'
 		pop     hl
 		pop     de
 		pop     bc
@@ -94,12 +94,12 @@ void IOChangeDirectory(void * pathString, unsigned char pathStringLength)
 
 	// Note: preserve/restore regs code from Nirvana Engine source code
 __asm
-	; preserve all registers
-		push    af
-		push    bc
-		push    de
-		push    hl
-		ex      af, af'
+; preserve all registers
+push    af
+push    bc
+push    de
+push    hl
+; // ex      af, af'
 		exx
 		push    af
 		push    bc
@@ -111,15 +111,15 @@ __asm
 	; call start address of recompiled routine
 		CALL 43500; // kRoutineChDirBaseAddress
 
-	; restore all registers
-		pop     iy
-		pop     ix
-		pop     hl
-		pop     de
-		pop     bc
-		pop     af
-		exx
-		ex      af, af'
+		; restore all registers
+			pop     iy
+			pop     ix
+			pop     hl
+			pop     de
+			pop     bc
+			pop     af
+			exx
+			; // ex      af, af'
 		pop     hl
 		pop     de
 		pop     bc

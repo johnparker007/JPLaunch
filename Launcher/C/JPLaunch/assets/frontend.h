@@ -122,7 +122,7 @@ void FrontendProcessInputConfigurationMenuBack();
 
 unsigned int FrontendGetCurrentListPageCount();
 unsigned char FrontendGetCurrentPageRowCount();
-unsigned char FrontendSetCurrentPageRowCount(int value);
+void FrontendSetCurrentPageRowCount(int value);
 
 unsigned int FrontendGetFileIndexFromListRowIndex(unsigned char listRowIndex);
 void FrontendGetMetadataRowColumnFromIndex(unsigned char *characterColumnRef, unsigned char *pixelRowRef, unsigned char listRowIndex);

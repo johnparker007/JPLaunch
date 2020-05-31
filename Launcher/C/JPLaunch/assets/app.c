@@ -29,43 +29,11 @@ main()
 
 	NirvanaLoadEngine(_configurationData.DefaultViewMode == DefaultViewModeFullScreenList);
 
-	AppSetState(kAppStateFrontend);
+	FrontendInitialise();
 
-	for(;;)
+	while (TRUE)
 	{
-		switch (_appState)
-		{
-		case kAppStateFrontend:
-			FrontendUpdate();
-			break;
-		case kAppStateGame:
-			//GameMusicUpdate();
-			GameUpdate();
-			GameDraw();
-			break;
-		case kAppStateGameOver:
-			break;
-		default:
-			break;
-		}
-	}
-}
-
-void AppSetState(unsigned char state)
-{
-	_appState = state;
-
-	switch (_appState)
-	{
-	case kAppStateFrontend:
-		FrontendInitialise();
-		break;
-	case kAppStateGame:
-		GameInitialise();
-		break;
-	case kAppStateGameOver:
-
-		break;
+		FrontendUpdate();
 	}
 }
 

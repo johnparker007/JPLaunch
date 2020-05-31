@@ -1008,7 +1008,7 @@ unsigned char FrontendGetCurrentPageRowCount()
 	return _listPageRowCountAddress[0];
 }
 
-unsigned char FrontendSetCurrentPageRowCount(int value)
+void FrontendSetCurrentPageRowCount(int value)
 {
 	_listPageRowCountAddress[0] = value;
 }
@@ -1801,7 +1801,7 @@ void FrontEndConfigurationMenuDrawRow(unsigned char rowIndex)
 
 	FontDrawCharsNullTerminated("               ", 16, charY); // VERY SLOW WAY OF ERASING FOR NOW!
 
-	FontDrawCharsProportional(string, (unsigned char)(128 + 3), charY * 8);
+	FontDrawCharsProportional((char *)string, (unsigned char)(128 + 3), charY * 8);
 }
 
 void FrontendPageUp()
