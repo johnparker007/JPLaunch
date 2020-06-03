@@ -624,6 +624,61 @@ RectTransform:
   m_AnchoredPosition: {x: -5, y: 0}
   m_SizeDelta: {x: -20, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1 &344544346
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 344544347}
+  - component: {fileID: 344544348}
+  m_Layer: 0
+  m_Name: SpectrumFiles
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &344544347
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 344544346}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 639835152}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &344544348
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 344544346}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ca2f234b888b2ca4bb497aa950996b01, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  AppCodeBin: {fileID: 4900000, guid: c1f1637ea91f95d47bb039cec40bd925, type: 3}
+  App_NIRVANAP_7_ROWSBin: {fileID: 4900000, guid: 973471d536fb2234eb33a204a7776b00,
+    type: 3}
+  App_NIRVANAP_23_ROWSBin: {fileID: 4900000, guid: 2f13cd743dea7d542849bc2a88b1affa,
+    type: 3}
+  BSave: {fileID: 4900000, guid: 987d5a2c3a3539843bba8cd2f8d19ddb, type: 3}
+  ChDir: {fileID: 4900000, guid: bf6b40946bbcfb4429fb73734f124f92, type: 3}
+  Ibm_fontChr: {fileID: 4900000, guid: b4b1f1bfb70a4614485e75716ac489e8, type: 3}
+  JPLAUNCHTap: {fileID: 4900000, guid: 6e25384a1d1564448a7eb24aa35c8da3, type: 3}
+  Ld16384_recompiled: {fileID: 4900000, guid: 581daa55c3a93804589881c3c5af3f23, type: 3}
+  MiniFzx: {fileID: 4900000, guid: 2c790a6b52e097a4a891715e627ac767, type: 3}
+  LD25000: {fileID: 4900000, guid: ff3130c66b434274794d4f94b6354260, type: 3}
+  LD43000: {fileID: 4900000, guid: 24741c68f123e1c4e85d3a14cf7a043c, type: 3}
+  SearchWindowScr: {fileID: 4900000, guid: 09630fa786d76c848b11b0f38f689b54, type: 3}
+  Installer: {fileID: 639835151}
 --- !u!1 &346612175
 GameObject:
   m_ObjectHideFlags: 0
@@ -1124,6 +1179,7 @@ MonoBehaviour:
   UDGFontTexture2D: {fileID: 2800000, guid: fb2ea667c92fdee4eaefe6e72305bf3d, type: 3}
   SpectrumScreenTexture2D: {fileID: 2800000, guid: a1752ba2f9ea6464dbdc373be182f743,
     type: 3}
+  SpectrumFiles: {fileID: 344544348}
 --- !u!4 &639835152
 Transform:
   m_ObjectHideFlags: 0
@@ -1133,7 +1189,8 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
+  m_Children:
+  - {fileID: 344544347}
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

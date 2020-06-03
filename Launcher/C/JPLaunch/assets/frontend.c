@@ -1304,6 +1304,15 @@ void FrontendDrawCurrentRowSelectedStandardAttributes()
 
 void FrontendLoadFile()
 {
+// WON'T COMPILE UNDER z88dk, need to precompile with pasmo
+	// TODO preserve registers:
+//__asm
+//ld (ix), 255; // address
+//;//LD A, 48; // value
+//OUT (IX), A; // disable 128k RAM paging to fix Ultimate and other games
+//__endasm;
+
+
 	uchar basicData[kFrontendBasicDataTapSnaZ80Length];
 	memset(&basicData, kInputASCIIEnter, kFrontendBasicDataTapSnaZ80Length);
 	unsigned int fileIndex = FrontendGetFileIndexFromListRowIndex(_frontendCurrentRow);
