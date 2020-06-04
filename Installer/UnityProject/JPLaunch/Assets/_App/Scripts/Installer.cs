@@ -2,7 +2,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -12,6 +12,14 @@ using UnityEngine.UI;
 
 public class Installer : MonoBehaviour
 {
+    public enum MasterStateType
+    {
+        Idle,
+        Running,
+        CompletedSuccessfully,
+        Failed
+    }
+
     public enum FileFormat
     {
         Tap,
@@ -195,6 +203,12 @@ public class Installer : MonoBehaviour
 
     private int[] _characterXPositions;
 
+    public MasterStateType MasterState
+    {
+        get;
+        private set;
+    }
+
 
     public Configuration Configuration
     {
@@ -265,6 +279,8 @@ public class Installer : MonoBehaviour
 
     private long _nextYieldtime = 0L;
 
+    private bool _coroutineTaskRunning = false;
+
     private List<String[]> _splitStrings = new List<string[]>();
 
 
@@ -273,10 +289,11 @@ public class Installer : MonoBehaviour
         Configuration = new Configuration();
         Configuration.Load();
 
-
         GenerateCharacterXPositions();
 
         GenerateBlankScreenColorArray();
+
+        MasterState = MasterStateType.Idle;
     }
 
     private void GenerateCharacterXPositions()
@@ -311,6 +328,25 @@ public class Installer : MonoBehaviour
 
     public void Install()
     {
+        StartCoroutine(InstallCoroutine());
+    }
+
+    public IEnumerator InstallCoroutine()
+    {
+        MasterState = MasterStateType.Running;
+
+        while (!DeleteOutputFolderIfPresent())
+        {
+            Debug.LogWarning("Failed to delete output folder... retrying in 1 second");
+
+            yield return new WaitForSeconds(1f);
+        }
+
+        Debug.Log("Deleted output folder successfully");
+
+        // let deletes catch up
+        yield return new WaitForSeconds(1f);
+
         InitialiseOutputFolder();
 
         SpectrumFiles.WriteFiles();
@@ -332,26 +368,55 @@ public class Installer : MonoBehaviour
             _splitStrings.Add(_allFilenamesWithoutPathOrExtensionUppercase[stringIndex].Split(separators));
         }
 
-         //GenerateDatabasePageFiles();
+        //GenerateDatabasePageFiles();
         GenerateNumberedGameFiles();
         GenerateNumberedLoadingScreenFiles();
 
         GenerateSystemMenus();
 
+        Debug.Log("GenerateGameListPages (full)...");
         StartCoroutine(GenerateGameListPages(kRowsPerPageFull));
-        StartCoroutine(GenerateGameListPages(kRowsPerPageMini));
+        while(_coroutineTaskRunning)
+        {
+            yield return null;
+        }
 
-        StartCoroutine(GenerateSearchResultPages(_searchGenerator.UniqueWordsFiltered, kRowsPerPageFull)); // TODO this at the end for now, just because it's crashing partway through
-        StartCoroutine(GenerateSearchResultPages(_searchGenerator.UniqueWordsFiltered, kRowsPerPageMini)); // TODO this at the end for now, just because it's crashing partway through
+        Debug.Log("GenerateGameListPages (mini)...");
+        StartCoroutine(GenerateGameListPages(kRowsPerPageMini));
+        while (_coroutineTaskRunning)
+        {
+            yield return null;
+        }
+
+        Debug.Log("GenerateSearchResultPages (full)...");
+        StartCoroutine(GenerateSearchResultPages(_searchGenerator.UniqueWordsFiltered, kRowsPerPageFull));
+        while (_coroutineTaskRunning)
+        {
+            yield return null;
+        }
+
+        Debug.Log("GenerateSearchResultPages (mini)...");
+        StartCoroutine(GenerateSearchResultPages(_searchGenerator.UniqueWordsFiltered, kRowsPerPageMini));
+        while (_coroutineTaskRunning)
+        {
+            yield return null;
+        }
+
+        MasterState = MasterStateType.CompletedSuccessfully; // TODO this isn't necessarily true!
     }
 
-    private void InitialiseOutputFolder()
+    private bool DeleteOutputFolderIfPresent()
     {
         if (Directory.Exists(kOutputFolder))
         {
             DeleteDirectory(kOutputFolder);
         }
-       
+
+        return !Directory.Exists(kOutputFolder);
+    }
+
+    private void InitialiseOutputFolder()
+    {
         Directory.CreateDirectory(kOutputFolder);
 
         Directory.CreateDirectory(kOutputFolder + "/" + kCodeFolder);
@@ -382,14 +447,20 @@ public class Installer : MonoBehaviour
         {
             Directory.Delete(path, true);
         }
-        catch (IOException)
+        catch(Exception)
         {
-            Directory.Delete(path, true);
+            Debug.LogWarning("Exception attempting to delete: " + path + "... retrying shortly");
+            // do nothing, but this should catch all exceptions
         }
-        catch (UnauthorizedAccessException)
-        {
-            Directory.Delete(path, true);
-        }
+
+        //catch (IOException)
+        //{
+        //    Directory.Delete(path, true);
+        //}
+        //catch (UnauthorizedAccessException)
+        //{
+        //    Directory.Delete(path, true);
+        //}
     }
 
 
@@ -500,7 +571,9 @@ public class Installer : MonoBehaviour
 
     private IEnumerator GenerateGameListPages(int rowsPerPage)
     {
-        for(int fileIndex = 0; fileIndex < _allFilenames.Count; ++fileIndex)
+        _coroutineTaskRunning = true;
+
+        for (int fileIndex = 0; fileIndex < _allFilenames.Count; ++fileIndex)
         {
             _fileIndices.Add(fileIndex);
         }
@@ -520,6 +593,8 @@ public class Installer : MonoBehaviour
 
             GenerateDatabaseScreenFile(pageIndex, rowsPerPage);
         }
+
+        _coroutineTaskRunning = false;
     }
 
     private void GenerateDatabaseScreenFile(int pageIndex, int rowsPerPage)
@@ -1002,7 +1077,8 @@ public class Installer : MonoBehaviour
 
     private IEnumerator GenerateSearchResultPages(List<String> searchStrings, int rowsPerPage)
     {
-        Debug.Log("Search string count: " + searchStrings.Count);
+        _coroutineTaskRunning = true;
+
         SearchStringsTotal = searchStrings.Count;
         for (int searchStringIndex = 0; searchStringIndex < searchStrings.Count; ++searchStringIndex)
         {
@@ -1021,6 +1097,8 @@ public class Installer : MonoBehaviour
             }
             GenerateSearchResultPage(searchStrings[searchStringIndex], _allFilenamesWithoutPathOrExtension, rowsPerPage);
         }
+
+        _coroutineTaskRunning = false;
     }
 
     private void GenerateSearchResultPage(String searchString, List<String> strings, int rowsPerPage)

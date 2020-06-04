@@ -6,6 +6,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using SFB;
+using System.IO;
 
 [RequireComponent(typeof(Button))]
 public class ButtonSelectGamesrootFolder : MonoBehaviour, IPointerDownHandler
@@ -20,14 +21,15 @@ public class ButtonSelectGamesrootFolder : MonoBehaviour, IPointerDownHandler
         button.onClick.AddListener(OnClick);
     }
 
-    void Start()
-    {
-
-    }
-
     private void OnClick()
     {
-        var paths = StandaloneFileBrowser.OpenFolderPanel("Select Games Root Folder", "", false);
+        string targetDirectory = "";
+        if(Installer.Configuration.GamesRootPath != null && Installer.Configuration.GamesRootPath.Length > 0)
+        {
+            targetDirectory = Installer.Configuration.GamesRootPath;
+        }
+
+        string[] paths = StandaloneFileBrowser.OpenFolderPanel("Select Games Root Folder", targetDirectory, false);
         if (paths.Length > 0)
         {
             Installer.Configuration.GamesRootPath = paths[0];

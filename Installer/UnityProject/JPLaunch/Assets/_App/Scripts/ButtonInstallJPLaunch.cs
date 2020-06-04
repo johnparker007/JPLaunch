@@ -24,11 +24,13 @@ public class ButtonInstallJPLaunch : MonoBehaviour, IPointerDownHandler
 
     private void Update()
     {
-        _button.interactable = Installer.Configuration.GamesRootPath != null;
+        _button.interactable = Installer.Configuration.GamesRootPath != null
+            && Installer.MasterState != Installer.MasterStateType.Running;
     }
 
     private void OnClick()
     {
+        _button.interactable = false;
         Installer.Install();
     }
     
