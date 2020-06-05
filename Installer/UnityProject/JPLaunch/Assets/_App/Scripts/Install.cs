@@ -290,6 +290,8 @@ public class Install : MonoBehaviour
     {
         _installer.MasterState = Installer.MasterStateType.Running;
 
+        yield return null; // initial yield to let GUI catch up
+
         while (!DeleteOutputFolderIfPresent())
         {
             Debug.LogWarning("Failed to delete output folder... retrying in 1 second");
@@ -358,6 +360,7 @@ public class Install : MonoBehaviour
         }
 
         _installer.MasterState = Installer.MasterStateType.CompletedSuccessfully; // TODO this isn't necessarily true!
+        MenuController.Instance.SetMenu(MenuController.Instance.MenuMain);
     }
 
     private bool DeleteOutputFolderIfPresent()

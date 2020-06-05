@@ -127,9 +127,16 @@ public class Installer : MonoBehaviour
         MasterState = MasterStateType.Idle;
     }
 
+    private void Start()
+    {
+        MenuController.Instance.SetMenu(MenuController.Instance.MenuMain);
+    }
+
     public void Install()
     {
-        if(_install != null)
+        MenuController.Instance.SetMenu(MenuController.Instance.MenuInstalling);
+
+        if (_install != null)
         {
             Destroy(_install.gameObject);
         }
