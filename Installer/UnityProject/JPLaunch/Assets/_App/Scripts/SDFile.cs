@@ -13,7 +13,7 @@ public class SDFile
 
     }
 
-    public bool WriteAllBytes(String filename, byte[] bytes)
+    public static bool WriteAllBytes(String filename, byte[] bytes)
     {
         try
         {
@@ -28,7 +28,7 @@ public class SDFile
         return true;
     }
 
-    public String CreateFlattenedFilepath(String rootFolder, String filename)
+    public static String CreateFlattenedFilepath(String rootFolder, String filename)
     {
         String directoryPath = "";
         for(int characterIndex = 0; characterIndex < filename.Length - 1; ++characterIndex)
@@ -45,7 +45,7 @@ public class SDFile
         return directoryPath;
     }
 
-    public String GetFlattenedFilename(String filename)
+    public static String GetFlattenedFilename(String filename)
     {
         // domark
         // want: /d/o/m/a/r/k

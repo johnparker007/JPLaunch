@@ -4,20 +4,21 @@ using UnityEngine;
 
 public static class FileFormatExtensions
 {
+
     public static string UDGIconString(this Installer.FileFormat fileFormat)
     {
         switch (fileFormat)
         {
             case Installer.FileFormat.Tap:
-                return Installer.kUDGTapIconString;
+                return Install.kUDGTapIconString;
             case Installer.FileFormat.Sna:
-                return Installer.kUDGSnaIconString;
+                return Install.kUDGSnaIconString;
             case Installer.FileFormat.Z80:
-                return Installer.kUDGZ80IconString;
+                return Install.kUDGZ80IconString;
             default:
                 Debug.LogError("Couldn't match format");
                 Debug.Break();
-                return Installer.kUDGTapIconString;
+                return Install.kUDGTapIconString;
         }
     }
 

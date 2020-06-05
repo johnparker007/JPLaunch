@@ -21,10 +21,15 @@ public class ButtonSelectGamesrootFolder : MonoBehaviour, IPointerDownHandler
         button.onClick.AddListener(OnClick);
     }
 
+    // TODO need to check Installer.Configuration.GamesRootPath exists otherwise highlight in red with error message
+    // to let user know they need to select a valid directory
+
     private void OnClick()
     {
         string targetDirectory = "";
-        if(Installer.Configuration.GamesRootPath != null && Installer.Configuration.GamesRootPath.Length > 0)
+        if(Installer.Configuration.GamesRootPath != null 
+            && Installer.Configuration.GamesRootPath.Length > 0
+            && Directory.Exists(Installer.Configuration.GamesRootPath))
         {
             targetDirectory = Installer.Configuration.GamesRootPath;
         }
