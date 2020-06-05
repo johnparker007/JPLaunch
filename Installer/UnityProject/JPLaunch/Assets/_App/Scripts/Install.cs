@@ -182,25 +182,50 @@ public class Install : MonoBehaviour
     private int[] _characterXPositions;
 
 
-    public int SearchStringsTotal
+    public int SearchStringsTotalFull
     {
         get;
         private set;
     }
 
-    public int GameListPagesTotal
+    public int SearchStringsTotalMini
     {
         get;
         private set;
     }
 
-    public int SearchStringsRemaining
+    public int GameListPagesTotalFull
     {
         get;
         private set;
     }
 
-    public int GameListPagesRemaining
+    public int GameListPagesTotalMini
+    {
+        get;
+        private set;
+    }
+
+    public int SearchStringsRemainingFull
+    {
+        get;
+        private set;
+    }
+
+
+    public int SearchStringsRemainingMini
+    {
+        get;
+        private set;
+    }
+
+    public int GameListPagesRemainingFull
+    {
+        get;
+        private set;
+    }
+
+    public int GameListPagesRemainingMini
     {
         get;
         private set;
@@ -210,7 +235,7 @@ public class Install : MonoBehaviour
     {
         get
         {
-            return SearchStringsTotal + GameListPagesTotal;
+            return SearchStringsTotalFull + GameListPagesTotalFull;
         }
     }
 
@@ -218,7 +243,7 @@ public class Install : MonoBehaviour
     {
         get
         {
-            return SearchStringsRemaining + GameListPagesRemaining;
+            return SearchStringsRemainingFull + GameListPagesRemainingFull;
         }
     }
 
@@ -538,10 +563,11 @@ public class Install : MonoBehaviour
 
         //        int pageCount = _allFilenames.Count / rowsPerPage; // TODO this is one more, will need to handle part pages to implement
         int pageCount = GetPageCountIncludingAnyPartialEndPage(_allFilenames.Count, rowsPerPage);
-        GameListPagesTotal = pageCount;
+        SetGameListPagesTotal(rowsPerPage, pageCount);
         for (int pageIndex = 0; pageIndex < pageCount; ++pageIndex)
         {
-            GameListPagesRemaining = pageCount - pageIndex;
+            SetGameListPagesRemaining(rowsPerPage, pageCount - pageIndex - 1);
+
             if (System.DateTime.Now.Ticks > _nextYieldtime)
             {
                 const long kTicksPerSecond = 10000000;
@@ -1037,10 +1063,11 @@ public class Install : MonoBehaviour
     {
         _coroutineTaskRunning = true;
 
-        SearchStringsTotal = searchStrings.Count;
+        SetSearchStringsTotal(rowsPerPage, searchStrings.Count);
         for (int searchStringIndex = 0; searchStringIndex < searchStrings.Count; ++searchStringIndex)
         {
-            SearchStringsRemaining = searchStrings.Count - searchStringIndex;
+            SetSearchStringsRemaining(rowsPerPage, searchStrings.Count - searchStringIndex - 1);
+
             if (System.DateTime.Now.Ticks > _nextYieldtime)
             {
                 const long kTicksPerSecond = 10000000;
@@ -1325,7 +1352,53 @@ public class Install : MonoBehaviour
 
     }
 
+    public void SetGameListPagesTotal(int rowsPerPage, int value)
+    {
+        if(rowsPerPage == kRowsPerPageFull)
+        {
+            GameListPagesTotalFull = value;
+        }
+        else
+        {
+            GameListPagesTotalMini = value;
+        }
+    }
 
+    public void SetGameListPagesRemaining(int rowsPerPage, int value)
+    {
+        if (rowsPerPage == kRowsPerPageFull)
+        {
+            GameListPagesRemainingFull = value;
+        }
+        else
+        {
+            GameListPagesRemainingMini = value;
+        }
+    }
+
+    public void SetSearchStringsTotal(int rowsPerPage, int value)
+    {
+        if (rowsPerPage == kRowsPerPageFull)
+        {
+            SearchStringsTotalFull = value;
+        }
+        else
+        {
+            SearchStringsTotalMini = value;
+        }
+    }
+
+    public void SetSearchStringsRemaining(int rowsPerPage, int value)
+    {
+        if (rowsPerPage == kRowsPerPageFull)
+        {
+            SearchStringsRemainingFull = value;
+        }
+        else
+        {
+            SearchStringsRemainingMini = value;
+        }
+    }
 
 
 }

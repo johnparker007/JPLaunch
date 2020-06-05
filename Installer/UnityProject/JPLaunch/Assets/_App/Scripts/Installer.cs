@@ -36,12 +36,16 @@ public class Installer : MonoBehaviour
 
     public Install InstallPrefab = null;
 
-    private Install _install = null;
-
     public MasterStateType MasterState
     {
         get;
         set;
+    }
+
+    public Install InstallInstance
+    {
+        get;
+        private set;
     }
 
 
@@ -55,12 +59,12 @@ public class Installer : MonoBehaviour
     {
         get
         {
-            if(_install == null)
+            if(InstallInstance == null)
             {
                 return 0;
             }
 
-            return _install.SearchStringsTotal;
+            return InstallInstance.SearchStringsTotalFull;
         }
     }
 
@@ -68,12 +72,12 @@ public class Installer : MonoBehaviour
     {
         get
         {
-            if (_install == null)
+            if (InstallInstance == null)
             {
                 return 0;
             }
 
-            return _install.GameListPagesTotal;
+            return InstallInstance.GameListPagesTotalFull;
         }
     }
 
@@ -81,12 +85,12 @@ public class Installer : MonoBehaviour
     {
         get
         {
-            if (_install == null)
+            if (InstallInstance == null)
             {
                 return 0;
             }
 
-            return _install.SearchStringsRemaining;
+            return InstallInstance.SearchStringsRemainingFull;
         }
     }
 
@@ -94,12 +98,12 @@ public class Installer : MonoBehaviour
     {
         get
         {
-            if (_install == null)
+            if (InstallInstance == null)
             {
                 return 0;
             }
 
-            return _install.GameListPagesRemaining;
+            return InstallInstance.GameListPagesRemainingFull;
         }
     }
 
@@ -136,13 +140,13 @@ public class Installer : MonoBehaviour
     {
         MenuController.Instance.SetMenu(MenuController.Instance.MenuInstalling);
 
-        if (_install != null)
+        if (InstallInstance != null)
         {
-            Destroy(_install.gameObject);
+            Destroy(InstallInstance.gameObject);
         }
 
-        _install = Instantiate(InstallPrefab, transform);
-        _install.StartInstall(this);
+        InstallInstance = Instantiate(InstallPrefab, transform);
+        InstallInstance.StartInstall(this);
     }
 
 
