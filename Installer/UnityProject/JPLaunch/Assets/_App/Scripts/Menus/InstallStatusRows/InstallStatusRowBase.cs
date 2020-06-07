@@ -9,6 +9,7 @@ public abstract class InstallStatusRowBase : MonoBehaviour
 	public Installer Installer = null;
 
 	public Text StatusString = null;
+	public Image CompletedTickImage = null;
 
 	protected abstract string RowText
     {
@@ -103,6 +104,6 @@ public abstract class InstallStatusRowBase : MonoBehaviour
 
 	private void UpdateStatusIcon()
 	{
-
+		CompletedTickImage.gameObject.SetActive(Completed);
 	}
 }
