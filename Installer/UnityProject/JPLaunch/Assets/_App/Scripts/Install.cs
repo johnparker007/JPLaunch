@@ -511,7 +511,7 @@ public class Install : MonoBehaviour
 
         SpectrumScreenTexture2D.Apply(false);
 
-        byte[] screenMemory = GetByteArrayFromScreenTexture();
+        byte[] screenMemory = GetByteArrayFromScreenTexture(kRowsPerPageFull);
 
         string filename =
             Installer.kOutputFolder + "/"
@@ -536,7 +536,7 @@ public class Install : MonoBehaviour
 
         FontDrawCharactersCentred("Back", 13 * kSpectrumCharSize);
 
-        byte[] screenMemory = GetByteArrayFromScreenTexture();
+        byte[] screenMemory = GetByteArrayFromScreenTexture(kRowsPerPageFull);
 
         string filename =
             Installer.kOutputFolder + "/"
@@ -632,7 +632,7 @@ public class Install : MonoBehaviour
         String rootFolder = Installer.kOutputFolder + "/" + kLibraryFolder + "/" + pageFolder + "/";
         String flattenedFilePath = SDFile.CreateFlattenedFilepath(rootFolder, pageNumberString);
 
-        byte[] screenMemory = GetByteArrayFromScreenTexture();
+        byte[] screenMemory = GetByteArrayFromScreenTexture(rowsPerPage);
 
         string filename =
             Installer.kOutputFolder + "/"
@@ -642,12 +642,21 @@ public class Install : MonoBehaviour
             + pageNumberString.Substring(pageNumberString.Length - 1)
             + ".scr";
 
-        SDFile.WriteAllBytes(filename, screenMemory);
+        if(rowsPerPage == kRowsPerPageFull)
+        {
+            SDFile.WriteAllBytes(filename, screenMemory);
+        }
+        else
+        {
+            SDFile.WriteAllBytes(filename, screenMemory, screenMemory.Length / 3);
+        }
     }
 
-    private byte[] GetByteArrayFromScreenTexture()
+    private byte[] GetByteArrayFromScreenTexture(int rowsPerPage)
     {
-        for (int spectrumScreenTextureY = 0; spectrumScreenTextureY < kSpectrumScreenHeight; ++spectrumScreenTextureY)
+        int heightToProcess = rowsPerPage == kRowsPerPageFull ? kSpectrumScreenHeight : kSpectrumScreenHeight / 3;
+
+        for (int spectrumScreenTextureY = 0; spectrumScreenTextureY < heightToProcess; ++spectrumScreenTextureY)
         {
             for (int spectrumScreenTextureX = 0; spectrumScreenTextureX < kSpectrumScreenWidth; /* don't need to increment spectrumScreenTextureX */ )
             {
@@ -950,7 +959,7 @@ public class Install : MonoBehaviour
         String rootFolder = Installer.kOutputFolder + "/" + kLibraryFolder + "/" + searchListFolder + "/";
         String flattenedFilePath = SDFile.CreateFlattenedFilepath(rootFolder, searchTerm);
 
-        byte[] screenMemory = GetByteArrayFromScreenTexture();
+        byte[] screenMemory = GetByteArrayFromScreenTexture(rowsPerPage);
 
         String pageNumberString = String.Format("{0:000000}", pageIndex);
 
@@ -962,7 +971,14 @@ public class Install : MonoBehaviour
              + searchTerm.Substring(searchTerm.Length - 1) + "_"
             + pageNumberString + ".scr";
 
-        SDFile.WriteAllBytes(filename, screenMemory);
+        if (rowsPerPage == kRowsPerPageFull)
+        {
+            SDFile.WriteAllBytes(filename, screenMemory);
+        }
+        else
+        {
+            SDFile.WriteAllBytes(filename, screenMemory, screenMemory.Length / 3);
+        }
     }
 
     private void DebugPrintDatabaseBytes()

@@ -13,11 +13,21 @@ public class SDFile
 
     }
 
-    public static bool WriteAllBytes(String filename, byte[] bytes)
+    public static bool WriteAllBytes(String filename, byte[] bytes, int overrideLength = 0)
     {
+
         try
         {
-            File.WriteAllBytes(filename, bytes);
+            if(overrideLength == 0)
+            {
+                File.WriteAllBytes(filename, bytes);
+            }
+            else
+            {
+                // TOIMPROVE probably a more efficient way of doing this
+                IEnumerable<byte> bytesToWrite = bytes.Take(overrideLength);
+                File.WriteAllBytes(filename, bytesToWrite.ToArray());
+            }
         }
         catch (IOException ioException)
         {
