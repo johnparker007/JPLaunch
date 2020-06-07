@@ -181,6 +181,29 @@ public class Install : MonoBehaviour
 
     private int[] _characterXPositions;
 
+    public int NumberedGameFilesTotal
+    {
+        get;
+        private set;
+    }
+
+    public int NumberedGameFilesRemaining
+    {
+        get;
+        private set;
+    }
+
+    public int NumberedLoadingScreenFilesTotal
+    {
+        get;
+        private set;
+    }
+
+    public int NumberedLoadingScreenFilesRemaining
+    {
+        get;
+        private set;
+    }
 
     public int SearchStringsTotalFull
     {
@@ -229,22 +252,6 @@ public class Install : MonoBehaviour
     {
         get;
         private set;
-    }
-
-    public int TotalObjects
-    {
-        get
-        {
-            return SearchStringsTotalFull + GameListPagesTotalFull;
-        }
-    }
-
-    public int TotalObjectsRemaining
-    {
-        get
-        {
-            return SearchStringsRemainingFull + GameListPagesRemainingFull;
-        }
     }
 
 
@@ -326,7 +333,6 @@ public class Install : MonoBehaviour
 
         Debug.Log("Deleted output folder successfully");
 
-        // let deletes catch up
         yield return new WaitForSeconds(1f);
 
         InitialiseOutputFolder();
@@ -351,38 +357,26 @@ public class Install : MonoBehaviour
         }
 
         //GenerateDatabasePageFiles();
-        GenerateNumberedGameFiles();
-        GenerateNumberedLoadingScreenFiles();
+
+        StartCoroutine(GenerateNumberedGameFiles());
+        yield return new WaitUntil(() => !_coroutineTaskRunning);
+
+        StartCoroutine(GenerateNumberedLoadingScreenFiles());
+        yield return new WaitUntil(() => !_coroutineTaskRunning);
 
         GenerateSystemMenus();
 
-        Debug.Log("GenerateGameListPages (full)...");
         StartCoroutine(GenerateGameListPages(kRowsPerPageFull));
-        while (_coroutineTaskRunning)
-        {
-            yield return null;
-        }
+        yield return new WaitUntil(() => !_coroutineTaskRunning);
 
-        Debug.Log("GenerateGameListPages (mini)...");
         StartCoroutine(GenerateGameListPages(kRowsPerPageMini));
-        while (_coroutineTaskRunning)
-        {
-            yield return null;
-        }
+        yield return new WaitUntil(() => !_coroutineTaskRunning);
 
-        Debug.Log("GenerateSearchResultPages (full)...");
         StartCoroutine(GenerateSearchResultPages(_searchGenerator.UniqueWordsFiltered, kRowsPerPageFull));
-        while (_coroutineTaskRunning)
-        {
-            yield return null;
-        }
+        yield return new WaitUntil(() => !_coroutineTaskRunning);
 
-        Debug.Log("GenerateSearchResultPages (mini)...");
         StartCoroutine(GenerateSearchResultPages(_searchGenerator.UniqueWordsFiltered, kRowsPerPageMini));
-        while (_coroutineTaskRunning)
-        {
-            yield return null;
-        }
+        yield return new WaitUntil(() => !_coroutineTaskRunning);
 
         _installer.MasterState = Installer.MasterStateType.CompletedSuccessfully; // TODO this isn't necessarily true!
         MenuController.Instance.SetMenu(MenuController.Instance.MenuMain);
@@ -568,10 +562,8 @@ public class Install : MonoBehaviour
         {
             SetGameListPagesRemaining(rowsPerPage, pageCount - pageIndex - 1);
 
-            if (System.DateTime.Now.Ticks > _nextYieldtime)
+            if (CheckYieldTime())
             {
-                const long kTicksPerSecond = 10000000;
-                _nextYieldtime = System.DateTime.Now.Ticks + kTicksPerSecond;
                 yield return null;
             }
 
@@ -694,10 +686,31 @@ public class Install : MonoBehaviour
         return pixelColor == Color.black ? 1 : 0;
     }
 
-    private void GenerateNumberedGameFiles()
+    private bool CheckYieldTime()
     {
+        if (System.DateTime.Now.Ticks > _nextYieldtime)
+        {
+            const long kTicksPerSecond = 10000000;
+            _nextYieldtime = System.DateTime.Now.Ticks + kTicksPerSecond;
+            return true;
+        }
+
+        return false;
+    }
+
+    private IEnumerator GenerateNumberedGameFiles()
+    {
+        _coroutineTaskRunning = true;
+
+        NumberedGameFilesTotal = _allFilenames.Count;
         for (int fileIndex = 0; fileIndex < _allFilenames.Count; ++fileIndex)
         {
+            NumberedGameFilesRemaining = _allFilenames.Count - fileIndex - 1;
+            if (CheckYieldTime())
+            {
+                yield return null;
+            }
+
             try
             {
                 Installer.FileFormat fileFormat = FileFormatHelpers.GetFileFormat(GetFilenameWithPath(fileIndex));
@@ -719,10 +732,14 @@ public class Install : MonoBehaviour
                     + GetFilenameWithPath(fileIndex));
             }
         }
+
+        _coroutineTaskRunning = false;
     }
 
-    private void GenerateNumberedLoadingScreenFiles()
+    private IEnumerator GenerateNumberedLoadingScreenFiles()
     {
+        _coroutineTaskRunning = true;
+
         byte[] partialScreenBytes = new byte[2048 + 2048 + 768];
         for (int attributeByteIndex = 0; attributeByteIndex < 256; ++attributeByteIndex)
         {
@@ -746,9 +763,15 @@ public class Install : MonoBehaviour
         partialScreenBytes[2048 + 2048 + 29] = (byte)(ZXConstants.PAPER_GREEN | ZXConstants.INK_CYAN | ZXConstants.BRIGHT);
         partialScreenBytes[2048 + 2048 + 30] = (byte)(ZXConstants.PAPER_CYAN | ZXConstants.INK_BLUE | ZXConstants.BRIGHT);
 
-
+        NumberedLoadingScreenFilesTotal = _allFilenames.Count;
         for (int fileIndex = 0; fileIndex < _allFilenames.Count; ++fileIndex)
         {
+            NumberedLoadingScreenFilesRemaining = _allFilenames.Count - fileIndex - 1;
+            if (CheckYieldTime())
+            {
+                yield return null;
+            }
+
             try
             {
                 byte[] fileBytes = File.ReadAllBytes(GetFilenameWithPath(fileIndex));
@@ -788,6 +811,8 @@ public class Install : MonoBehaviour
                     + GetFilenameWithPath(fileIndex));
             }
         }
+
+        _coroutineTaskRunning = false;
     }
 
     private List<String> GetAllFilenames(String directory)
@@ -1068,10 +1093,8 @@ public class Install : MonoBehaviour
         {
             SetSearchStringsRemaining(rowsPerPage, searchStrings.Count - searchStringIndex - 1);
 
-            if (System.DateTime.Now.Ticks > _nextYieldtime)
+            if (CheckYieldTime())
             {
-                const long kTicksPerSecond = 10000000;
-                _nextYieldtime = System.DateTime.Now.Ticks + kTicksPerSecond;
                 yield return null;
             }
 
