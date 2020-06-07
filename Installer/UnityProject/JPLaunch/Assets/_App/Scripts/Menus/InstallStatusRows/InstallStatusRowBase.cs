@@ -71,6 +71,12 @@ public abstract class InstallStatusRowBase : MonoBehaviour
         }
     }
 
+	protected void OnEnable()
+    {
+		StatusString.text = "";
+		CompletedTickImage.gameObject.SetActive(false);
+	}
+
 	protected void Update() 
 	{
 		UpdateStatusString();

@@ -379,7 +379,7 @@ public class Install : MonoBehaviour
         yield return new WaitUntil(() => !_coroutineTaskRunning);
 
         _installer.MasterState = Installer.MasterStateType.CompletedSuccessfully; // TODO this isn't necessarily true!
-        MenuController.Instance.SetMenu(MenuController.Instance.MenuMain);
+        MenuController.Instance.SetMenu(MenuController.Instance.MenuCompleted);
     }
 
     private bool DeleteOutputFolderIfPresent()

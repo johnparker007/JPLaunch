@@ -6,6 +6,8 @@ public class MenuController : MonoBehaviour
 {
 	public GameObject MenuMain = null;
 	public GameObject MenuInstalling = null;
+	public GameObject MenuCompleted = null;
+
 
 	public static MenuController Instance
     {
@@ -21,6 +23,7 @@ public class MenuController : MonoBehaviour
 
 		MenuMain.SetActive(false);
 		MenuInstalling.SetActive(false);
+		MenuCompleted.SetActive(false);
 	}
 
 	public void SetMenu(GameObject menu)
