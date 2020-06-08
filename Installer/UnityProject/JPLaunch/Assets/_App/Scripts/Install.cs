@@ -181,6 +181,18 @@ public class Install : MonoBehaviour
 
     private int[] _characterXPositions;
 
+    public int InitialInstallTasksTotal
+    {
+        get;
+        private set;
+    }
+
+    public int InitialInstallTasksRemaining
+    {
+        get;
+        private set;
+    }
+
     public int NumberedGameFilesTotal
     {
         get;
@@ -324,47 +336,14 @@ public class Install : MonoBehaviour
 
         yield return null; // initial yield to let GUI catch up
 
-        while (!DeleteOutputFolderIfPresent())
-        {
-            Debug.LogWarning("Failed to delete output folder... retrying in 1 second");
-
-            yield return new WaitForSeconds(1f);
-        }
-
-        Debug.Log("Deleted output folder successfully");
-
-        yield return new WaitForSeconds(1f);
-
-        InitialiseOutputFolder();
-
-        _installer.SpectrumFiles.WriteFiles();
-
-        _allFilenames = GetAllFilenames(_installer.Configuration.GamesRootPath);
-
-        _allFilenamesWithoutPathOrExtension = GetAllFilenamesWithoutPathOrExtension();
-        _allFilenamesWithoutPathOrExtensionUppercase = _allFilenamesWithoutPathOrExtension.ConvertAll(x => x.ToUpper());
-
-        CreateDatabase(); // TOIMPROVE may not want to use this later
-
-        _searchGenerator.Initialise(_allFilenamesWithoutPathOrExtensionUppercase);
-
-
-
-        char[] separators = { ' ', ',', '(', ')', '{', '}', '[', ']' }; // TODO add more, don't know what kind of filenames other people will have, ? £ $ etc
-        for (int stringIndex = 0; stringIndex < _allFilenamesWithoutPathOrExtension.Count; ++stringIndex)
-        {
-            _splitStrings.Add(_allFilenamesWithoutPathOrExtensionUppercase[stringIndex].Split(separators));
-        }
-
-        //GenerateDatabasePageFiles();
+        StartCoroutine(InitialInstallTaskCoroutine());
+        yield return new WaitUntil(() => !_coroutineTaskRunning);
 
         StartCoroutine(GenerateNumberedGameFiles());
         yield return new WaitUntil(() => !_coroutineTaskRunning);
 
         StartCoroutine(GenerateNumberedLoadingScreenFiles());
         yield return new WaitUntil(() => !_coroutineTaskRunning);
-
-        GenerateSystemMenus();
 
         StartCoroutine(GenerateGameListPages(kRowsPerPageFull));
         yield return new WaitUntil(() => !_coroutineTaskRunning);
@@ -380,6 +359,65 @@ public class Install : MonoBehaviour
 
         _installer.MasterState = Installer.MasterStateType.CompletedSuccessfully; // TODO this isn't necessarily true!
         MenuController.Instance.SetMenu(MenuController.Instance.MenuCompleted);
+    }
+
+    private IEnumerator InitialInstallTaskCoroutine()
+    {
+        _coroutineTaskRunning = true;
+
+        InitialInstallTasksTotal = 6;
+        InitialInstallTasksRemaining = InitialInstallTasksTotal;
+
+        // task 1
+        while (!DeleteOutputFolderIfPresent())
+        {
+            Debug.LogWarning("Failed to delete output folder... retrying in 1 second");
+            yield return new WaitForSeconds(1f);
+        }
+        yield return new WaitForSeconds(1f); // let OS catch up with deleted files
+        --InitialInstallTasksRemaining;
+        yield return null;
+
+        // task 2
+        InitialiseOutputFolder();
+        _installer.SpectrumFiles.WriteFiles();
+        --InitialInstallTasksRemaining;
+        yield return null;
+
+        // task 3
+        _allFilenames = GetAllFilenames(_installer.Configuration.GamesRootPath);
+        _allFilenamesWithoutPathOrExtension = GetAllFilenamesWithoutPathOrExtension();
+        _allFilenamesWithoutPathOrExtensionUppercase = _allFilenamesWithoutPathOrExtension.ConvertAll(x => x.ToUpper());
+        --InitialInstallTasksRemaining;
+        yield return null;
+
+        // task 4     
+        CreateDatabase(); // TOIMPROVE may not want to use this later
+        _searchGenerator.Initialise(_allFilenamesWithoutPathOrExtensionUppercase);
+        --InitialInstallTasksRemaining;
+        yield return null;
+
+        // task 5
+        char[] separators = { ' ', ',', '(', ')', '{', '}', '[', ']' }; // TODO add more, don't know what kind of filenames other people will have, ? £ $ etc
+        for (int stringIndex = 0; stringIndex < _allFilenamesWithoutPathOrExtension.Count; ++stringIndex)
+        {
+            _splitStrings.Add(_allFilenamesWithoutPathOrExtensionUppercase[stringIndex].Split(separators));
+        }
+        --InitialInstallTasksRemaining;
+        yield return null;
+
+        // task 6
+        GenerateSystemMenus();
+        --InitialInstallTasksRemaining;
+        yield return null;
+
+        if (InitialInstallTasksRemaining != 0)
+        {
+            Debug.LogError("InitialInstallTasksTotal must need updating");
+            Debug.Break();
+        }
+
+        _coroutineTaskRunning = false;
     }
 
     private bool DeleteOutputFolderIfPresent()
