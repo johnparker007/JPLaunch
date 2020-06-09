@@ -815,44 +815,29 @@ public class Install : MonoBehaviour
                 yield return null;
             }
 
-            try
-            {
-                byte[] fileBytes = File.ReadAllBytes(GetFilenameWithPath(fileIndex));
+            byte[] fileBytes = File.ReadAllBytes(GetFilenameWithPath(fileIndex));
 
-                Installer.FileFormat fileFormat = FileFormatHelpers.GetFileFormat(GetFilenameWithPath(fileIndex));
-                byte[] screenBytes = _loadingScreenExtractor.Extract(fileBytes, fileFormat, GetFilenameWithPath(fileIndex));
+            Installer.FileFormat fileFormat = FileFormatHelpers.GetFileFormat(GetFilenameWithPath(fileIndex));
+            byte[] screenBytes = _loadingScreenExtractor.Extract(fileBytes, fileFormat, GetFilenameWithPath(fileIndex));
 
-                String fileIndexAsPaddedString = String.Format("{0:000000}", fileIndex);
+            String fileIndexAsPaddedString = String.Format("{0:000000}", fileIndex);
 
-                String rootFolderFull = Installer.kOutputFolder + "/" + kLibraryFolder + "/" + kFullLoadingScreenScrFolder + "/";
-                String flattenedFilePathFull = SDFile.CreateFlattenedFilepath(rootFolderFull, fileIndexAsPaddedString);
+            String rootFolderFull = Installer.kOutputFolder + "/" + kLibraryFolder + "/" + kFullLoadingScreenScrFolder + "/";
+            String flattenedFilePathFull = SDFile.CreateFlattenedFilepath(rootFolderFull, fileIndexAsPaddedString);
 
-                String rootFolderPartial = Installer.kOutputFolder + "/" + kLibraryFolder + "/" + kPartialLoadingScreenScrFolder + "/";
-                String flattenedFilePathPartial = SDFile.CreateFlattenedFilepath(rootFolderPartial, fileIndexAsPaddedString);
+            String rootFolderPartial = Installer.kOutputFolder + "/" + kLibraryFolder + "/" + kPartialLoadingScreenScrFolder + "/";
+            String flattenedFilePathPartial = SDFile.CreateFlattenedFilepath(rootFolderPartial, fileIndexAsPaddedString);
 
-                String flattenedFilenameAndPathFullScreen = Installer.kOutputFolder + "/" + kLibraryFolder + "/" + kFullLoadingScreenScrFolder + "/" + flattenedFilePathFull + fileIndexAsPaddedString.Substring(fileIndexAsPaddedString.Length - 1) + ".scr";
-                String flattenedFilenameAndPathPartialScreen = Installer.kOutputFolder + "/" + kLibraryFolder + "/" + kPartialLoadingScreenScrFolder + "/" + flattenedFilePathPartial + fileIndexAsPaddedString.Substring(fileIndexAsPaddedString.Length - 1) + ".scr";
+            String flattenedFilenameAndPathFullScreen = Installer.kOutputFolder + "/" + kLibraryFolder + "/" + kFullLoadingScreenScrFolder + "/" + flattenedFilePathFull + fileIndexAsPaddedString.Substring(fileIndexAsPaddedString.Length - 1) + ".scr";
+            String flattenedFilenameAndPathPartialScreen = Installer.kOutputFolder + "/" + kLibraryFolder + "/" + kPartialLoadingScreenScrFolder + "/" + flattenedFilePathPartial + fileIndexAsPaddedString.Substring(fileIndexAsPaddedString.Length - 1) + ".scr";
 
-                // write full screen
-                FileStream outputFileStream = new FileStream(flattenedFilenameAndPathFullScreen, FileMode.Create, FileAccess.Write);
-                outputFileStream.Write(screenBytes, 0, LoadingScreenExtractor.kLoadingScreenLength);
-                outputFileStream.Close();
+            // write full screen
+            SDFile.WriteAllBytesAsync(flattenedFilenameAndPathFullScreen, screenBytes);
 
-                // write partial screen
-                Array.Copy(screenBytes, partialScreenBytes, 2048 + 2048);
-                Array.Copy(screenBytes, 2048 + 2048 + 2048, partialScreenBytes, 2048 + 2048 + 256, 256 + 256);
-
-                outputFileStream = new FileStream(flattenedFilenameAndPathPartialScreen, FileMode.Create, FileAccess.Write);
-                outputFileStream.Write(partialScreenBytes, 0, LoadingScreenExtractor.kLoadingScreenLength - 2048);
-                outputFileStream.Close();
-            }
-            catch (Exception exception)
-            {
-                Debug.LogError("Exception "
-                    + exception.ToString()
-                    + " while trying to generate a loading screen file from: "
-                    + GetFilenameWithPath(fileIndex));
-            }
+            // write partial screen
+            Array.Copy(screenBytes, partialScreenBytes, 2048 + 2048);
+            Array.Copy(screenBytes, 2048 + 2048 + 2048, partialScreenBytes, 2048 + 2048 + 256, 256 + 256);
+            SDFile.WriteAllBytesAsync(flattenedFilenameAndPathPartialScreen, partialScreenBytes);
         }
 
         _coroutineTaskRunning = false;
