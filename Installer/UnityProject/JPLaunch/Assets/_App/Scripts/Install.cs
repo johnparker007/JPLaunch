@@ -815,7 +815,16 @@ public class Install : MonoBehaviour
                 yield return null;
             }
 
-            byte[] fileBytes = File.ReadAllBytes(GetFilenameWithPath(fileIndex));
+            byte[] fileBytes;
+            try
+            {
+                fileBytes = File.ReadAllBytes(GetFilenameWithPath(fileIndex));
+            }
+            catch(Exception exception)
+            {
+                Debug.LogError("Exception reading file bytes: " + exception);
+                continue;
+            }
 
             Installer.FileFormat fileFormat = FileFormatHelpers.GetFileFormat(GetFilenameWithPath(fileIndex));
             byte[] screenBytes = _loadingScreenExtractor.Extract(fileBytes, fileFormat, GetFilenameWithPath(fileIndex));
