@@ -556,7 +556,7 @@ public class Install : MonoBehaviour
             + kGraphicsFolder + "/"
             + "exit";
 
-        SDFile.WriteAllBytes(filename, screenMemory);
+        SDFile.WriteAllBytesAsync(filename, screenMemory);
     }
 
     private void GenerateSystemMenuConfiguration()
@@ -581,7 +581,7 @@ public class Install : MonoBehaviour
             + kGraphicsFolder + "/"
             + "config";
 
-        SDFile.WriteAllBytes(filename, screenMemory);
+        SDFile.WriteAllBytesAsync(filename, screenMemory);
     }
 
     private IEnumerator GenerateGameListPages(int rowsPerPage)
@@ -682,11 +682,11 @@ public class Install : MonoBehaviour
 
         if(rowsPerPage == kRowsPerPageFull)
         {
-            SDFile.WriteAllBytes(filename, screenMemory);
+            SDFile.WriteAllBytesAsync(filename, screenMemory);
         }
         else
         {
-            SDFile.WriteAllBytes(filename, screenMemory, screenMemory.Length / 3);
+            SDFile.WriteAllBytesAsync(filename, screenMemory, screenMemory.Length / 3);
         }
     }
 
@@ -1011,11 +1011,11 @@ public class Install : MonoBehaviour
 
         if (rowsPerPage == kRowsPerPageFull)
         {
-            SDFile.WriteAllBytes(filename, screenMemory);
+            SDFile.WriteAllBytesAsync(filename, screenMemory);
         }
         else
         {
-            SDFile.WriteAllBytes(filename, screenMemory, screenMemory.Length / 3);
+            SDFile.WriteAllBytesAsync(filename, screenMemory, screenMemory.Length / 3);
         }
     }
 

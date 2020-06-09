@@ -5,6 +5,7 @@ using System.Linq;
 using System;
 using System.Text;
 using System.IO;
+using System.Threading.Tasks;
 
 public class SDFile
 {
@@ -13,29 +14,37 @@ public class SDFile
 
     }
 
-    public static bool WriteAllBytes(String filename, byte[] bytes, int overrideLength = 0)
+    public static async Task<bool> WriteAllBytesAsync(String filename, byte[] bytes, int overrideLength = 0)
     {
-
-        try
+        if(overrideLength == 0)
         {
-            if(overrideLength == 0)
+            return await WriteAllBytesAsyncTask(filename, bytes);
+        }
+        else
+        {
+            // TOIMPROVE probably a more efficient way of doing this
+            IEnumerable<byte> bytesToWrite = bytes.Take(overrideLength);
+            return await WriteAllBytesAsyncTask(filename, bytesToWrite.ToArray());
+        }
+    }
+
+    private static async Task<bool> WriteAllBytesAsyncTask(String filename, byte[] bytes)
+    {
+        bool writtenWithoutException = true;
+        await Task.Run(() =>
+        {
+            try
             {
                 File.WriteAllBytes(filename, bytes);
             }
-            else
+            catch(Exception exception)
             {
-                // TOIMPROVE probably a more efficient way of doing this
-                IEnumerable<byte> bytesToWrite = bytes.Take(overrideLength);
-                File.WriteAllBytes(filename, bytesToWrite.ToArray());
+                Debug.LogError("Exception trying to WriteAllBytes in Async function: " + exception);
+                writtenWithoutException = false;
             }
-        }
-        catch (IOException ioException)
-        {
-            Debug.LogWarning("Caught IOException " + ioException + " writing file " + filename);
-            return false;
-        }
+        });
 
-        return true;
+        return writtenWithoutException;
     }
 
     public static String CreateFlattenedFilepath(String rootFolder, String filename)

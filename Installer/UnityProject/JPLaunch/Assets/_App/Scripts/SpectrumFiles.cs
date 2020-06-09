@@ -38,6 +38,6 @@ public class SpectrumFiles : MonoBehaviour
 
     private void WriteFile(TextAsset fileBytes, string filename)
     {
-        SDFile.WriteAllBytes(filename, fileBytes.bytes);
+        SDFile.WriteAllBytesAsync(filename, fileBytes.bytes);
     }
 }
