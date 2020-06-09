@@ -181,6 +181,8 @@ public class Install : MonoBehaviour
 
     private int[] _characterXPositions;
 
+    private Color[] _spectrumScreenTexturePixels = null;
+
     public int InitialInstallTasksTotal
     {
         get;
@@ -694,6 +696,8 @@ public class Install : MonoBehaviour
     {
         int heightToProcess = rowsPerPage == kRowsPerPageFull ? kSpectrumScreenHeight : kSpectrumScreenHeight / 3;
 
+        _spectrumScreenTexturePixels = SpectrumScreenTexture2D.GetPixels();
+
         for (int spectrumScreenTextureY = 0; spectrumScreenTextureY < heightToProcess; ++spectrumScreenTextureY)
         {
             for (int spectrumScreenTextureX = 0; spectrumScreenTextureX < kSpectrumScreenWidth; /* don't need to increment spectrumScreenTextureX */ )
@@ -728,9 +732,11 @@ public class Install : MonoBehaviour
 
     private int GetBitFromSpectrumScreenTexture(int x, int y)
     {
-        Color pixelColor = SpectrumScreenTexture2D.GetPixel(x, kSpectrumScreenHeight - y - 1);
+        int readX = x;
+        int readY = kSpectrumScreenHeight - y - 1;
 
-        return pixelColor == Color.black ? 1 : 0;
+        Color pixelColor = _spectrumScreenTexturePixels[(kSpectrumScreenWidth * readY) + readX];
+        return 1 - (int)pixelColor.r;
     }
 
     private bool CheckYieldTime()
