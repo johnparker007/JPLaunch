@@ -764,26 +764,16 @@ public class Install : MonoBehaviour
                 yield return null;
             }
 
-            try
-            {
-                Installer.FileFormat fileFormat = FileFormatHelpers.GetFileFormat(GetFilenameWithPath(fileIndex));
+            Installer.FileFormat fileFormat = FileFormatHelpers.GetFileFormat(GetFilenameWithPath(fileIndex));
 
-                String fileIndexAsPaddedString = String.Format("{0:000000}", fileIndex);
+            String fileIndexAsPaddedString = String.Format("{0:000000}", fileIndex);
 
-                String rootFolder = Installer.kOutputFolder + "/" + kLibraryFolder + "/" + kFilesFolder + "/";
-                String flattenedFilePath = SDFile.CreateFlattenedFilepath(rootFolder, fileIndexAsPaddedString);
+            String rootFolder = Installer.kOutputFolder + "/" + kLibraryFolder + "/" + kFilesFolder + "/";
+            String flattenedFilePath = SDFile.CreateFlattenedFilepath(rootFolder, fileIndexAsPaddedString);
 
-                String flattenedFilenameAndPath = Installer.kOutputFolder + "/" + kLibraryFolder + "/" + kFilesFolder + "/" + flattenedFilePath + fileIndexAsPaddedString.Substring(fileIndexAsPaddedString.Length - 1) + "." + fileFormat.ToString();
+            String flattenedFilenameAndPath = Installer.kOutputFolder + "/" + kLibraryFolder + "/" + kFilesFolder + "/" + flattenedFilePath + fileIndexAsPaddedString.Substring(fileIndexAsPaddedString.Length - 1) + "." + fileFormat.ToString();
 
-                File.Copy(GetFilenameWithPath(fileIndex), flattenedFilenameAndPath);
-            }
-            catch (Exception exception)
-            {
-                Debug.LogError("Exception "
-                    + exception.ToString()
-                    + " while trying to generate a numbered game file from: "
-                    + GetFilenameWithPath(fileIndex));
-            }
+            SDFile.CopyFileAsync(GetFilenameWithPath(fileIndex), flattenedFilenameAndPath);
         }
 
         _coroutineTaskRunning = false;

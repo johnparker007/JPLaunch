@@ -47,6 +47,30 @@ public class SDFile
         return writtenWithoutException;
     }
 
+    public static async Task<bool> CopyFileAsync(string sourceFilename, string destinationFilename)
+    {
+        return await CopyFileAsyncTask(sourceFilename, destinationFilename);
+    }
+
+    private static async Task<bool> CopyFileAsyncTask(string sourceFilename, string destinationFilename)
+    {
+        bool writtenWithoutException = true;
+        await Task.Run(() =>
+        {
+            try
+            {
+                File.Copy(sourceFilename, destinationFilename);
+            }
+            catch (Exception exception)
+            {
+                Debug.LogError("Exception trying to copy file in Async function: " + exception);
+                writtenWithoutException = false;
+            }
+        });
+
+        return writtenWithoutException;
+    }
+
     public static String CreateFlattenedFilepath(String rootFolder, String filename)
     {
         String directoryPath = "";
