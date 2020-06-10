@@ -7,6 +7,22 @@ public class SDFileManager : MonoBehaviour
 {
     private static SDFileTaskPool _sdFileTaskPool = new SDFileTaskPool();
 
+    public static int WritesInUse
+    {
+        get
+        {
+            return _sdFileTaskPool.WritesInUse;
+        }
+    }
+
+    public static bool WritesComplete
+    {
+        get
+        {
+            return !_sdFileTaskPool.IsAnyTaskInUse;
+        }
+    }
+
     public static void WriteAllBytesAsync(string filename, byte[] bytes, int overrideLength = 0)
     {
         SDFileTask sdFileTask = _sdFileTaskPool.GetNextFreeSDFileTask();

@@ -268,6 +268,18 @@ public class Install : MonoBehaviour
         private set;
     }
 
+    public int AsyncWritesTotal
+    {
+        get;
+        private set;
+    }
+
+    public int AsyncWritesRemaining
+    {
+        get;
+        private set;
+    }
+
 
     private List<String> _allFilenames = null;
     private List<String> _allFilenamesWithoutPathOrExtension = null;
@@ -357,6 +369,9 @@ public class Install : MonoBehaviour
         yield return new WaitUntil(() => !_coroutineTaskRunning);
 
         StartCoroutine(GenerateSearchResultPages(_searchGenerator.UniqueWordsFiltered, kRowsPerPageMini));
+        yield return new WaitUntil(() => !_coroutineTaskRunning);
+
+        StartCoroutine(WaitForAsyncWritesToComplete());
         yield return new WaitUntil(() => !_coroutineTaskRunning);
 
         _installer.MasterState = Installer.MasterStateType.CompletedSuccessfully; // TODO this isn't necessarily true!
@@ -1198,6 +1213,21 @@ public class Install : MonoBehaviour
         return new Regex(pattern, RegexOptions.None /*, true*/).IsMatch(input);
 
         //Regex testRegex = new Regex("", RegexOptions.None);
+    }
+
+    private IEnumerator WaitForAsyncWritesToComplete()
+    {
+        _coroutineTaskRunning = true;
+
+        AsyncWritesTotal = AsyncWritesRemaining = SDFileManager.WritesInUse;
+
+        while (AsyncWritesRemaining > 0)
+        {
+            yield return new WaitForSeconds(1f);
+            AsyncWritesRemaining = SDFileManager.WritesInUse;
+        }
+
+        _coroutineTaskRunning = false;
     }
 
     private void WriteByteToScreenTexture(byte writeByte, int spectrumCharacterColumn, int spectrumPixelRow)

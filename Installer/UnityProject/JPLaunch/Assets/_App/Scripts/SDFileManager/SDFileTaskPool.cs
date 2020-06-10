@@ -7,6 +7,22 @@ public class SDFileTaskPool
 {
     private List<SDFileTask> _pool = new List<SDFileTask>();
 
+    public int WritesInUse
+    {
+        get
+        {
+            return _pool.Count(x => x.InUse);
+        }
+    }
+
+    public bool IsAnyTaskInUse
+    {
+        get
+        {
+            return _pool.Find(x => x.InUse) != null;
+        }
+    }
+
     public SDFileTaskPool()
     {
 
@@ -24,11 +40,11 @@ public class SDFileTaskPool
             sdFileTask = new SDFileTask();
             sdFileTask.InUse = true;
             _pool.Add(sdFileTask);
-
-            Debug.Log("pool length: " + _pool.Count());
         }
 
         return sdFileTask;
     }
+
+ 
 
 }
