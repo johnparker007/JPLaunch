@@ -558,7 +558,7 @@ public class Install : MonoBehaviour
             + kGraphicsFolder + "/"
             + "exit";
 
-        SDFile.WriteAllBytesAsync(filename, screenMemory);
+        SDFileManager.WriteAllBytesAsync(filename, screenMemory);
     }
 
     private void GenerateSystemMenuConfiguration()
@@ -583,7 +583,7 @@ public class Install : MonoBehaviour
             + kGraphicsFolder + "/"
             + "config";
 
-        SDFile.WriteAllBytesAsync(filename, screenMemory);
+        SDFileManager.WriteAllBytesAsync(filename, screenMemory);
     }
 
     private IEnumerator GenerateGameListPages(int rowsPerPage)
@@ -670,7 +670,7 @@ public class Install : MonoBehaviour
         }
 
         String rootFolder = Installer.kOutputFolder + "/" + kLibraryFolder + "/" + pageFolder + "/";
-        String flattenedFilePath = SDFile.CreateFlattenedFilepath(rootFolder, pageNumberString);
+        String flattenedFilePath = SDFileManager.CreateFlattenedFilepath(rootFolder, pageNumberString);
 
         byte[] screenMemory = GetByteArrayFromScreenTexture(rowsPerPage);
 
@@ -684,11 +684,11 @@ public class Install : MonoBehaviour
 
         if(rowsPerPage == kRowsPerPageFull)
         {
-            SDFile.WriteAllBytesAsync(filename, screenMemory);
+            SDFileManager.WriteAllBytesAsync(filename, screenMemory);
         }
         else
         {
-            SDFile.WriteAllBytesAsync(filename, screenMemory, screenMemory.Length / 3);
+            SDFileManager.WriteAllBytesAsync(filename, screenMemory, screenMemory.Length / 3);
         }
     }
 
@@ -769,11 +769,11 @@ public class Install : MonoBehaviour
             String fileIndexAsPaddedString = String.Format("{0:000000}", fileIndex);
 
             String rootFolder = Installer.kOutputFolder + "/" + kLibraryFolder + "/" + kFilesFolder + "/";
-            String flattenedFilePath = SDFile.CreateFlattenedFilepath(rootFolder, fileIndexAsPaddedString);
+            String flattenedFilePath = SDFileManager.CreateFlattenedFilepath(rootFolder, fileIndexAsPaddedString);
 
             String flattenedFilenameAndPath = Installer.kOutputFolder + "/" + kLibraryFolder + "/" + kFilesFolder + "/" + flattenedFilePath + fileIndexAsPaddedString.Substring(fileIndexAsPaddedString.Length - 1) + "." + fileFormat.ToString();
 
-            SDFile.CopyFileAsync(GetFilenameWithPath(fileIndex), flattenedFilenameAndPath);
+            SDFileManager.CopyFileAsync(GetFilenameWithPath(fileIndex), flattenedFilenameAndPath);
         }
 
         _coroutineTaskRunning = false;
@@ -832,21 +832,21 @@ public class Install : MonoBehaviour
             String fileIndexAsPaddedString = String.Format("{0:000000}", fileIndex);
 
             String rootFolderFull = Installer.kOutputFolder + "/" + kLibraryFolder + "/" + kFullLoadingScreenScrFolder + "/";
-            String flattenedFilePathFull = SDFile.CreateFlattenedFilepath(rootFolderFull, fileIndexAsPaddedString);
+            String flattenedFilePathFull = SDFileManager.CreateFlattenedFilepath(rootFolderFull, fileIndexAsPaddedString);
 
             String rootFolderPartial = Installer.kOutputFolder + "/" + kLibraryFolder + "/" + kPartialLoadingScreenScrFolder + "/";
-            String flattenedFilePathPartial = SDFile.CreateFlattenedFilepath(rootFolderPartial, fileIndexAsPaddedString);
+            String flattenedFilePathPartial = SDFileManager.CreateFlattenedFilepath(rootFolderPartial, fileIndexAsPaddedString);
 
             String flattenedFilenameAndPathFullScreen = Installer.kOutputFolder + "/" + kLibraryFolder + "/" + kFullLoadingScreenScrFolder + "/" + flattenedFilePathFull + fileIndexAsPaddedString.Substring(fileIndexAsPaddedString.Length - 1) + ".scr";
             String flattenedFilenameAndPathPartialScreen = Installer.kOutputFolder + "/" + kLibraryFolder + "/" + kPartialLoadingScreenScrFolder + "/" + flattenedFilePathPartial + fileIndexAsPaddedString.Substring(fileIndexAsPaddedString.Length - 1) + ".scr";
 
             // write full screen
-            SDFile.WriteAllBytesAsync(flattenedFilenameAndPathFullScreen, screenBytes);
+            SDFileManager.WriteAllBytesAsync(flattenedFilenameAndPathFullScreen, screenBytes);
 
             // write partial screen
             Array.Copy(screenBytes, partialScreenBytes, 2048 + 2048);
             Array.Copy(screenBytes, 2048 + 2048 + 2048, partialScreenBytes, 2048 + 2048 + 256, 256 + 256);
-            SDFile.WriteAllBytesAsync(flattenedFilenameAndPathPartialScreen, partialScreenBytes);
+            SDFileManager.WriteAllBytesAsync(flattenedFilenameAndPathPartialScreen, partialScreenBytes);
         }
 
         _coroutineTaskRunning = false;
@@ -985,7 +985,7 @@ public class Install : MonoBehaviour
         }
 
         String rootFolder = Installer.kOutputFolder + "/" + kLibraryFolder + "/" + searchListFolder + "/";
-        String flattenedFilePath = SDFile.CreateFlattenedFilepath(rootFolder, searchTerm);
+        String flattenedFilePath = SDFileManager.CreateFlattenedFilepath(rootFolder, searchTerm);
 
         byte[] screenMemory = GetByteArrayFromScreenTexture(rowsPerPage);
 
@@ -1001,11 +1001,11 @@ public class Install : MonoBehaviour
 
         if (rowsPerPage == kRowsPerPageFull)
         {
-            SDFile.WriteAllBytesAsync(filename, screenMemory);
+            SDFileManager.WriteAllBytesAsync(filename, screenMemory);
         }
         else
         {
-            SDFile.WriteAllBytesAsync(filename, screenMemory, screenMemory.Length / 3);
+            SDFileManager.WriteAllBytesAsync(filename, screenMemory, screenMemory.Length / 3);
         }
     }
 
