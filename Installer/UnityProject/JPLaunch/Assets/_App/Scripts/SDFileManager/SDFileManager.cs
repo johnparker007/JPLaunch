@@ -23,6 +23,14 @@ public class SDFileManager : MonoBehaviour
         }
     }
 
+    public static int PoolCount
+    {
+        get
+        {
+            return _sdFileTaskPool.PoolCount;
+        }
+    }
+
     public static void WriteAllBytesAsync(string filename, byte[] bytes, int overrideLength = 0)
     {
         SDFileTask sdFileTask = _sdFileTaskPool.GetNextFreeSDFileTask();

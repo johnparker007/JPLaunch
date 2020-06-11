@@ -23,6 +23,15 @@ public class SDFileTaskPool
         }
     }
 
+    public int PoolCount
+    {
+        get
+        {
+            return _pool.Count();
+        }
+    }
+
+
     public SDFileTaskPool()
     {
 

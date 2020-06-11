@@ -49,7 +49,6 @@ public class SDFileTask
             catch (Exception exception)
             {
                 Debug.LogError("Exception trying to WriteAllBytes in Async function: " + exception);
-                Debug.Break();
             }
 
             InUse = false;
@@ -75,7 +74,6 @@ public class SDFileTask
             catch (Exception exception)
             {
                 Debug.LogError("Exception trying to copy file in Async function: " + exception);
-                Debug.Break();
             }
 
             InUse = false;

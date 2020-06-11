@@ -110,21 +110,7 @@ public class Installer : MonoBehaviour
         }
     }
 
-    public int TotalObjects
-    {
-        get
-        {
-            return SearchStringsTotal + GameListPagesTotal;
-        }
-    }
 
-    public int TotalObjectsRemaining
-    {
-        get
-        {
-            return SearchStringsRemaining + GameListPagesRemaining;
-        }
-    }
 
     private void Awake()
     {
