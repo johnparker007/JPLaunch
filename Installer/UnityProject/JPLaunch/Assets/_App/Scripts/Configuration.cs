@@ -5,6 +5,7 @@ using UnityEngine;
 public class Configuration
 {
     private const string kKeyGamesRootPath = "GamesRootPath";
+    private const string kKeyESXDOSRootPath = "ESXDOSRootPath";
     private const string kKeyAutobootFPLaunch = "AutobootFPLaunch";
     private const string kKeyIncludeTapFiles = "IncludeTapFiles";
     private const string kKeyIncludeSnaFiles = "IncludeSnaFiles";
@@ -12,6 +13,12 @@ public class Configuration
 
 
     public string GamesRootPath
+    {
+        get;
+        set;
+    }
+
+    public string ESXDOSRootPath
     {
         get;
         set;
@@ -44,6 +51,7 @@ public class Configuration
     public void Load()
     {
         GamesRootPath = PlayerPrefs.GetString(kKeyGamesRootPath);
+        ESXDOSRootPath = PlayerPrefs.GetString(kKeyESXDOSRootPath);
         AutobootFPLaunch = PlayerPrefs.GetInt(kKeyAutobootFPLaunch) == 1;
         IncludeTapFiles = PlayerPrefs.GetInt(kKeyIncludeTapFiles) == 1;
         IncludeSnaFiles = PlayerPrefs.GetInt(kKeyIncludeSnaFiles) == 1;
@@ -53,6 +61,7 @@ public class Configuration
     public void Save()
     {
         PlayerPrefs.SetString(kKeyGamesRootPath, GamesRootPath);
+        PlayerPrefs.SetString(kKeyESXDOSRootPath, ESXDOSRootPath);
         PlayerPrefs.SetInt(kKeyAutobootFPLaunch, AutobootFPLaunch ? 1 : 0);
         PlayerPrefs.SetInt(kKeyIncludeTapFiles, IncludeTapFiles ? 1 : 0);
         PlayerPrefs.SetInt(kKeyIncludeSnaFiles, IncludeSnaFiles ? 1 : 0);

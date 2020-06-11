@@ -27,14 +27,17 @@ public class Installer : MonoBehaviour
         Z80
     }
     
-
-    public const string kOutputRoot= "C:/Users/John/Desktop/ZEsarUX_win-8.1/_SD_CARD_ROOT_087";
-    public const string kOutputFolder = kOutputRoot + "/JPLAUNCH";
-
-
     public SpectrumFiles SpectrumFiles = null;
 
     public Install InstallPrefab = null;
+
+    public string OutputFolder
+    {
+        get
+        {
+            return Configuration.ESXDOSRootPath + "/JPLAUNCH";
+        }
+    }
 
     public MasterStateType MasterState
     {
