@@ -10,6 +10,8 @@ using SFB;
 [RequireComponent(typeof(Text))]
 public class TextWritesInUse : MonoBehaviour
 {
+    public Installer Installer = null;
+
     private Text _text = null;
 
     void Start()
@@ -19,7 +21,7 @@ public class TextWritesInUse : MonoBehaviour
 
     private void Update()
     {
-        _text.text = SDFileManager.WritesInUse.ToString();
+        _text.text = Installer.InstallInstance.AsyncWritesRemaining.ToString();
     }
 
 }

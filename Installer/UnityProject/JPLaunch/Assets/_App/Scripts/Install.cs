@@ -8,9 +8,13 @@ using System.Text;
 using System.Text.RegularExpressions;
 using UnityEngine;
 using UnityEngine.UI;
+using Soft160.Data.Cryptography;
 
 public class Install : MonoBehaviour 
 {
+    public const bool kReuseExistingInstall = true;
+
+
     public const int kSpectrumCharacterColumnPageCountHighByte = 31;
     public const int kSpectrumPixelRowPageCountHighByte = 0;
     public const int kSpectrumCharacterColumnPageCountLowByte = 31;
@@ -75,6 +79,8 @@ public class Install : MonoBehaviour
     public Texture2D FontTexture2D = null;
     public Texture2D UDGFontTexture2D = null;
     public Texture2D SpectrumScreenTexture2D = null;
+
+    public CRCServiceProvider FastCRC = new CRCServiceProvider();
 
     private Installer _installer = null;
 
@@ -341,6 +347,8 @@ public class Install : MonoBehaviour
     {
         GenerateCharacterXPositions();
         GenerateBlankScreenColorArray();
+
+        FastCRC.Initialize();
     }
 
     public IEnumerator InstallCoroutine()
@@ -385,12 +393,15 @@ public class Install : MonoBehaviour
         InitialInstallTasksRemaining = InitialInstallTasksTotal;
 
         // task 1
-        while (!DeleteOutputFolderIfPresent())
+        if(!kReuseExistingInstall)
         {
-            Debug.LogWarning("Failed to delete output folder... retrying in 1 second");
-            yield return new WaitForSeconds(1f);
+            while (!DeleteOutputFolderIfPresent())
+            {
+                Debug.LogWarning("Failed to delete output folder... retrying in 1 second");
+                yield return new WaitForSeconds(1f);
+            }
+            yield return new WaitForSeconds(1f); // let OS catch up with deleted files
         }
-        yield return new WaitForSeconds(1f); // let OS catch up with deleted files
         --InitialInstallTasksRemaining;
         yield return null;
 
@@ -856,6 +867,7 @@ public class Install : MonoBehaviour
 
             // write full screen
             SDFileManager.WriteAllBytesAsync(flattenedFilenameAndPathFullScreen, screenBytes);
+            byte[] crc = FastCRC.ComputeHash(screenBytes);
 
             // write partial screen
             Array.Copy(screenBytes, partialScreenBytes, 2048 + 2048);

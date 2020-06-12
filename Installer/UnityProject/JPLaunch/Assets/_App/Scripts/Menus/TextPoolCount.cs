@@ -10,6 +10,8 @@ using SFB;
 [RequireComponent(typeof(Text))]
 public class TextPoolCount : MonoBehaviour
 {
+    public Installer Installer = null;
+
     private Text _text = null;
 
     void Start()
@@ -19,7 +21,7 @@ public class TextPoolCount : MonoBehaviour
 
     private void Update()
     {
-        _text.text = SDFileManager.PoolCount.ToString();
+        _text.text = Installer.InstallInstance.AsyncWritesTotal.ToString();
     }
 
 }

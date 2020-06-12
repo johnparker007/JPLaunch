@@ -69,7 +69,7 @@ public class SDFileTask
         {
             try
             {
-                File.Copy(_sourceFilename, _targetFilename);
+                File.Copy(_sourceFilename, _targetFilename, true);
             }
             catch (Exception exception)
             {

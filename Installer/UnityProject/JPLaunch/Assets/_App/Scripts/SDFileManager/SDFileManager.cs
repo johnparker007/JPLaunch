@@ -54,6 +54,8 @@ public class SDFileManager : MonoBehaviour
 
             directoryPath += character;
 
+            // TODO don't try to create dir if already there according to the saved dictionary
+            // small time saving writing to SD from testing (maybe save 10%-20% overall time)
             Directory.CreateDirectory(rootFolder + "/" + directoryPath);
 
             directoryPath += "/";
@@ -61,16 +63,5 @@ public class SDFileManager : MonoBehaviour
 
         return directoryPath;
     }
-
-    public static string GetFlattenedFilename(string filename)
-    {
-        // domark
-        // want: /d/o/m/a/r/k
-
-        string flattenedFilename = "";
-
-        return flattenedFilename;
-    }
-
 
 }
