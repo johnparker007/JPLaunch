@@ -80,8 +80,6 @@ public class Install : MonoBehaviour
     public Texture2D UDGFontTexture2D = null;
     public Texture2D SpectrumScreenTexture2D = null;
 
-    public CRCServiceProvider FastCRC = new CRCServiceProvider();
-
     private Installer _installer = null;
 
     private int[] _characterWidths =
@@ -345,10 +343,10 @@ public class Install : MonoBehaviour
 
     private void Initialise()
     {
+        FastCRC.Instance.Setup(_installer);
+
         GenerateCharacterXPositions();
         GenerateBlankScreenColorArray();
-
-        FastCRC.Initialize();
     }
 
     public IEnumerator InstallCoroutine()
@@ -380,6 +378,8 @@ public class Install : MonoBehaviour
 
         StartCoroutine(WaitForAsyncWritesToComplete());
         yield return new WaitUntil(() => !_coroutineTaskRunning);
+
+        FastCRC.Instance.SaveDatabase();
 
         _installer.MasterState = Installer.MasterStateType.CompletedSuccessfully; // TODO this isn't necessarily true!
         MenuController.Instance.SetMenu(MenuController.Instance.MenuCompleted);
@@ -867,7 +867,6 @@ public class Install : MonoBehaviour
 
             // write full screen
             SDFileManager.WriteAllBytesAsync(flattenedFilenameAndPathFullScreen, screenBytes);
-            byte[] crc = FastCRC.ComputeHash(screenBytes);
 
             // write partial screen
             Array.Copy(screenBytes, partialScreenBytes, 2048 + 2048);

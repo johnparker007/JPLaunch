@@ -17,9 +17,6 @@ public class SDFileTask
     private string _filename = null;
     private byte[] _bytes = null;
 
-    private string _sourceFilename = null;
-    private string _targetFilename = null;
-
     public void WriteAllBytesAsync(string filename, byte[] bytes, int overrideLength)
     {
         _filename = (string)filename.Clone();
@@ -27,14 +24,19 @@ public class SDFileTask
         if (overrideLength == 0)
         {
             _bytes = (byte[])bytes.Clone();
-
-            WriteAllBytesAsyncTask();
         }
         else
         {
             _bytes = bytes.Take(overrideLength).ToArray();
+        }
 
+        if(!FastCRC.Instance.AddOrUpdateFile(_filename, _bytes))
+        {
             WriteAllBytesAsyncTask();
+        }
+        else
+        {
+            InUse = false;
         }
     }
 
@@ -57,28 +59,11 @@ public class SDFileTask
 
     public void CopyFileAsync(string sourceFilename, string targetFilename)
     {
-        _sourceFilename = (string)sourceFilename.Clone();
-        _targetFilename = (string)targetFilename.Clone();
+        byte[] fileBytes = File.ReadAllBytes(sourceFilename);
 
-        CopyFileAsyncTask();
+        WriteAllBytesAsync(targetFilename, fileBytes, 0);
     }
 
-    private async void CopyFileAsyncTask()
-    {
-        await Task.Run(() =>
-        {
-            try
-            {
-                File.Copy(_sourceFilename, _targetFilename, true);
-            }
-            catch (Exception exception)
-            {
-                Debug.LogError("Exception trying to copy file in Async function: " + exception);
-            }
-
-            InUse = false;
-        });
-    }
 
 
 }
