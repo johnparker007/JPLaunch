@@ -45,20 +45,33 @@ public class SDFileManager : MonoBehaviour
         sdFileTask.CopyFileAsync(sourceFilename, targetFilename);
     }
 
-    public static string CreateFlattenedFilepath(string rootFolder, string filename)
+    public static string CreateFlattenedFilepath(string rootFolder, string filename, string filenameSuffix, string filenameExtension)
     {
+        List<string> directoriesToWrite = new List<string>();
         string directoryPath = "";
         for (int characterIndex = 0; characterIndex < filename.Length - 1; ++characterIndex)
         {
             string character = filename.Substring(characterIndex, 1);
 
             directoryPath += character;
-
-            // TODO don't try to create dir if already there according to the saved dictionary
-            // small time saving writing to SD from testing (maybe save 10%-20% overall time)
-            Directory.CreateDirectory(rootFolder + "/" + directoryPath);
+             
+            directoriesToWrite.Add(rootFolder + directoryPath);
 
             directoryPath += "/";
+        }
+
+        string filePath = 
+            rootFolder 
+            + directoryPath 
+            + filename.Substring(filename.Length - 1, 1) 
+            + filenameSuffix
+            + filenameExtension;
+        if (!FastCRC.Instance.IsFilePathInDatabase(filePath))
+        {
+            foreach (string writePath in directoriesToWrite)
+            {
+                Directory.CreateDirectory(writePath);
+            }
         }
 
         return directoryPath;

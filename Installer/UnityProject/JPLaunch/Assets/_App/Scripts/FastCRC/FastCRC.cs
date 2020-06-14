@@ -129,6 +129,14 @@ public class FastCRC : CRCServiceProvider
 		}
 	}
 
+	public bool IsFilePathInDatabase(string filePath)
+    {
+		int foundCRCValue;
+		bool foundFilePath = _database.CRCData.TryGetValue(filePath, out foundCRCValue);
+
+		return foundFilePath;
+	}
+
 	public void SaveDatabase()
     {
 		_database.Save();
