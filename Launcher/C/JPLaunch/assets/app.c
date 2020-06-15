@@ -39,11 +39,8 @@ main()
 
 void AppLoadResources()
 {
-	const char * kFontProportionalPath = "../graphics/propfont";
-	IOLoadBytes(kFontProportionalPath, kFrontendBasicDataPageLength, kProportionalFontBaseAddress);
-
-	const char * kFontFixedPath = "../graphics/8x8font";
-	IOLoadBytes(kFontFixedPath, kFrontendBasicDataPageLength, kFontSheetBaseAddress);
+	// TODO figure out why these only work in certain orders!  had to put the fonts at the end otherwise they
+	// didn't load/were overwritten and the memory was all zeros instead of the data
 
 	const char * kSearchWindowPath = "../graphics/srch_win";
 	IOLoadBytes(kSearchWindowPath, kFrontendBasicDataPageLength, kSearchWindowPixelDataReadAddress);
@@ -53,4 +50,10 @@ void AppLoadResources()
 
 	const char * kBSaveRoutinePath = "../code/bsave";
 	IOLoadBytes(kBSaveRoutinePath, kFrontendBasicDataPageLength, kRoutineBSaveBaseAddress);
+
+	const char* kFontProportionalPath = "../graphics/propfont";
+	IOLoadBytes(kFontProportionalPath, kFrontendBasicDataPageLength, kProportionalFontBaseAddress);
+
+	const char* kFontFixedPath = "../graphics/8x8font";
+	IOLoadBytes(kFontFixedPath, kFrontendBasicDataPageLength, kFontSheetBaseAddress);
 }

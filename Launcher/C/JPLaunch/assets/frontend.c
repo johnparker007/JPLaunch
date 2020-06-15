@@ -80,47 +80,18 @@
 #define kExitMenuOptionCount	(3)
 
 #define kConfigurationMenuOptionDefaultView			(0)
-#define kConfigurationMenuOptionInputAcceleration	(1)
-#define kConfigurationMenuOptionKeyboardType		(2)
-#define kConfigurationMenuOptionJoystickType		(3)
-#define kConfigurationMenuOptionNMISYSStartupPath	(4)
+#define kConfigurationMenuOptionNMISYSStartupPath	(1)
+#define kConfigurationMenuOptionInputAcceleration	(2)
+#define kConfigurationMenuOptionKeyboardType		(3)
+#define kConfigurationMenuOptionJoystickType		(4)
+
 #define kConfigurationMenuOptionBack				(5)
 #define kConfigurationMenuOptionCount				(6)
-
-//#define kConfigurationMenuCycleDefaultViewFullScreen		(0)
-//#define kConfigurationMenuCycleDefaultViewMiniListAndImage	(1)
-//#define kConfigurationMenuCycleDefaultViewCount				(2)
-//
-//#define kConfigurationMenuCycleInputAccelerationPageAndRow	(0)
-//#define kConfigurationMenuCycleInputAccelerationPage		(1)
-//#define kConfigurationMenuCycleInputAccelerationRow			(2)
-//#define kConfigurationMenuCycleInputAccelerationDisabled	(3)
-//#define kConfigurationMenuCycleInputAccelerationCount		(4)
-//
-//#define kConfigurationMenuCycleKeyboardTypeNon48KWithCursor	(0)
-//#define kConfigurationMenuCycleKeyboardType48KNoCursor		(1)
-//#define kConfigurationMenuCycleKeyboardTypeCount			(2)
-//
-//#define kConfigurationMenuCycleJoystickTypeDisabled	(0)
-//#define kConfigurationMenuCycleJoystickTypeSinclair	(1)
-//#define kConfigurationMenuCycleJoystickTypeKempston	(2)
-//#define kConfigurationMenuCycleJoystickTypeCursor	(3)
-//#define kConfigurationMenuCycleJoystickTypeCount	(4)
-
-#define kConfigurationMenuCycleOptionCount			(kConfigurationMenuOptionJoystickType + 1)
 
 
 #define kDebugFakeLoadDelayForEmulator
 
 
-
-unsigned char _configurationMenuCycleOptionCountPerRow[kConfigurationMenuCycleOptionCount] =
-{
-	2,
-	4,
-	2,
-	4
-};
 
 		
 void * _basicTapFilenameAddress = (void *)(0x5cdd); // in use
@@ -974,14 +945,6 @@ void FrontendProcessInputConfigurationMenuSelect()
 {
 	switch (_frontendCurrentRow)
 	{
-	case kConfigurationMenuOptionDefaultView:
-		break;
-	case kConfigurationMenuOptionNMISYSStartupPath:
-		break;
-	case kConfigurationMenuOptionInputAcceleration:
-		break;
-	case kConfigurationMenuOptionKeyboardType:
-		break;
 	case kConfigurationMenuOptionBack:
 		FrontendProcessInputConfigurationMenuBack();
 		break;
