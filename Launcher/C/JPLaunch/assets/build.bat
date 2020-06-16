@@ -16,11 +16,14 @@ set APP_NIRVANAP_23_ROWS_BIN_TARGET_NAME=nirvana
 set APP_NIRVANAP_7_ROWS_BIN_TARGET_NAME=nirvana7
 
 
-REM *** TODO copy installer spectrum files to the new subdirectory per file, with the .bytes extension
 
 
 copy app_CODE.bin %SD_CARD_JPLAUNCH_PATH%\code\%APP_CODE_BIN_TARGET_NAME%
-REM copy app_CODE.bin %INSTALLER_SPECTRUM_FILES_PATH%\%APP_CODE_BIN_TARGET_NAME%
+copy app_CODE.bin %INSTALLER_SPECTRUM_FILES_PATH%\app_CODE_bin\app_CODE.bytes
+
+
+REM *** TODO copy all below installer spectrum files to the new subdirectory per file, with the .bytes extension
+
 
 copy app_NIRVANAP_23_ROWS.bin %SD_CARD_JPLAUNCH_PATH%\code\%APP_NIRVANAP_23_ROWS_BIN_TARGET_NAME%
 REM copy app_NIRVANAP_23_ROWS.bin %INSTALLER_SPECTRUM_FILES_PATH%\%APP_NIRVANAP_23_ROWS_BIN_TARGET_NAME%
