@@ -95,8 +95,8 @@
 
 		
 void * _basicTapFilenameAddress = (void *)(0x5cdd); // in use
-void * _basicSnaZ80IndexAddress = (void *)(0x5d1a); // in use 
-void * _basicCDPathAddress = (void *)(0x5d32); // in use
+void * _basicSnaZ80IndexAddress = (void *)(0x5d1c); // in use 
+void * _basicCDPathAddress = (void *)(0x5d3e); // in use
 
 void * _searchWindowPixelDataReadAddress = (void *)(48952);
 void * _searchWindowPixelDataWriteAddress = (void *)(16384 + 2048);
@@ -1288,13 +1288,12 @@ void FrontendLoadFile()
 	{
 		basicData[basicDataIndex] = paddedTapSnaZ80NumberString[paddedTapSnaZ80NumberStringIndex];
 		++basicDataIndex;
-		if (paddedTapSnaZ80NumberStringIndex < kFrontendTapSnaZ80FileNumberPaddedLength - 1)
-		{
-			basicData[basicDataIndex] = '/';
-			++basicDataIndex;
-		}
+		basicData[basicDataIndex] = '/';
+		++basicDataIndex;
 	}
 
+	basicData[basicDataIndex] = '0';
+	++basicDataIndex;
 	basicData[basicDataIndex] = '.';
 	++basicDataIndex;
 
@@ -1444,21 +1443,11 @@ void FrontendShowLoadingScreenFile(_Bool partial)
 	{
 		basicData[basicDataIndex] = paddedTapSnaZ80NumberString[paddedTapSnaZ80NumberStringIndex];
 		++basicDataIndex;
-		if (paddedTapSnaZ80NumberStringIndex < kFrontendTapSnaZ80FileNumberPaddedLength - 1)
-		{
-			basicData[basicDataIndex] = '/';
-			++basicDataIndex;
-		}
+		basicData[basicDataIndex] = '/';
+		++basicDataIndex;
 	}
 
-	basicData[basicDataIndex] = '.';
-	++basicDataIndex;
-	basicData[basicDataIndex] = 's';
-	++basicDataIndex;
-	basicData[basicDataIndex] = 'c';
-	++basicDataIndex;
-	basicData[basicDataIndex] = 'r';
-	++basicDataIndex;
+	basicData[basicDataIndex] = '0';
 
 #ifdef kDebugFakeLoadDelayForEmulator
 	IOFakeScreenLoadDelay();
@@ -1551,22 +1540,11 @@ void FrontendLoadGameListScreen()
 	{
 		basicData[basicDataIndex] = paddedPageNumberString[paddedPageNumberStringIndex];
 		++basicDataIndex;
-		if (paddedPageNumberStringIndex < kFrontendGameListPageIndexPaddedMaximumLength - 1)
-		{
-			basicData[basicDataIndex] = '/';
-			++basicDataIndex;
-		}
+		basicData[basicDataIndex] = '/';
+		++basicDataIndex;
 	}
 
-	basicData[basicDataIndex] = '.';
-	++basicDataIndex;
-	basicData[basicDataIndex] = 's';
-	++basicDataIndex;
-	basicData[basicDataIndex] = 'c';
-	++basicDataIndex;
-	basicData[basicDataIndex] = 'r';
-	++basicDataIndex;
-	basicData[basicDataIndex] = 0;
+	basicData[basicDataIndex] = '0';
 
 #ifdef kDebugFakeLoadDelayForEmulator
 	IOFakeScreenLoadDelay();

@@ -59,7 +59,17 @@ public class SDFileTask
 
     public void CopyFileAsync(string sourceFilename, string targetFilename)
     {
-        byte[] fileBytes = File.ReadAllBytes(sourceFilename);
+        byte[] fileBytes;
+
+        try
+        {
+            fileBytes = File.ReadAllBytes(sourceFilename);
+        }
+        catch(Exception exception)
+        {
+            Debug.LogError("Exception: " + exception);
+            return;
+        }
 
         WriteAllBytesAsync(targetFilename, fileBytes, 0);
     }

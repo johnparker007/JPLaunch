@@ -43,7 +43,6 @@ public class Install : MonoBehaviour
     public const string kGraphicsFolder = "graphics";
 
     public const string kFilesFolder = "files";
-    public const string kDatabaseFolder = "database";
 
     public const string kGameListFullFolder = "gamefull";
     public const string kGameListMiniFolder = "gamemini";
@@ -464,7 +463,6 @@ public class Install : MonoBehaviour
         Directory.CreateDirectory(_installer.OutputFolder + "/" + kCodeFolder);
         Directory.CreateDirectory(_installer.OutputFolder + "/" + kGraphicsFolder);
 
-        Directory.CreateDirectory(_installer.OutputFolder + "/" + kLibraryFolder + "/" + kDatabaseFolder);
         Directory.CreateDirectory(_installer.OutputFolder + "/" + kLibraryFolder + "/" + kGameListFullFolder);
         Directory.CreateDirectory(_installer.OutputFolder + "/" + kLibraryFolder + "/" + kGameListMiniFolder);
         Directory.CreateDirectory(_installer.OutputFolder + "/" + kLibraryFolder + "/" + kSearchListFullFolder);
@@ -695,7 +693,7 @@ public class Install : MonoBehaviour
         }
 
         String rootFolder = _installer.OutputFolder + "/" + kLibraryFolder + "/" + pageFolder + "/";
-        String flattenedFilePath = SDFileManager.CreateFlattenedFilepath(rootFolder, pageNumberString, "", ".scr");
+        String flattenedFilePath = SDFileManager.CreateFlattenedFilepath(rootFolder, pageNumberString, "", "");
 
         byte[] screenMemory = GetByteArrayFromScreenTexture(rowsPerPage);
 
@@ -704,8 +702,7 @@ public class Install : MonoBehaviour
             + kLibraryFolder + "/"
             + pageFolder + "/"
             + flattenedFilePath
-            + pageNumberString.Substring(pageNumberString.Length - 1)
-            + ".scr";
+            + "0";
 
         if(rowsPerPage == kRowsPerPageFull)
         {
@@ -796,7 +793,7 @@ public class Install : MonoBehaviour
             String rootFolder = _installer.OutputFolder + "/" + kLibraryFolder + "/" + kFilesFolder + "/";
             String flattenedFilePath = SDFileManager.CreateFlattenedFilepath(rootFolder, fileIndexAsPaddedString, "", "." + fileFormat.ToString());
 
-            String flattenedFilenameAndPath = _installer.OutputFolder + "/" + kLibraryFolder + "/" + kFilesFolder + "/" + flattenedFilePath + fileIndexAsPaddedString.Substring(fileIndexAsPaddedString.Length - 1) + "." + fileFormat.ToString();
+            String flattenedFilenameAndPath = _installer.OutputFolder + "/" + kLibraryFolder + "/" + kFilesFolder + "/" + flattenedFilePath + "0" + "." + fileFormat.ToString();
 
             SDFileManager.CopyFileAsync(GetFilenameWithPath(fileIndex), flattenedFilenameAndPath);
         }
@@ -857,13 +854,13 @@ public class Install : MonoBehaviour
             String fileIndexAsPaddedString = String.Format("{0:000000}", fileIndex);
 
             String rootFolderFull = _installer.OutputFolder + "/" + kLibraryFolder + "/" + kFullLoadingScreenScrFolder + "/";
-            String flattenedFilePathFull = SDFileManager.CreateFlattenedFilepath(rootFolderFull, fileIndexAsPaddedString, "", ".scr");
+            String flattenedFilePathFull = SDFileManager.CreateFlattenedFilepath(rootFolderFull, fileIndexAsPaddedString, "", "");
 
             String rootFolderPartial = _installer.OutputFolder + "/" + kLibraryFolder + "/" + kPartialLoadingScreenScrFolder + "/";
-            String flattenedFilePathPartial = SDFileManager.CreateFlattenedFilepath(rootFolderPartial, fileIndexAsPaddedString, "", ".scr");
+            String flattenedFilePathPartial = SDFileManager.CreateFlattenedFilepath(rootFolderPartial, fileIndexAsPaddedString, "", "");
 
-            String flattenedFilenameAndPathFullScreen = _installer.OutputFolder + "/" + kLibraryFolder + "/" + kFullLoadingScreenScrFolder + "/" + flattenedFilePathFull + fileIndexAsPaddedString.Substring(fileIndexAsPaddedString.Length - 1) + ".scr";
-            String flattenedFilenameAndPathPartialScreen = _installer.OutputFolder + "/" + kLibraryFolder + "/" + kPartialLoadingScreenScrFolder + "/" + flattenedFilePathPartial + fileIndexAsPaddedString.Substring(fileIndexAsPaddedString.Length - 1) + ".scr";
+            String flattenedFilenameAndPathFullScreen = _installer.OutputFolder + "/" + kLibraryFolder + "/" + kFullLoadingScreenScrFolder + "/" + flattenedFilePathFull + "0";
+            String flattenedFilenameAndPathPartialScreen = _installer.OutputFolder + "/" + kLibraryFolder + "/" + kPartialLoadingScreenScrFolder + "/" + flattenedFilePathPartial + "0";
 
             // write full screen
             SDFileManager.WriteAllBytesAsync(flattenedFilenameAndPathFullScreen, screenBytes);

@@ -14,7 +14,7 @@
 #define kFrontendBasicDataSearchMaximumLength			(((kFrontendSearchInputStringMaximumLength * 2) - 1) + 4 + 7) //+4 for ".scr", +8 for _000000
 
 #define kFrontendTapSnaZ80FileNumberPaddedLength		(6)
-#define kFrontendBasicDataTapSnaZ80Length				(((kFrontendTapSnaZ80FileNumberPaddedLength * 2) - 1) + 4) //+4 for ".tap"
+#define kFrontendBasicDataTapSnaZ80Length				((kFrontendTapSnaZ80FileNumberPaddedLength * 2) + 5) //+5 for "0.tap"
 
 #define kFrontendGameListPageIndexPaddedMaximumLength	(6)
 

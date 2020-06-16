@@ -49,7 +49,7 @@ public class SDFileManager : MonoBehaviour
     {
         List<string> directoriesToWrite = new List<string>();
         string directoryPath = "";
-        for (int characterIndex = 0; characterIndex < filename.Length - 1; ++characterIndex)
+        for (int characterIndex = 0; characterIndex < filename.Length; ++characterIndex)
         {
             string character = filename.Substring(characterIndex, 1);
 
@@ -63,8 +63,7 @@ public class SDFileManager : MonoBehaviour
         string filePath = 
             rootFolder 
             + directoryPath 
-            + filename.Substring(filename.Length - 1, 1) 
-            + filenameSuffix
+            + "0"
             + filenameExtension;
         if (!FastCRC.Instance.IsFilePathInDatabase(filePath))
         {
