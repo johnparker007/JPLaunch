@@ -1603,15 +1603,9 @@ void FrontendLoadSearchListScreen()
 	{
 		basicData[basicDataIndex] = _frontendSearchInputString[searchInputStringCharIndex];
 		++basicDataIndex;
-		if (searchInputStringCharIndex < _frontendSearchInputStringLength - 1)
-		{
-			basicData[basicDataIndex] = '/';
-			++basicDataIndex;
-		}
+		basicData[basicDataIndex] = '/';
+		++basicDataIndex;
 	}
-
-	basicData[basicDataIndex] = '_';
-	++basicDataIndex;
 
 	basicData[basicDataIndex] = paddedPageNumberString[0];
 	++basicDataIndex;
@@ -1624,16 +1618,6 @@ void FrontendLoadSearchListScreen()
 	basicData[basicDataIndex] = paddedPageNumberString[4];
 	++basicDataIndex;
 	basicData[basicDataIndex] = paddedPageNumberString[5];
-	++basicDataIndex;
-
-	basicData[basicDataIndex] = '.';
-	++basicDataIndex;
-	basicData[basicDataIndex] = 's';
-	++basicDataIndex;
-	basicData[basicDataIndex] = 'c';
-	++basicDataIndex;
-	basicData[basicDataIndex] = 'r';
-	++basicDataIndex;
 	
 #ifdef kDebugFakeLoadDelayForEmulator
 	IOFakeScreenLoadDelay();

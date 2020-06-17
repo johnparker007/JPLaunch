@@ -1018,8 +1018,7 @@ public class Install : MonoBehaviour
             + kLibraryFolder + "/"
             + searchListFolder + "/"
             + flattenedFilePath
-             + searchTerm.Substring(searchTerm.Length - 1) + "_"
-            + pageNumberString + ".scr";
+            + pageNumberString;
 
         if (rowsPerPage == kRowsPerPageFull)
         {
