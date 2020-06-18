@@ -532,29 +532,6 @@ public class Install : MonoBehaviour
         }
     }
 
-    //private void GenerateDatabasePageFiles(int rowsPerPage)
-    //{
-    //    //byte[] sourcePlusThreeDatabasePageFileBytes = File.ReadAllBytes("Assets\\_App\\SpectrumFiles\\32x23DatabasePage44000");
-    //    byte[] sourcePlusThreeDatabasePageFileBytes = File.ReadAllBytes("Assets\\_App\\SpectrumFiles\\64x23DatabasePage44000");
-
-    //    byte[] plusThreeDatabasePageBuffer = new byte[sourcePlusThreeDatabasePageFileBytes.Length];
-
-    //    Buffer.BlockCopy(sourcePlusThreeDatabasePageFileBytes, 0, plusThreeDatabasePageBuffer, 0, sourcePlusThreeDatabasePageFileBytes.Length);
-
-    //    int pageCount = _allFilenames.Count / rowsPerPage; // TODO this is one more, will need to handle part pages to implement
-    //    for(int pageIndex = 0; pageIndex < pageCount; ++pageIndex)
-    //    {
-    //        int sourceOffset = pageIndex * rowsPerPage * kGamenameMaximumLength;
-    //        int destinationOffset = kPlusThreeDOSFileDataStartOffset;
-
-    //        Buffer.BlockCopy(_database, sourceOffset, plusThreeDatabasePageBuffer, destinationOffset, rowsPerPage * kGamenameMaximumLength);
-
-    //        string filename = kOutputFolder + "/" + kLibraryFolder + "/" + kDatabaseFolder + "/" + String.Format("{0:000000}", pageIndex);
-    //        File.WriteAllBytes(filename, plusThreeDatabasePageBuffer);
-    //    }
-
-    //}
-
     private void GenerateSystemMenus()
     {
         GenerateSystemMenuExit();
@@ -674,13 +651,7 @@ public class Install : MonoBehaviour
 
     private void SaveScreenTextureAsSpectrumScreenData(int pageIndex, int rowsPerPage)
     {
-        //byte[] screenMemory = GetByteArrayFromScreenTexture();
-
-        //string filename = kOutputFolder + "/" + kLibraryFolder + "/" + kPageScrFolder + "/" + String.Format("{0:000000}", pageIndex) + ".SCR";
-        //File.WriteAllBytes(filename, screenMemory);
-
-        //**************************************************************************************
-        String pageNumberString = String.Format("{0:000000}", pageIndex);
+        String pageNumberString = String.Format("{0:0000}", pageIndex);
 
         String pageFolder;
         if (rowsPerPage == kRowsPerPageFull)
@@ -692,8 +663,9 @@ public class Install : MonoBehaviour
             pageFolder = kGameListMiniFolder;
         }
 
-        String rootFolder = _installer.OutputFolder + "/" + kLibraryFolder + "/" + pageFolder + "/";
-        String flattenedFilePath = SDFileManager.CreateFlattenedFilepath(rootFolder, pageNumberString, "", "");
+        string rootFolder = _installer.OutputFolder + "/" + kLibraryFolder + "/" + pageFolder + "/";
+        string targetFilename = "0";
+        string flattenedFilePath = SDFileManager.CreateFlattenedFilepath(rootFolder, pageNumberString, targetFilename, "");
 
         byte[] screenMemory = GetByteArrayFromScreenTexture(rowsPerPage);
 
@@ -702,7 +674,7 @@ public class Install : MonoBehaviour
             + kLibraryFolder + "/"
             + pageFolder + "/"
             + flattenedFilePath
-            + "0";
+            + targetFilename;
 
         if(rowsPerPage == kRowsPerPageFull)
         {
@@ -787,13 +759,22 @@ public class Install : MonoBehaviour
             }
 
             Installer.FileFormat fileFormat = FileFormatHelpers.GetFileFormat(GetFilenameWithPath(fileIndex));
+            string fileExtension = "." + fileFormat.ToString();
 
-            String fileIndexAsPaddedString = String.Format("{0:000000}", fileIndex);
+            string fileIndexAsPaddedString = String.Format("{0:00000}", fileIndex);
 
-            String rootFolder = _installer.OutputFolder + "/" + kLibraryFolder + "/" + kFilesFolder + "/";
-            String flattenedFilePath = SDFileManager.CreateFlattenedFilepath(rootFolder, fileIndexAsPaddedString, "", "." + fileFormat.ToString());
+            string rootFolder = _installer.OutputFolder + "/" + kLibraryFolder + "/" + kFilesFolder + "/";
+            string targetFilename = "0";
+            string flattenedFilePath = 
+                SDFileManager.CreateFlattenedFilepath(rootFolder, fileIndexAsPaddedString, targetFilename, fileExtension);
 
-            String flattenedFilenameAndPath = _installer.OutputFolder + "/" + kLibraryFolder + "/" + kFilesFolder + "/" + flattenedFilePath + "0" + "." + fileFormat.ToString();
+            String flattenedFilenameAndPath = 
+                _installer.OutputFolder + "/" 
+                + kLibraryFolder + "/" 
+                + kFilesFolder + "/" 
+                + flattenedFilePath 
+                + targetFilename 
+                + fileExtension;
 
             SDFileManager.CopyFileAsync(GetFilenameWithPath(fileIndex), flattenedFilenameAndPath);
         }
@@ -851,13 +832,13 @@ public class Install : MonoBehaviour
             Installer.FileFormat fileFormat = FileFormatHelpers.GetFileFormat(GetFilenameWithPath(fileIndex));
             byte[] screenBytes = _loadingScreenExtractor.Extract(fileBytes, fileFormat, GetFilenameWithPath(fileIndex));
 
-            String fileIndexAsPaddedString = String.Format("{0:000000}", fileIndex);
+            String fileIndexAsPaddedString = String.Format("{0:00000}", fileIndex);
 
             String rootFolderFull = _installer.OutputFolder + "/" + kLibraryFolder + "/" + kFullLoadingScreenScrFolder + "/";
-            String flattenedFilePathFull = SDFileManager.CreateFlattenedFilepath(rootFolderFull, fileIndexAsPaddedString, "", "");
+            String flattenedFilePathFull = SDFileManager.CreateFlattenedFilepath(rootFolderFull, fileIndexAsPaddedString, "0", "");
 
             String rootFolderPartial = _installer.OutputFolder + "/" + kLibraryFolder + "/" + kPartialLoadingScreenScrFolder + "/";
-            String flattenedFilePathPartial = SDFileManager.CreateFlattenedFilepath(rootFolderPartial, fileIndexAsPaddedString, "", "");
+            String flattenedFilePathPartial = SDFileManager.CreateFlattenedFilepath(rootFolderPartial, fileIndexAsPaddedString, "0", "");
 
             String flattenedFilenameAndPathFullScreen = _installer.OutputFolder + "/" + kLibraryFolder + "/" + kFullLoadingScreenScrFolder + "/" + flattenedFilePathFull + "0";
             String flattenedFilenameAndPathPartialScreen = _installer.OutputFolder + "/" + kLibraryFolder + "/" + kPartialLoadingScreenScrFolder + "/" + flattenedFilePathPartial + "0";
@@ -948,7 +929,6 @@ public class Install : MonoBehaviour
 
             SpectrumScreenTexture2D.Apply(false);
 
-            //SaveSearchPageDatFile(searchTerm, searchResultIndices);
             SaveScreenTextureAsSpectrumSearchScreenData(searchTerm, pageIndex, rowsPerPage);
         }
     }
@@ -1006,19 +986,18 @@ public class Install : MonoBehaviour
             searchListFolder = kSearchListMiniFolder;
         }
 
-        String rootFolder = _installer.OutputFolder + "/" + kLibraryFolder + "/" + searchListFolder + "/";
-        String flattenedFilePath = SDFileManager.CreateFlattenedFilepath(rootFolder, searchTerm, "_000000", ".scr");
+        string rootFolder = _installer.OutputFolder + "/" + kLibraryFolder + "/" + searchListFolder + "/";
+        string targetFilename = string.Format("{0:0000}", pageIndex);
+        string flattenedFilePath = SDFileManager.CreateFlattenedFilepath(rootFolder, searchTerm, targetFilename, "");
 
         byte[] screenMemory = GetByteArrayFromScreenTexture(rowsPerPage);
-
-        String pageNumberString = String.Format("{0:000000}", pageIndex);
 
         string filename =
             _installer.OutputFolder + "/"
             + kLibraryFolder + "/"
             + searchListFolder + "/"
             + flattenedFilePath
-            + pageNumberString;
+            + targetFilename;
 
         if (rowsPerPage == kRowsPerPageFull)
         {

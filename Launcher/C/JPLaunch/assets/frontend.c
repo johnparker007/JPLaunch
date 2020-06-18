@@ -89,7 +89,7 @@
 #define kConfigurationMenuOptionCount				(6)
 
 
-#define kDebugFakeLoadDelayForEmulator
+//#define kDebugFakeLoadDelayForEmulator
 
 
 
@@ -1281,7 +1281,7 @@ void FrontendLoadFile()
 	unsigned int fileIndex = FrontendGetFileIndexFromListRowIndex(_frontendCurrentRow);
 
 	uchar paddedTapSnaZ80NumberString[kFrontendTapSnaZ80FileNumberPaddedLength];
-	FrontendGetChars(fileIndex, paddedTapSnaZ80NumberString);
+	FrontendGetChars(fileIndex, paddedTapSnaZ80NumberString, TRUE);
 
 	unsigned char basicDataIndex = 0;
 	for (unsigned char paddedTapSnaZ80NumberStringIndex = 0; paddedTapSnaZ80NumberStringIndex < kFrontendTapSnaZ80FileNumberPaddedLength; ++paddedTapSnaZ80NumberStringIndex)
@@ -1437,7 +1437,7 @@ void FrontendShowLoadingScreenFile(_Bool partial)
 	unsigned int fileIndex = FrontendGetFileIndexFromListRowIndex(_frontendCurrentRow);
 
 	uchar paddedTapSnaZ80NumberString[kFrontendTapSnaZ80FileNumberPaddedLength];
-	FrontendGetChars(fileIndex, paddedTapSnaZ80NumberString);
+	FrontendGetChars(fileIndex, paddedTapSnaZ80NumberString, TRUE);
 
 	for (unsigned char paddedTapSnaZ80NumberStringIndex = 0; paddedTapSnaZ80NumberStringIndex < kFrontendTapSnaZ80FileNumberPaddedLength; ++paddedTapSnaZ80NumberStringIndex)
 	{
@@ -1500,7 +1500,7 @@ void FrontendLoadGameListScreen()
 	memset(&basicData, 0, kFrontendBasicDataPageLength);
 
 	uchar paddedPageNumberString[kFrontendGameListPageIndexPaddedMaximumLength];
-	FrontendGetChars(_frontendCurrentPage, paddedPageNumberString);
+	FrontendGetChars(_frontendCurrentPage, paddedPageNumberString, FALSE);
 
 	unsigned char basicDataIndex = 0;
 
@@ -1562,8 +1562,8 @@ void FrontendLoadSearchListScreen()
 	uchar basicData[kFrontendBasicDataSearchMaximumLength];
 	memset(&basicData, 0, kFrontendBasicDataSearchMaximumLength);
 
-	uchar paddedPageNumberString[6];
-	FrontendGetChars(_frontendCurrentPage, paddedPageNumberString);
+	uchar paddedPageNumberString[4];
+	FrontendGetChars(_frontendCurrentPage, paddedPageNumberString, FALSE);
 
 	unsigned char basicDataIndex = 0;
 
@@ -1614,10 +1614,6 @@ void FrontendLoadSearchListScreen()
 	basicData[basicDataIndex] = paddedPageNumberString[2];
 	++basicDataIndex;
 	basicData[basicDataIndex] = paddedPageNumberString[3];
-	++basicDataIndex;
-	basicData[basicDataIndex] = paddedPageNumberString[4];
-	++basicDataIndex;
-	basicData[basicDataIndex] = paddedPageNumberString[5];
 	
 #ifdef kDebugFakeLoadDelayForEmulator
 	IOFakeScreenLoadDelay();
@@ -1764,32 +1760,45 @@ void FrontendPageDown()
 	}
 }
 
-void FrontendGetChars(unsigned int value, char * chars)
+void FrontendGetChars(unsigned int value, char * chars, _Bool fiveChars)
 {
 	chars[0] = '0';
 	chars[1] = '0';
 	chars[2] = '0';
 	chars[3] = '0';
-	chars[4] = '0';
-	chars[5] = '0';
+
+	unsigned int startIndex = 3;
+	if (fiveChars)
+	{
+		startIndex = 4;
+		chars[4] = '0';
+	}
 
 	const int kZeroASCII = 48;
-	chars[5] = (uchar)(kZeroASCII + (value % 10));
+	chars[startIndex] = (uchar)(kZeroASCII + (value % 10));
+	--startIndex;
+
 	if (value >= 10)
 	{
-		chars[4] = (uchar)(kZeroASCII + (value % 100) / 10);
+		chars[startIndex] = (uchar)(kZeroASCII + (value % 100) / 10);
 	}
+	--startIndex;
+
 	if (value >= 100)
 	{
-		chars[3] = (uchar)(kZeroASCII + (value % 1000) / 100);
+		chars[startIndex] = (uchar)(kZeroASCII + (value % 1000) / 100);
 	}
+	--startIndex;
+
 	if (value >= 1000)
 	{
-		chars[2] = (uchar)(kZeroASCII + (value % 10000)/ 1000);
+		chars[startIndex] = (uchar)(kZeroASCII + (value % 10000)/ 1000);
 	}
+	--startIndex;
+
 	if (value >= 10000)
 	{
-		chars[1] = (uchar)(kZeroASCII + (value % 100000) / 10000);
+		chars[startIndex] = (uchar)(kZeroASCII + (value % 100000) / 10000);
 	}
 }
 

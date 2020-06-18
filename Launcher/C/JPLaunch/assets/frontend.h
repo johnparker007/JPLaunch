@@ -13,10 +13,10 @@
 #define kFrontendSearchInputStringMaximumLength			(16)
 #define kFrontendBasicDataSearchMaximumLength			(((kFrontendSearchInputStringMaximumLength * 2) - 1) + 4 + 7) //+4 for ".scr", +8 for _000000
 
-#define kFrontendTapSnaZ80FileNumberPaddedLength		(6)
+#define kFrontendTapSnaZ80FileNumberPaddedLength		(5)
 #define kFrontendBasicDataTapSnaZ80Length				((kFrontendTapSnaZ80FileNumberPaddedLength * 2) + 5) //+5 for "0.tap"
 
-#define kFrontendGameListPageIndexPaddedMaximumLength	(6)
+#define kFrontendGameListPageIndexPaddedMaximumLength	(4)
 
 #define kFrontendBasicDataPageLength					(54)
 
@@ -166,7 +166,7 @@ void FrontEndConfigurationMenuDrawRow(unsigned char rowIndex);
 void FrontendPageUp();
 void FrontendPageDown();
 
-void FrontendGetChars(unsigned int value, char * chars);
+void FrontendGetChars(unsigned int value, char * chars, _Bool fiveChars);
 
 void FrontendSearchInputInitialise();
 void FrontendSearchInputUpdate();

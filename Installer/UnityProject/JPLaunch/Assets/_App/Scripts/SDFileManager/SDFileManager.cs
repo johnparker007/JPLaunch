@@ -45,13 +45,17 @@ public class SDFileManager : MonoBehaviour
         sdFileTask.CopyFileAsync(sourceFilename, targetFilename);
     }
 
-    public static string CreateFlattenedFilepath(string rootFolder, string filename, string filenameSuffix, string filenameExtension)
+    public static string CreateFlattenedFilepath(
+        string rootFolder, 
+        string sourceFilenameToCreatePath, 
+        string targetFilenameAtPath, 
+        string filenameExtension)
     {
         List<string> directoriesToWrite = new List<string>();
         string directoryPath = "";
-        for (int characterIndex = 0; characterIndex < filename.Length; ++characterIndex)
+        for (int characterIndex = 0; characterIndex < sourceFilenameToCreatePath.Length; ++characterIndex)
         {
-            string character = filename.Substring(characterIndex, 1);
+            string character = sourceFilenameToCreatePath.Substring(characterIndex, 1);
 
             directoryPath += character;
              
@@ -63,7 +67,7 @@ public class SDFileManager : MonoBehaviour
         string filePath = 
             rootFolder 
             + directoryPath 
-            + "0"
+            + targetFilenameAtPath
             + filenameExtension;
         if (!FastCRC.Instance.IsFilePathInDatabase(filePath))
         {
