@@ -22,6 +22,8 @@
 
 #define kFrontendBasicCDPathLength						(24)
 
+unsigned char _frontendFrameCount;
+
 
 unsigned char _frontendTitleAttributeValues[4];
 unsigned char _frontendCopyrightAttributeValues[4];
@@ -162,6 +164,14 @@ void FrontendLoadConfigurationMenuScreen();
 
 void FrontEndConfigurationMenuDrawRows();
 void FrontEndConfigurationMenuDrawRow(unsigned char rowIndex);
+
+void FrontendConfigurationMenuDrawArrows(_Bool eraseArrows);
+
+_Bool FrontendConfigurationCurrentRowCanMoveLeft();
+_Bool FrontendConfigurationCurrentRowCanMoveRight();
+
+
+
 
 void FrontendPageUp();
 void FrontendPageDown();

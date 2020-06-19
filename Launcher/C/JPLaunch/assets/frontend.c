@@ -265,9 +265,13 @@ void FrontendUpdate()
 		FrontendUpdateProcessInputExitMenu();
 		break;
 	case kLauncherStateConfigurationMenu:
+		// draw needs to be done before update to avoid leaving unwanted draws on exiting config menu
+		FrontendConfigurationMenuDrawArrows(FALSE); 
 		FrontendUpdateProcessInputConfigurationMenu();
 		break;
 	}
+
+	++_frontendFrameCount;
 }
 
 void FrontendGetInput()
@@ -756,6 +760,11 @@ void FrontendProcessInputMenuUp()
 {
 	if (_frontendCurrentRow > 0)
 	{
+		if (_frontendLauncherState == kLauncherStateConfigurationMenu)
+		{
+			FrontendConfigurationMenuDrawArrows(TRUE);
+		}
+
 		FrontendDrawCurrentRowUnselectedNoScrollBar();
 		--_frontendCurrentRow;
 		FrontendDrawCurrentRowSelectedNoScrollBar();
@@ -776,6 +785,11 @@ void FrontendProcessInputMenuDown()
 
 	if (_frontendCurrentRow < menuRowCount - 1)
 	{
+		if (_frontendLauncherState == kLauncherStateConfigurationMenu)
+		{
+			FrontendConfigurationMenuDrawArrows(TRUE);
+		}
+
 		FrontendDrawCurrentRowUnselectedNoScrollBar();
 		++_frontendCurrentRow;
 		FrontendDrawCurrentRowSelectedNoScrollBar();
@@ -784,31 +798,24 @@ void FrontendProcessInputMenuDown()
 
 void FrontendProcessInputMenuLeft()
 {
+	if (!FrontendConfigurationCurrentRowCanMoveLeft())
+	{
+		return;
+	}
+
 	switch (_frontendCurrentRow)
 	{
 	case kConfigurationMenuOptionDefaultView:
-		if (_configurationData.DefaultViewMode > 0)
-		{
-			--_configurationData.DefaultViewMode;
-		}
+		--_configurationData.DefaultViewMode;
 		break;
 	case kConfigurationMenuOptionInputAcceleration:
-		if (_configurationData.InputAccelerationMode > 0)
-		{
-			--_configurationData.InputAccelerationMode;
-		}
+		--_configurationData.InputAccelerationMode;
 		break;
 	case kConfigurationMenuOptionKeyboardType:
-		if (_configurationData.KeyboardType > 0)
-		{
-			--_configurationData.KeyboardType;
-		}
+		--_configurationData.KeyboardType;
 		break;
 	case kConfigurationMenuOptionJoystickType:
-		if (_configurationData.JoystickType > 0)
-		{
-			--_configurationData.JoystickType;
-		}
+		--_configurationData.JoystickType;
 		break;
 	}
 
@@ -817,31 +824,24 @@ void FrontendProcessInputMenuLeft()
 
 void FrontendProcessInputMenuRight()
 {
+	if (!FrontendConfigurationCurrentRowCanMoveRight())
+	{
+		return;
+	}
+
 	switch (_frontendCurrentRow)
 	{
 	case kConfigurationMenuOptionDefaultView:
-		if (_configurationData.DefaultViewMode < DefaultViewModeCount - 1)
-		{
-			++_configurationData.DefaultViewMode;
-		}
+		++_configurationData.DefaultViewMode;
 		break;
 	case kConfigurationMenuOptionInputAcceleration:
-		if (_configurationData.InputAccelerationMode < InputAccelerationModeCount - 1)
-		{
-			++_configurationData.InputAccelerationMode;
-		}
+		++_configurationData.InputAccelerationMode;
 		break;
 	case kConfigurationMenuOptionKeyboardType:
-		if (_configurationData.KeyboardType < KeyboardTypeCount - 1)
-		{
-			++_configurationData.KeyboardType;
-		}
+		++_configurationData.KeyboardType;
 		break;
 	case kConfigurationMenuOptionJoystickType:
-		if (_configurationData.JoystickType < JoystickTypeCount - 1)
-		{
-			++_configurationData.JoystickType;
-		}
+		++_configurationData.JoystickType;
 		break;
 	}
 
@@ -957,7 +957,6 @@ void FrontendProcessInputConfigurationMenuBack()
 
 	FrontendProcessInputMenuBack();
 }
-
 
 
 // TOIMPROVE - check if these [0] are necessary, or if there's a cleaner way
@@ -1731,7 +1730,68 @@ void FrontEndConfigurationMenuDrawRow(unsigned char rowIndex)
 
 	FontDrawCharsNullTerminated("               ", 16, charY); // VERY SLOW WAY OF ERASING FOR NOW!
 
-	FontDrawCharsProportional((char *)string, (unsigned char)(128 + 3), charY * 8);
+	FontDrawCharsProportional((char *)string, (unsigned char)(128 + 8), charY * 8);
+}
+
+void FrontendConfigurationMenuDrawArrows(_Bool eraseArrows)
+{
+	if (!FrontendConfigurationCurrentRowCanMoveLeft() && !FrontendConfigurationCurrentRowCanMoveRight())
+	{
+		return;
+	}
+
+	unsigned char charY = 3 + (_frontendCurrentRow * 2);
+
+	if (!eraseArrows && _frontendFrameCount % 128 < 64)
+	{
+		if (FrontendConfigurationCurrentRowCanMoveLeft())
+		{
+			FontDrawCharsNullTerminated("<", 16, charY);
+		}
+		if (FrontendConfigurationCurrentRowCanMoveRight())
+		{
+			FontDrawCharsNullTerminated(">", 31, charY);
+		}
+	}
+	else
+	{
+		FontDrawCharsNullTerminated(" ", 16, charY);
+		FontDrawCharsNullTerminated(" ", 31, charY);
+	}
+}
+
+_Bool FrontendConfigurationCurrentRowCanMoveLeft()
+{
+	switch (_frontendCurrentRow)
+	{
+	case kConfigurationMenuOptionDefaultView:
+		return _configurationData.DefaultViewMode > 0;
+	case kConfigurationMenuOptionInputAcceleration:
+		return _configurationData.InputAccelerationMode > 0;
+	case kConfigurationMenuOptionKeyboardType:
+		return _configurationData.KeyboardType > 0;
+	case kConfigurationMenuOptionJoystickType:
+		return _configurationData.JoystickType > 0;
+	default:
+		return FALSE;
+	}
+}
+
+_Bool FrontendConfigurationCurrentRowCanMoveRight()
+{
+	switch (_frontendCurrentRow)
+	{
+	case kConfigurationMenuOptionDefaultView:
+		return _configurationData.DefaultViewMode < DefaultViewModeCount - 1;
+	case kConfigurationMenuOptionInputAcceleration:
+		return _configurationData.InputAccelerationMode < InputAccelerationModeCount - 1;
+	case kConfigurationMenuOptionKeyboardType:
+		return _configurationData.KeyboardType < KeyboardTypeCount - 1;
+	case kConfigurationMenuOptionJoystickType:
+		return _configurationData.JoystickType < JoystickTypeCount - 1;
+	default:
+		return FALSE;
+	}
 }
 
 void FrontendPageUp()
