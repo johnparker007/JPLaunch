@@ -18,6 +18,8 @@ void NirvanaLoadEngine(_Bool rows23)
 		NirvanaRowHeightPatchAddressInitialise();
 	}
 
+	intrinsic_di(); // otherwise Nirvana gets called during the patching/loading and crashes (on real hardware)
+ 
 	if (rows23)
 	{
 		memset((void *)_nirvanaRowHeightPatchAddress, kNirvanaByte0Value23Rows, 1);
@@ -32,6 +34,8 @@ void NirvanaLoadEngine(_Bool rows23)
 
 		IOLoadBytes(kNirvanaEnginePath7Rows, kFrontendBasicDataPageLength, kNirvanaPlusStartAddress);
 	}
+
+	intrinsic_ei(); // restore interrupts now Nirvana patched and (re)loaded, it can safely run again
 }
 
 void NirvanaRowHeightPatchAddressInitialise()
