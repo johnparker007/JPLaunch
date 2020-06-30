@@ -867,14 +867,18 @@ public class Install : MonoBehaviour
 
     private List<String> GetAllFilenames(String directory)
     {
-        var allFullPathAndFilenames = Directory.GetFiles(directory, "*.*", SearchOption.AllDirectories).
-            Where(s =>
-                (_installer.Configuration.IncludeTapFiles && s.EndsWith(".tap", StringComparison.OrdinalIgnoreCase))
-                || (_installer.Configuration.IncludeSnaFiles && s.EndsWith(".sna", StringComparison.OrdinalIgnoreCase))
-                || (_installer.Configuration.IncludeZ80Files && s.EndsWith(".z80", StringComparison.OrdinalIgnoreCase))
-                );
+        const int kMaximumFilenameLength = 128;
 
-        Array.Sort(allFullPathAndFilenames.ToArray(), StringComparer.Ordinal);
+        string[] allFullPathAndFilenames = Directory.GetFiles(directory, "*.*", SearchOption.AllDirectories).
+            Where(s =>
+                (s.Length <= kMaximumFilenameLength
+                &&
+                    (_installer.Configuration.IncludeTapFiles && s.EndsWith(".tap", StringComparison.OrdinalIgnoreCase))
+                    || (_installer.Configuration.IncludeSnaFiles && s.EndsWith(".sna", StringComparison.OrdinalIgnoreCase))
+                    || (_installer.Configuration.IncludeZ80Files && s.EndsWith(".z80", StringComparison.OrdinalIgnoreCase)))
+                ).ToArray();
+
+        Array.Sort(allFullPathAndFilenames, StringComparer.Ordinal);
         return allFullPathAndFilenames.ToList();
     }
 
