@@ -821,15 +821,7 @@ public class Install : MonoBehaviour
             }
 
             byte[] fileBytes;
-            try
-            {
-                fileBytes = File.ReadAllBytes(GetFilenameWithPath(fileIndex));
-            }
-            catch(Exception exception)
-            {
-                Debug.LogError("Exception reading file bytes: " + exception);
-                continue;
-            }
+            fileBytes = File.ReadAllBytes(GetFilenameWithPath(fileIndex));
 
             Installer.FileFormat fileFormat = FileFormatHelpers.GetFileFormat(GetFilenameWithPath(fileIndex));
             byte[] screenBytes = _loadingScreenExtractor.Extract(fileBytes, fileFormat, GetFilenameWithPath(fileIndex));
@@ -871,7 +863,7 @@ public class Install : MonoBehaviour
 
         string[] allFullPathAndFilenames = Directory.GetFiles(directory, "*.*", SearchOption.AllDirectories).
             Where(s =>
-                (s.Length <= kMaximumFilenameLength
+                (Path.GetFileName(s).Length <= kMaximumFilenameLength
                 &&
                     (_installer.Configuration.IncludeTapFiles && s.EndsWith(".tap", StringComparison.OrdinalIgnoreCase))
                     || (_installer.Configuration.IncludeSnaFiles && s.EndsWith(".sna", StringComparison.OrdinalIgnoreCase))

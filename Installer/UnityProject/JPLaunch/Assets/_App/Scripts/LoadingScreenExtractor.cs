@@ -84,16 +84,9 @@ public class LoadingScreenExtractor
     private byte[] ExtractZ80(string filename)
     {
         Z80_SNAPSHOT z80Snapshot;
-        try
-        {
-            z80Snapshot = Z80File.LoadZ80(filename);
-            //Array.Copy(z80Snapshot.RAM_BANK[8], 0, _buffer, 0, kLoadingScreenLength);
-            Array.Copy(z80Snapshot.RAM_BANK[10], 0, _buffer, 0, kLoadingScreenLength);
-        }
-        catch(Exception exception)
-        {
-            Debug.LogError("Exception loading z80 file: " + exception);
-        }
+        z80Snapshot = Z80File.LoadZ80(filename);
+        //Array.Copy(z80Snapshot.RAM_BANK[8], 0, _buffer, 0, kLoadingScreenLength);
+        Array.Copy(z80Snapshot.RAM_BANK[10], 0, _buffer, 0, kLoadingScreenLength);
 
         return _buffer;
         //Debug.Log(z80Snapshot.)
