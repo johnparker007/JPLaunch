@@ -2,7 +2,6 @@
 
 #define kReturnCodeLoadTap (1010)
 #define kReturnCodeLoadSnaZ80 (2010)
-#define kReturnCodeCD (3000)
 
 #define kLauncherStateGetFirstPage (0)
 #define kLauncherStateUninitialised (1)
@@ -94,9 +93,8 @@
 
 
 		
-void * _basicTapFilenameAddress = (void *)(0x5cdd); // in use
-void * _basicSnaZ80IndexAddress = (void *)(0x5d1c); // in use 
-void * _basicCDPathAddress = (void *)(0x5d3e); // in use
+void * _basicTapFilenameAddress = (void *)(0x5cf7); // in use
+void * _basicSnaZ80IndexAddress = (void *)(0x5d4e); // in use 
 
 void * _searchWindowPixelDataReadAddress = (void *)(48952);
 void * _searchWindowPixelDataWriteAddress = (void *)(16384 + 2048);
@@ -1336,60 +1334,6 @@ void FrontendLoadFile()
 		exit(kReturnCodeLoadSnaZ80);
 		break;
 	}
-
-
-}
-
-// TODO get rid of this including the lines in the basic loader
-void FrontendChangeDirectory(_Bool library)
-{
-	uchar basicData[kFrontendBasicCDPathLength];
-	memset(&basicData, ' ', kFrontendBasicCDPathLength);
-
-	unsigned char basicDataIndex = 0;
-
-	basicData[basicDataIndex] = '/'; // just this sets path to root
-	++basicDataIndex;
-	
-	if (library)
-	{
-		basicData[basicDataIndex] = 'j';
-		++basicDataIndex;
-		basicData[basicDataIndex] = 'p';
-		++basicDataIndex;
-		basicData[basicDataIndex] = 'l';
-		++basicDataIndex;
-		basicData[basicDataIndex] = 'a';
-		++basicDataIndex;
-		basicData[basicDataIndex] = 'u';
-		++basicDataIndex;
-		basicData[basicDataIndex] = 'n';
-		++basicDataIndex;
-		basicData[basicDataIndex] = 'c';
-		++basicDataIndex;
-		basicData[basicDataIndex] = 'h';
-		++basicDataIndex;
-		basicData[basicDataIndex] = '/';
-		++basicDataIndex;
-		basicData[basicDataIndex] = 'l';
-		++basicDataIndex;
-		basicData[basicDataIndex] = 'i';
-		++basicDataIndex;
-		basicData[basicDataIndex] = 'b';
-		++basicDataIndex;
-		basicData[basicDataIndex] = 'r';
-		++basicDataIndex;
-		basicData[basicDataIndex] = 'a';
-		++basicDataIndex;
-		basicData[basicDataIndex] = 'r';
-		++basicDataIndex;
-		basicData[basicDataIndex] = 'y';
-		++basicDataIndex;
-	}
-
-	memcpy(_basicCDPathAddress, &basicData, basicDataIndex);
-
-	exit(kReturnCodeCD);
 }
 
 void FrontendShowLoadingScreenFile(_Bool partial)

@@ -20,7 +20,6 @@
 
 #define kFrontendBasicDataPageLength					(54)
 
-#define kFrontendBasicCDPathLength						(24)
 
 unsigned char _frontendFrameCount;
 
@@ -152,7 +151,6 @@ void FrontendUpdateBottomRowColorCycle();
 void FrontendEraseBottomRowColorCycle();
 
 void FrontendLoadFile();
-void FrontendChangeDirectory(_Bool library);
 
 void FrontendShowLoadingScreenFile(_Bool partial);
 

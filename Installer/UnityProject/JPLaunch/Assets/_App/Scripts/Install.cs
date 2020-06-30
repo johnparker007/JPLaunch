@@ -12,6 +12,8 @@ using Soft160.Data.Cryptography;
 
 public class Install : MonoBehaviour 
 {
+    private const bool kDebugWorldOfSpectrumOutputScrFiles = false;
+
     public const bool kReuseExistingInstall = true;
 
 
@@ -845,6 +847,14 @@ public class Install : MonoBehaviour
 
             // write full screen
             SDFileManager.WriteAllBytesAsync(flattenedFilenameAndPathFullScreen, screenBytes);
+
+            // ****************************************************** output for World of Spectrum
+            if(kDebugWorldOfSpectrumOutputScrFiles)
+            {
+                string wosOutputFilePath = _installer.OutputFolder + "/" + kLibraryFolder + "/" + GetFilenameWithoutPath(fileIndex) + ".scr";
+                SDFileManager.WriteAllBytesAsync(wosOutputFilePath, screenBytes);
+            }
+            // *****************************************************************************************
 
             // write partial screen
             Array.Copy(screenBytes, partialScreenBytes, 2048 + 2048);
