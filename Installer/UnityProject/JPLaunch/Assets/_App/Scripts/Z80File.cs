@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 
 public class Z80File
 {
@@ -18,12 +19,13 @@ public class Z80File
             {
                 byte bite = buffer[counter++];
 
-                if (bite == 0xED)
+                if (bite == 0xED && counter < buffer.Length)
                 {
                     int bite2 = buffer[counter];
-                    if (bite2 == 0xED)
+                    if (bite2 == 0xED && counter + 2 < buffer.Length) 
                     {
                         counter++;
+
                         int dataSize = buffer[counter++];
                         byte data = buffer[counter++];
 
@@ -39,7 +41,6 @@ public class Z80File
                 }
                 else
                     bank[memStart++] = bite;
-                //   dataCounter = counter - dataBlockOffset;
             }
         }
     }
