@@ -87,7 +87,7 @@ void FrontendProcessInputListUp();
 void FrontendProcessInputListDown();
 void FrontendProcessInputListLeft();
 void FrontendProcessInputListRight();
-void FrontendProcessInputGamelistSelect();
+void FrontendProcessInputGamelistSelect(_Bool disable128kPaging);
 void FrontendProcessInputGamelistShowLoadingScreen();
 void FrontendProcessInputListToggleMode();
 void FrontendProcessInputListBack();
@@ -150,7 +150,7 @@ void FrontendClearScreenPixelsExceptTopBar();
 void FrontendUpdateBottomRowColorCycle();
 void FrontendEraseBottomRowColorCycle();
 
-void FrontendLoadFile();
+void FrontendLoadFile(_Bool disable128kPaging);
 
 void FrontendShowLoadingScreenFile(_Bool partial);
 

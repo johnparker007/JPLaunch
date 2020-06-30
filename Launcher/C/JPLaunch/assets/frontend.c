@@ -1,7 +1,10 @@
 #include "headers.h"
 
+#define kReturnCodeLoadTapDisable128kPaging (1000)
 #define kReturnCodeLoadTap (1010)
+#define kReturnCodeLoadSnaZ80Disable128kPaging (2000)
 #define kReturnCodeLoadSnaZ80 (2010)
+
 
 #define kLauncherStateGetFirstPage (0)
 #define kLauncherStateUninitialised (1)
@@ -343,7 +346,7 @@ void FrontendUpdateProcessInputList()
 	}
 	else if (in_key_pressed(kInputScancodeSelect))
 	{
-		FrontendProcessInputGamelistSelect();
+		FrontendProcessInputGamelistSelect(in_key_pressed(IN_KEY_SCANCODE_CAPS));
 	}
 	else if (in_key_pressed(kInputScancodeShowLoadingScreen) && !in_key_pressed(IN_KEY_SCANCODE_CAPS))
 	{
@@ -450,9 +453,9 @@ void FrontendProcessInputListRight()
 	}
 }
 
-void FrontendProcessInputGamelistSelect()
+void FrontendProcessInputGamelistSelect(_Bool disable128kPaging)
 {
-	FrontendLoadFile();
+	FrontendLoadFile(disable128kPaging);
 }
 
 void FrontendProcessInputGamelistShowLoadingScreen()
@@ -1262,9 +1265,9 @@ void FrontendDrawCurrentRowSelectedStandardAttributes()
 	memset((void *)(16384 + 6144 + 32 + (_frontendCurrentRow * 32)), PAPER_RED | INK_BLACK | BRIGHT, 31);
 }
 
-void FrontendLoadFile()
+void FrontendLoadFile(_Bool disable128kPaging)
 {
-// WON'T COMPILE UNDER z88dk, need to precompile with pasmo
+// WON'T COMPILE UNDER z88dk, need to precompile with pasmo - have just done in the BASIC code for now to get working
 	// TODO preserve registers:
 //__asm
 //ld (ix), 255; // address
@@ -1307,7 +1310,14 @@ void FrontendLoadFile()
 
 		memcpy(_basicTapFilenameAddress, &basicData, kFrontendBasicDataTapSnaZ80Length);
 
-		exit(kReturnCodeLoadTap);
+		if (disable128kPaging)
+		{
+			exit(kReturnCodeLoadTapDisable128kPaging);
+		}
+		else
+		{
+			exit(kReturnCodeLoadTap);
+		}
 		break;
 	case kFileFormatTypeSna:
 		basicData[basicDataIndex] = 's';
@@ -1319,7 +1329,14 @@ void FrontendLoadFile()
 
 		memcpy(_basicSnaZ80IndexAddress, &basicData, kFrontendBasicDataTapSnaZ80Length);
 
-		exit(kReturnCodeLoadSnaZ80);
+		if (disable128kPaging)
+		{
+			exit(kReturnCodeLoadSnaZ80Disable128kPaging);
+		}
+		else
+		{
+			exit(kReturnCodeLoadSnaZ80);
+		}
 		break;
 	case kFileFormatTypeZ80:
 		basicData[basicDataIndex] = 'z';
@@ -1331,7 +1348,14 @@ void FrontendLoadFile()
 
 		memcpy(_basicSnaZ80IndexAddress, &basicData, kFrontendBasicDataTapSnaZ80Length);
 
-		exit(kReturnCodeLoadSnaZ80);
+		if (disable128kPaging)
+		{
+			exit(kReturnCodeLoadSnaZ80Disable128kPaging);
+		}
+		else
+		{
+			exit(kReturnCodeLoadSnaZ80);
+		}
 		break;
 	}
 }
