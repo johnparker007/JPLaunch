@@ -52,17 +52,7 @@ public class LoadingScreenExtractor
 
         do
         {
-            int blockLength;
-            try
-            {
-                blockLength = Get16BitWord(sourceFileBytes, offset);
-            }
-            catch(Exception exception)
-            {
-                Debug.LogError("Exception trying to extract tap: " + exception);
-                break;
-            }
-
+            int blockLength = Get16BitWord(sourceFileBytes, offset);
             if (blockLength == kLoadingScreenBlockLength)
             {
                 Array.Copy(sourceFileBytes, offset + kLengthByteCount + 1, _buffer, 0, kLoadingScreenLength); // + 1 as I think flags byte is at start?
@@ -71,7 +61,7 @@ public class LoadingScreenExtractor
 
             offset += kLengthByteCount + blockLength;
         }
-        while (offset < sourceFileBytes.Length);
+        while (offset < sourceFileBytes.Length - kLengthByteCount - kLoadingScreenBlockLength);
 
         return _noImageAvailableBuffer;
     }
