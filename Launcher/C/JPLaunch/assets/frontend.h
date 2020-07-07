@@ -60,14 +60,9 @@ unsigned char _frontendColorCycleFrame;
 
 unsigned char _frontendFillBarFrame;
 
-unsigned char _frontendASCIIInput;
-_Bool _frontendInputWaitForNoInput;
-
 unsigned char _frontendSearchInputString[kFrontendSearchInputStringMaximumLength + 1]; // +1 for end of c string null terminator (required?)
 unsigned char _frontendSearchInputStringLength;
 unsigned char _frontendSearchCursorPosition;
-
-unsigned int _frontendInputHeldFrameCount;
 
 void FrontendInitialise();
 void FrontendInitialiseScreen();
@@ -76,10 +71,6 @@ void FrontendPaintNirvanaRowsAttributes(_Bool includeScrollbar, unsigned char ro
 void FrontendInitialiseAttributeValues();
 
 void FrontendUpdate();
-
-void FrontendGetInput();
-void FrontendGetUppercaseASCIIInput();
-void FrontendUpdateInputHeldFrameCount();
 
 void FrontendUpdateProcessInputList();
 
@@ -139,10 +130,6 @@ void FrontendDrawCurrentRowSelectedStandardAttributes();
 void FrontendDrawPopupFade();
 void FrontendDrawSearchWindow();
 void FrontendDrawSearchString();
-
-//void FrontendDrawGameNames();
-//void FrontendDrawGameNamesFixed();
-//void FrontendDrawGameNamesProportional();
 
 void FrontendDrawTopBar();
 void FrontendClearScreenPixelsExceptTopBar();

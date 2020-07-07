@@ -36,6 +36,9 @@
     <ClCompile Include="..\assets\configuration.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\assets\inputSystem.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\assets\app.h">
@@ -48,9 +51,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\assets\headers.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\assets\inputConstants.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\assets\frontend.h">
@@ -66,6 +66,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\assets\configuration.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\assets\inputSystem.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

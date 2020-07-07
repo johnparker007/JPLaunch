@@ -131,6 +131,7 @@
     <ClCompile Include="..\assets\font.c" />
     <ClCompile Include="..\assets\frontend.c" />
     <ClCompile Include="..\assets\game.c" />
+    <ClCompile Include="..\assets\inputSystem.c" />
     <ClCompile Include="..\assets\io.c" />
     <ClCompile Include="..\assets\nirvana.c" />
   </ItemGroup>
@@ -141,7 +142,7 @@
     <ClInclude Include="..\assets\frontend.h" />
     <ClInclude Include="..\assets\game.h" />
     <ClInclude Include="..\assets\headers.h" />
-    <ClInclude Include="..\assets\inputConstants.h" />
+    <ClInclude Include="..\assets\inputSystem.h" />
     <ClInclude Include="..\assets\io.h" />
     <ClInclude Include="..\assets\macros.h" />
     <ClInclude Include="..\assets\nirvana.h" />

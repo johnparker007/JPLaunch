@@ -3,6 +3,7 @@
 #include "io.c"
 #include "configuration.c"
 #include "nirvana.c"
+#include "inputSystem.c"
 #include "frontend.c"
 #include "game.c"
 #include "font.c"

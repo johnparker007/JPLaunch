@@ -16,8 +16,6 @@
 #define kLauncherStateExitMenu (7)
 #define kLauncherStateConfigurationMenu (8)
 
-//#define kRowCount (23) 
-//#define kRowCount (7) 
 #define kRowCountFull (23)
 #define kRowCountMini (7)
 
@@ -34,17 +32,13 @@
 
 
 
+
 #define kInputScancodeUp		(IN_KEY_SCANCODE_7)
 #define kInputScancodeDown		(IN_KEY_SCANCODE_6)
 #define kInputScancodeLeft		(IN_KEY_SCANCODE_5)
 #define kInputScancodeRight		(IN_KEY_SCANCODE_8)
 #define kInputScancodeSelect	(IN_KEY_SCANCODE_ENTER)
 #define kInputScancodeShowLoadingScreen	(IN_KEY_SCANCODE_SPACE)
-
-#define kInputHeldRepeatStartFrameCountUpDown (240)
-#define kInputHeldRepeatStartFrameCountLeftRight (215)
-
-
 
 
 #define kMetadataAddressTopRightRow0 (16384 + 31)
@@ -235,13 +229,12 @@ void FrontendPaintTopRowAttributes()
 
 void FrontendUpdate()
 {
-	if (_frontendInputWaitForNoInput && in_test_key() != 0)
+	if (InputBlockedAwaitingKeyUp())
 	{
 		return;
 	}
-	_frontendInputWaitForNoInput = FALSE;
 
-	FrontendGetInput();
+	InputGetInput();
 
 	switch (_frontendLauncherState)
 	{
@@ -275,87 +268,54 @@ void FrontendUpdate()
 	++_frontendFrameCount;
 }
 
-void FrontendGetInput()
-{
-	FrontendUpdateInputHeldFrameCount();
-}
-
-void FrontendGetUppercaseASCIIInput()
-{
-	_frontendASCIIInput = in_inkey();
-
-	if (_frontendASCIIInput >= 'a' && _frontendASCIIInput <= 'z')
-	{
-		const int kUpperCaseOffset = 32;
-		_frontendASCIIInput -= kUpperCaseOffset;
-	}
-}
-
-void FrontendUpdateInputHeldFrameCount()
-{
-	if(in_test_key() == 0)
-	{
-		_frontendInputHeldFrameCount = 0;
-	}
-	else
-	{
-		FrontendGetUppercaseASCIIInput(); // have to call this just after in_test_key check above, otherwise can miss alphanumeric keystrokes
-
-		if (_frontendInputHeldFrameCount < 65535)
-		{
-			++_frontendInputHeldFrameCount;
-		}
-	}
-}
-
 void FrontendUpdateProcessInputList()
 {
-	if (_frontendInputHeldFrameCount == 1 || _frontendInputHeldFrameCount > kInputHeldRepeatStartFrameCountUpDown)
+	if (InputHeldFrameCountIsOneOrRepeating())
 	{
-		if (in_key_pressed(kInputScancodeUp))
+		if(_inputStateData.UpHeld)
 		{
 			FrontendProcessInputListUp();
 		}
-		else if (in_key_pressed(kInputScancodeDown))
+		else if (_inputStateData.DownHeld)
 		{
 			FrontendProcessInputListDown();
 		}
 
-		if (in_key_pressed(kInputScancodeLeft))
+		if (_inputStateData.LeftHeld)
 		{
 			FrontendProcessInputListLeft();
 		}
-		else if (in_key_pressed(kInputScancodeRight))
+		else if (_inputStateData.RightHeld)
 		{
 			FrontendProcessInputListRight();
 		}
 	}
 
-	if (in_key_pressed(IN_KEY_SCANCODE_CAPS) && in_key_pressed(IN_KEY_SCANCODE_SYM))
+	if (_inputStateData.ViewModeToggleHeld)
 	{
 		FrontendProcessInputListToggleMode();
-		_frontendInputWaitForNoInput = TRUE;
+		_inputWaitForNoInput = TRUE;
 	}
-	else if (in_key_pressed(IN_KEY_SCANCODE_CAPS) && in_key_pressed(IN_KEY_SCANCODE_SPACE))
+	else if (_inputStateData.BackHeld)
 	{
 		FrontendProcessInputListBack();
 	}
-	else if (in_key_pressed(IN_KEY_SCANCODE_CAPS) && in_key_pressed(IN_KEY_SCANCODE_1))
+	else if (_inputStateData.ConfigurationHeld)
 	{
 		FrontendProcessInputListConfiguration();
 	}
-	else if (in_key_pressed(kInputScancodeSelect))
+	else if (_inputStateData.SelectHeld)
 	{
 		FrontendProcessInputGamelistSelect(in_key_pressed(IN_KEY_SCANCODE_CAPS));
 	}
-	else if (in_key_pressed(kInputScancodeShowLoadingScreen) && !in_key_pressed(IN_KEY_SCANCODE_CAPS))
+	else if (_inputStateData.ShowFullScreenImageHeld)
 	{
 		FrontendProcessInputGamelistShowLoadingScreen();
-		_frontendInputWaitForNoInput = TRUE;
+		_inputWaitForNoInput = TRUE;
 	}
-	else if ((_frontendASCIIInput >= '0' && _frontendASCIIInput <= '4')
-		|| _frontendASCIIInput == '9'
-		|| (_frontendASCIIInput >= 'A' && _frontendASCIIInput <= 'Z'))
+	else if ((_inputASCIIInput >= '0' && _inputASCIIInput <= '4')
+		|| _inputASCIIInput == '9'
+		|| (_inputASCIIInput >= 'A' && _inputASCIIInput <= 'Z'))
 	{
 		FrontendSearchInputInitialise();
 	}
@@ -545,7 +505,7 @@ void FrontendProcessInputGameListBack()
 	_frontendLauncherState = kLauncherStateExitMenu;
 	FrontendLoadExitMenuScreen();
 
-	_frontendInputWaitForNoInput = TRUE;
+	_inputWaitForNoInput = TRUE;
 }
 
 void FrontendProcessInputListConfiguration()
@@ -570,7 +530,7 @@ void FrontendProcessInputListConfiguration()
 	FrontendLoadConfigurationMenuScreen();
 	FrontEndConfigurationMenuDrawRows();
 
-	_frontendInputWaitForNoInput = TRUE;
+	_inputWaitForNoInput = TRUE;
 }
 
 void FrontendBackToGameList(_Bool fromMenu)
@@ -579,8 +539,8 @@ void FrontendBackToGameList(_Bool fromMenu)
 
 	_frontendLauncherState = kLauncherStateGameList;
 
-	_frontendASCIIInput = 0;
-	_frontendInputWaitForNoInput = TRUE;
+	_inputASCIIInput = 0;
+	_inputWaitForNoInput = TRUE;
 
 	if (fromMenu)
 	{
@@ -621,9 +581,9 @@ void FrontendBackToSearchList()
 
 void FrontendUpdateProcessInputSearch()
 {
-	if(_frontendInputHeldFrameCount == 1 || _frontendInputHeldFrameCount > kInputHeldRepeatStartFrameCountUpDown)
+	if(InputHeldFrameCountIsOneOrRepeating())
 	{
-		switch (_frontendASCIIInput)
+		switch (_inputASCIIInput)
 		{
 		case kInputASCIIDelete:
 			if (_frontendSearchCursorPosition > 0)
@@ -669,11 +629,11 @@ void FrontendUpdateProcessInputSearch()
 			break;
 		default:
 			if (_frontendSearchInputStringLength < kFrontendSearchInputStringMaximumLength
-				&& ((_frontendASCIIInput >= '0' && _frontendASCIIInput <= '9')
-					|| (_frontendASCIIInput >= 'A' && _frontendASCIIInput <= 'Z'))
+				&& ((_inputASCIIInput >= '0' && _inputASCIIInput <= '9')
+					|| (_inputASCIIInput >= 'A' && _inputASCIIInput <= 'Z'))
 				)
 			{
-				_frontendSearchInputString[_frontendSearchCursorPosition] = _frontendASCIIInput;
+				_frontendSearchInputString[_frontendSearchCursorPosition] = _inputASCIIInput;
 
 				++_frontendSearchInputStringLength;
 				++_frontendSearchCursorPosition;
@@ -684,7 +644,7 @@ void FrontendUpdateProcessInputSearch()
 		}
 	}
 
-	if (in_key_pressed(IN_KEY_SCANCODE_CAPS) && in_key_pressed(IN_KEY_SCANCODE_SPACE))
+	if (_inputStateData.BackHeld)
 	{
 		//test code copied from frontend initialise
 		NIRVANAP_stop();
@@ -708,7 +668,7 @@ void FrontendUpdateProcessInputSearch()
 		_frontendLauncherState = kLauncherStateGameList;
 		FrontendLoadGameListScreen();
 
-		_frontendInputWaitForNoInput = TRUE;
+		_inputWaitForNoInput = TRUE;
 		return;
 	}
 
@@ -729,29 +689,29 @@ void FrontendUpdateProcessInputLoadingScreenFull()
 			FrontendShowLoadingScreenFile(TRUE);
 		}
 
-		_frontendInputWaitForNoInput = TRUE;
+		_inputWaitForNoInput = TRUE;
 	}
 }
 
 void FrontendUpdateProcessInputExitMenu()
 {
-	if (_frontendInputHeldFrameCount == 1 || _frontendInputHeldFrameCount > kInputHeldRepeatStartFrameCountUpDown)
+	if (InputHeldFrameCountIsOneOrRepeating())
 	{
-		if (in_key_pressed(kInputScancodeUp))
+		if (_inputStateData.UpHeld)
 		{
 			FrontendProcessInputMenuUp();
 		}
-		else if (in_key_pressed(kInputScancodeDown))
+		else if (_inputStateData.DownHeld)
 		{
 			FrontendProcessInputMenuDown();
 		}
 	}
 
-	if (in_key_pressed(IN_KEY_SCANCODE_CAPS) && in_key_pressed(IN_KEY_SCANCODE_SPACE))
+	if (_inputStateData.BackHeld)
 	{
 		FrontendProcessInputMenuBack();
 	}
-	else if (in_key_pressed(kInputScancodeSelect))
+	else if (_inputStateData.SelectHeld)
 	{
 		FrontendProcessInputExitMenuSelect();
 	}
@@ -881,7 +841,7 @@ void FrontendProcessInputExitMenuSelect()
 		zx_border(INK_BLACK);
 		memset((void *)(16384 + 6144 + 32), 0, 768 - 32);
 
-		_frontendASCIIInput = 0;
+		_inputASCIIInput = 0;
 
 		const char * kLibraryPath = "/jplaunch/library";
 		IOChangeDirectory(kLibraryPath, kFrontendBasicDataPageLength);
@@ -901,32 +861,32 @@ void FrontendProcessInputExitMenuSelect()
 
 void FrontendUpdateProcessInputConfigurationMenu()
 {
-	if (_frontendInputHeldFrameCount == 1 || _frontendInputHeldFrameCount > kInputHeldRepeatStartFrameCountUpDown)
+	if (InputHeldFrameCountIsOneOrRepeating())
 	{
-		if (in_key_pressed(kInputScancodeUp))
+		if (_inputStateData.UpHeld)
 		{
 			FrontendProcessInputMenuUp();
 		}
-		else if (in_key_pressed(kInputScancodeDown))
+		else if (_inputStateData.DownHeld)
 		{
 			FrontendProcessInputMenuDown();
 		}
 
-		if (in_key_pressed(kInputScancodeLeft))
+		if (_inputStateData.LeftHeld)
 		{
 			FrontendProcessInputMenuLeft();
 		}
-		else if (in_key_pressed(kInputScancodeRight))
+		else if (_inputStateData.RightHeld)
 		{
 			FrontendProcessInputMenuRight();
 		}
 	}
 
-	if (in_key_pressed(IN_KEY_SCANCODE_CAPS) && in_key_pressed(IN_KEY_SCANCODE_SPACE))
+	if (_inputStateData.BackHeld)
 	{
 		FrontendProcessInputConfigurationMenuBack();
 	}
-	else if (in_key_pressed(kInputScancodeSelect))
+	else if (_inputStateData.SelectHeld)
 	{
 		FrontendProcessInputConfigurationMenuSelect();
 	}

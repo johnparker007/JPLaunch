@@ -22,6 +22,7 @@
 #include "nirvana.h"
 
 #include "app.h"
+#include "inputSystem.h"
 #include "frontend.h"
 #include "game.h"
 
