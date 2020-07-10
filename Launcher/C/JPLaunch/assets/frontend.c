@@ -6,15 +6,7 @@
 #define kReturnCodeLoadSnaZ80 (2010)
 
 
-#define kLauncherStateGetFirstPage (0)
-#define kLauncherStateUninitialised (1)
-#define kLauncherStateGameList (2)
-//#define kLauncherStateSearching (3) unused
-#define kLauncherStateSearchInput (4)
-#define kLauncherStateSearchList (5)
-#define kLauncherStateShowLoadingScreenFull (6)
-#define kLauncherStateExitMenu (7)
-#define kLauncherStateConfigurationMenu (8)
+
 
 #define kRowCountFull (23)
 #define kRowCountMini (7)

@@ -1,9 +1,8 @@
 #ifndef __INPUT_SYSTEM_H__
 #define __INPUT_SYSTEM
 
-#define kInputHeldRepeatStartFrameCountUpDown (240)
-#define kInputHeldRepeatStartFrameCountLeftRight (215)
-
+#define kInputHeldRepeatStartFrameCount23Rows (60)
+#define kInputHeldRepeatStartFrameCount7Rows (150)
 
 struct InputState
 {
@@ -21,10 +20,9 @@ struct InputState
 
 _Bool InputBlockedAwaitingKeyUp();
 _Bool InputHeldFrameCountIsOneOrRepeating();
-void InputGetUppercaseASCIIInput();
-void InputSample();
+
 void InputGetInput();
-void InputUpdateInputHeldFrameCount();
+void InputGetUppercaseASCIIInput();
 
 
 _Bool _inputWaitForNoInput;
