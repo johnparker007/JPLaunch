@@ -267,19 +267,23 @@ void FrontendUpdateProcessInputList()
 		if(_inputStateData.UpHeld)
 		{
 			FrontendProcessInputListUp();
+			return;
 		}
 		else if (_inputStateData.DownHeld)
 		{
 			FrontendProcessInputListDown();
+			return;
 		}
 
 		if (_inputStateData.LeftHeld)
 		{
 			FrontendProcessInputListLeft();
+			return;
 		}
 		else if (_inputStateData.RightHeld)
 		{
 			FrontendProcessInputListRight();
+			return;
 		}
 	}
 
@@ -305,9 +309,16 @@ void FrontendUpdateProcessInputList()
 		FrontendProcessInputGamelistShowLoadingScreen();
 		_inputWaitForNoInput = TRUE;
 	}
-	else if ((_inputASCIIInput >= '0' && _inputASCIIInput <= '4')
-		|| _inputASCIIInput == '9'
-		|| (_inputASCIIInput >= 'A' && _inputASCIIInput <= 'Z'))
+	else if (
+		// TODO this could be written better/with less code:
+		(_configurationData.KeyboardType == KeyboardTypeNon48KWithCursor
+		&& (_inputASCIIInput >= '0' && _inputASCIIInput <= '9')
+			|| (_inputASCIIInput >= 'A' && _inputASCIIInput <= 'Z'))
+		||
+		(_configurationData.KeyboardType == KeyboardType48KWithoutCursor
+		&& ((_inputASCIIInput >= '0' && _inputASCIIInput <= '4') || _inputASCIIInput == '9')
+			|| (_inputASCIIInput >= 'A' && _inputASCIIInput <= 'Z'))
+	)
 	{
 		FrontendSearchInputInitialise();
 	}
