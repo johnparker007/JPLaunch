@@ -287,6 +287,11 @@ void FrontendUpdateProcessInputList()
 		}
 	}
 
+	if (_inputHeldFrameCount != 1)
+	{
+		return;
+	}
+
 	if (_inputStateData.ViewModeToggleHeld)
 	{
 		FrontendProcessInputListToggleMode();
@@ -703,11 +708,18 @@ void FrontendUpdateProcessInputExitMenu()
 		if (_inputStateData.UpHeld)
 		{
 			FrontendProcessInputMenuUp();
+			return;
 		}
 		else if (_inputStateData.DownHeld)
 		{
 			FrontendProcessInputMenuDown();
+			return;
 		}
+	}
+
+	if (_inputHeldFrameCount != 1)
+	{
+		return;
 	}
 
 	if (_inputStateData.BackHeld)
@@ -869,20 +881,28 @@ void FrontendUpdateProcessInputConfigurationMenu()
 		if (_inputStateData.UpHeld)
 		{
 			FrontendProcessInputMenuUp();
+			return;
 		}
 		else if (_inputStateData.DownHeld)
 		{
 			FrontendProcessInputMenuDown();
+			return;
 		}
-
-		if (_inputStateData.LeftHeld)
+		else if (_inputStateData.LeftHeld)
 		{
 			FrontendProcessInputMenuLeft();
+			return;
 		}
 		else if (_inputStateData.RightHeld)
 		{
 			FrontendProcessInputMenuRight();
+			return;
 		}
+	}
+
+	if (_inputHeldFrameCount != 1)
+	{
+		return;
 	}
 
 	if (_inputStateData.BackHeld)
