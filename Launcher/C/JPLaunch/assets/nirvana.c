@@ -53,3 +53,30 @@ void NirvanaRowHeightPatchAddressInitialise()
 		++_nirvanaRowHeightPatchAddress;
 	} 
 }
+
+void NirvanaRestartNextUpdate()
+{
+	if (InputHeldFrameCountIsRepeating()
+		&&
+		(_frontendLauncherState == kLauncherStateGameList || _frontendLauncherState == kLauncherStateSearchList)
+		&&
+		(	(_frontendListModeFull && (_inputStateData.LeftHeld || _inputStateData.RightHeld))
+			||
+			(!_frontendListModeFull && (_inputStateData.LeftHeld || _inputStateData.RightHeld || _inputStateData.UpHeld || _inputStateData.DownHeld))
+		)
+	)
+	{
+		return;
+	}
+
+	NirvanaStartAndCancelRestartNextUpdate();
+}
+
+void NirvanaStartAndCancelRestartNextUpdate()
+{
+	if (_nirvanaRestartNextUpdate)
+	{
+		NIRVANAP_start();
+		_nirvanaRestartNextUpdate = FALSE;
+	}
+}

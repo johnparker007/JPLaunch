@@ -13,10 +13,13 @@ _Bool InputBlockedAwaitingKeyUp()
 
 _Bool InputHeldFrameCountIsOneOrRepeating()
 {
-	// TODO - default to 23 rows shen not in list view (ie full screen menus etc)
-	return _inputHeldFrameCount == 1 
-		|| _inputHeldFrameCount > 
-			(_frontendListModeFull || (_frontendLauncherState != kLauncherStateSearchList && _frontendLauncherState != kLauncherStateGameList)
+	return _inputHeldFrameCount == 1 || InputHeldFrameCountIsRepeating();
+}
+
+_Bool InputHeldFrameCountIsRepeating()
+{
+	return _inputHeldFrameCount >
+		(_frontendListModeFull || (_frontendLauncherState != kLauncherStateSearchList && _frontendLauncherState != kLauncherStateGameList)
 			? kInputHeldRepeatStartFrameCount23Rows : kInputHeldRepeatStartFrameCount7Rows);
 }
 

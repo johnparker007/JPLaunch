@@ -77,7 +77,7 @@
 #define kConfigurationMenuOptionCount				(6)
 
 
-//#define kDebugFakeLoadDelayForEmulator
+#define kDebugFakeLoadDelayForEmulator
 
 
 
@@ -228,6 +228,11 @@ void FrontendUpdate()
 
 	InputGetInput();
 
+	if (_nirvanaRestartNextUpdate)
+	{
+		NirvanaRestartNextUpdate();
+	}
+
 	switch (_frontendLauncherState)
 	{
 	case kLauncherStateGameList:
@@ -357,6 +362,10 @@ void FrontendProcessInputListUp()
 			FrontendShowLoadingScreenFile(TRUE);
 		}
 	}
+	else
+	{
+		NirvanaStartAndCancelRestartNextUpdate();
+	}
 }
 
 void FrontendProcessInputListDown()
@@ -387,6 +396,10 @@ void FrontendProcessInputListDown()
 			FrontendShowLoadingScreenFile(TRUE);
 		}
 	}
+	else
+	{
+		NirvanaStartAndCancelRestartNextUpdate();
+	}
 }
 
 void FrontendProcessInputListLeft()
@@ -399,6 +412,10 @@ void FrontendProcessInputListLeft()
 		{
 			FrontendShowLoadingScreenFile(TRUE);
 		}
+	}
+	else
+	{
+		NirvanaStartAndCancelRestartNextUpdate();
 	}
 }
 
@@ -418,6 +435,10 @@ void FrontendProcessInputListRight()
 		{
 			FrontendShowLoadingScreenFile(TRUE);
 		}
+	}
+	else
+	{
+		NirvanaStartAndCancelRestartNextUpdate();
 	}
 }
 
@@ -1407,7 +1428,8 @@ void FrontendShowLoadingScreenFile(_Bool partial)
 	{
 		IOLoadBytes(&basicData, kFrontendBasicDataPageLength, 16384 + 2048);
 		FrontendDrawCurrentRowSelectedStandardAttributes();
-		NIRVANAP_start();
+
+		_nirvanaRestartNextUpdate = TRUE;
 	}
 	else
 	{
@@ -1502,7 +1524,7 @@ void FrontendLoadGameListScreen()
 
 	IOLoadBytes(&basicData, kFrontendBasicDataPageLength, 16384);
 	
-	NIRVANAP_start();
+	_nirvanaRestartNextUpdate = TRUE;
 }
 
 void FrontendLoadSearchListScreen()
@@ -1571,7 +1593,7 @@ void FrontendLoadSearchListScreen()
 
 	IOLoadBytes(&basicData, kFrontendBasicDataSearchMaximumLength, 16384);
 
-	NIRVANAP_start();
+	_nirvanaRestartNextUpdate = TRUE;
 }
 
 void FrontendLoadExitMenuScreen()

@@ -3,9 +3,13 @@
 
 unsigned int  _nirvanaRowHeightPatchAddress;
 
+_Bool _nirvanaRestartNextUpdate;
+
 
 void NirvanaLoadEngine(_Bool rows23);
 void NirvanaRowHeightPatchAddressInitialise();
+void NirvanaRestartNextUpdate();
+void NirvanaStartAndCancelRestartNextUpdate();
 
 
 

@@ -20,6 +20,7 @@ struct InputState
 
 _Bool InputBlockedAwaitingKeyUp();
 _Bool InputHeldFrameCountIsOneOrRepeating();
+_Bool InputHeldFrameCountIsRepeating();
 
 void InputGetInput();
 void InputGetUppercaseASCIIInput();
