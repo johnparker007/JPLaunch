@@ -26,18 +26,18 @@ void InputGetInput()
 
 	// TODO read these scancode states as a couple of keyboard joystick scans
 
-	_inputStateData.BackHeld = in_key_pressed(IN_KEY_SCANCODE_CAPS) && in_key_pressed(IN_KEY_SCANCODE_SPACE);
-	_inputStateData.ShowFullScreenImageHeld = !in_key_pressed(IN_KEY_SCANCODE_CAPS) && in_key_pressed(IN_KEY_SCANCODE_SPACE);
+	_inputStateData.BackHeld = in_key_pressed(IN_KEY_SCANCODE_SPACE) && in_key_pressed(IN_KEY_SCANCODE_CAPS);
+	_inputStateData.ShowFullScreenImageHeld = in_key_pressed(IN_KEY_SCANCODE_SPACE) && !in_key_pressed(IN_KEY_SCANCODE_CAPS);
 	_inputStateData.SelectHeld = in_key_pressed(IN_KEY_SCANCODE_ENTER);
-	_inputStateData.ViewModeToggleHeld = in_key_pressed(IN_KEY_SCANCODE_CAPS) && in_key_pressed(IN_KEY_SCANCODE_SYM);
-	_inputStateData.ConfigurationHeld = in_key_pressed(IN_KEY_SCANCODE_CAPS) && in_key_pressed(IN_KEY_SCANCODE_1);
+	_inputStateData.ViewModeToggleHeld = in_key_pressed(IN_KEY_SCANCODE_SYM) && in_key_pressed(IN_KEY_SCANCODE_CAPS);
+	_inputStateData.ConfigurationHeld = in_key_pressed(IN_KEY_SCANCODE_1) && in_key_pressed(IN_KEY_SCANCODE_CAPS);
 
 	if (_configurationData.KeyboardType == KeyboardTypeNon48KWithCursor)
 	{
-		_inputStateData.UpHeld = in_key_pressed(IN_KEY_SCANCODE_CAPS) && in_key_pressed(IN_KEY_SCANCODE_7);
-		_inputStateData.DownHeld = in_key_pressed(IN_KEY_SCANCODE_CAPS) && in_key_pressed(IN_KEY_SCANCODE_6);
-		_inputStateData.LeftHeld = in_key_pressed(IN_KEY_SCANCODE_CAPS) && in_key_pressed(IN_KEY_SCANCODE_5);
-		_inputStateData.RightHeld = in_key_pressed(IN_KEY_SCANCODE_CAPS) && in_key_pressed(IN_KEY_SCANCODE_8);
+		_inputStateData.UpHeld = in_key_pressed(IN_KEY_SCANCODE_7) && in_key_pressed(IN_KEY_SCANCODE_CAPS);
+		_inputStateData.DownHeld = in_key_pressed(IN_KEY_SCANCODE_6) && in_key_pressed(IN_KEY_SCANCODE_CAPS);
+		_inputStateData.LeftHeld = in_key_pressed(IN_KEY_SCANCODE_5) && in_key_pressed(IN_KEY_SCANCODE_CAPS);
+		_inputStateData.RightHeld = in_key_pressed(IN_KEY_SCANCODE_8) && in_key_pressed(IN_KEY_SCANCODE_CAPS);
 	}
 	else
 	{
