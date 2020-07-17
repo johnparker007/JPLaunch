@@ -2,7 +2,7 @@
 #define __IO
 
 
-
+//#define kDebugFakeLoadDelayForEmulator
 
 void IOLoadBytes(void * pathString, unsigned char pathStringLength, unsigned int startAddress);
 void IOSaveBytes(void * pathString, unsigned char pathStringLength, unsigned int startAddress, unsigned int byteCount);

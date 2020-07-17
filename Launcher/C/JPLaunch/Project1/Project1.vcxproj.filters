@@ -39,6 +39,9 @@
     <ClCompile Include="..\assets\inputSystem.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\assets\screensaver.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\assets\app.h">
@@ -69,6 +72,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\assets\inputSystem.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\assets\screensaver.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

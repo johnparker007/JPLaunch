@@ -134,6 +134,7 @@
     <ClCompile Include="..\assets\inputSystem.c" />
     <ClCompile Include="..\assets\io.c" />
     <ClCompile Include="..\assets\nirvana.c" />
+    <ClCompile Include="..\assets\screensaver.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\assets\app.h" />
@@ -146,6 +147,7 @@
     <ClInclude Include="..\assets\io.h" />
     <ClInclude Include="..\assets\macros.h" />
     <ClInclude Include="..\assets\nirvana.h" />
+    <ClInclude Include="..\assets\screensaver.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

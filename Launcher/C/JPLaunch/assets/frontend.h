@@ -30,6 +30,7 @@
 #define kLauncherStateShowLoadingScreenFull (6)
 #define kLauncherStateExitMenu (7)
 #define kLauncherStateConfigurationMenu (8)
+#define kLauncherStateScreensaver (9)
 
 
 unsigned char _frontendFrameCount;

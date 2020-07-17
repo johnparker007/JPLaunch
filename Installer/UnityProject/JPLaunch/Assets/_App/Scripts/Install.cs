@@ -43,6 +43,7 @@ public class Install : MonoBehaviour
     public const string kLibraryFolder = "library";
     public const string kCodeFolder = "code";
     public const string kGraphicsFolder = "graphics";
+    public const string kScreensaverFramesFolder = "scrnsave";
 
     public const string kFilesFolder = "files";
 
@@ -380,6 +381,9 @@ public class Install : MonoBehaviour
         StartCoroutine(WaitForAsyncWritesToComplete());
         yield return new WaitUntil(() => !_coroutineTaskRunning);
 
+        StartCoroutine(CopyScreensaverImages());
+        yield return new WaitUntil(() => !_coroutineTaskRunning);
+
         FastCRC.Instance.SaveDatabase();
 
         _installer.MasterState = Installer.MasterStateType.CompletedSuccessfully; // TODO this isn't necessarily true!
@@ -465,6 +469,8 @@ public class Install : MonoBehaviour
         Directory.CreateDirectory(_installer.OutputFolder + "/" + kCodeFolder);
         Directory.CreateDirectory(_installer.OutputFolder + "/" + kGraphicsFolder);
 
+        Directory.CreateDirectory(_installer.OutputFolder + "/" + kGraphicsFolder + "/" + kScreensaverFramesFolder);
+        
         Directory.CreateDirectory(_installer.OutputFolder + "/" + kLibraryFolder + "/" + kGameListFullFolder);
         Directory.CreateDirectory(_installer.OutputFolder + "/" + kLibraryFolder + "/" + kGameListMiniFolder);
         Directory.CreateDirectory(_installer.OutputFolder + "/" + kLibraryFolder + "/" + kSearchListFullFolder);
@@ -1488,5 +1494,37 @@ public class Install : MonoBehaviour
         }
     }
 
+    private IEnumerator CopyScreensaverImages()
+    {
+        // TODO this needs its own row on the Install status page with % complete etc
+        yield return null;
 
+
+
+        _coroutineTaskRunning = true;
+
+        const int kImageCount = 1000;
+
+        for(int imageIndex = 0; imageIndex < kImageCount; ++imageIndex)
+        {
+            string sourceImageIndexAsPaddedString = String.Format("{0:00000}", imageIndex + 1);
+            string sourceFilePath = "FractalFrames/" + sourceImageIndexAsPaddedString /* + ".bytes" */;
+            TextAsset sourceFileTextAsset = Resources.Load<TextAsset>(sourceFilePath);
+            byte[] sourceFileBytes = sourceFileTextAsset.bytes.Take(6144).ToArray();
+
+            string rootFolder = _installer.OutputFolder + "/" + kGraphicsFolder + "/" + kScreensaverFramesFolder + "/";
+            string targetFilename = "0";
+            string targetImageIndexAsPaddedString = String.Format("{0:00000}", imageIndex);
+            string flattenedFilePath =
+                SDFileManager.CreateFlattenedFilepath(rootFolder, targetImageIndexAsPaddedString, targetFilename, "");
+
+            string filename = rootFolder
+                 + flattenedFilePath
+                 + targetFilename;
+
+            SDFileManager.WriteAllBytesAsync(filename, sourceFileBytes);
+        }
+
+        _coroutineTaskRunning = false;
+    }
 }

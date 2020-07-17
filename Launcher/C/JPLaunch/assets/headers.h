@@ -23,6 +23,7 @@
 
 #include "app.h"
 #include "inputSystem.h"
+#include "screensaver.h"
 #include "frontend.h"
 #include "game.h"
 

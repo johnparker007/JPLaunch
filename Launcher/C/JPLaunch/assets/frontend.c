@@ -77,10 +77,6 @@
 #define kConfigurationMenuOptionCount				(6)
 
 
-#define kDebugFakeLoadDelayForEmulator
-
-
-
 		
 void * _basicTapFilenameAddress = (void *)(0x5cf7); // in use
 void * _basicSnaZ80IndexAddress = (void *)(0x5d4e); // in use 
@@ -260,6 +256,9 @@ void FrontendUpdate()
 		FrontendConfigurationMenuDrawArrows(FALSE); 
 		FrontendUpdateProcessInputConfigurationMenu();
 		break;
+	case kLauncherStateScreensaver:
+		ScreensaverUpdate();
+		break;
 	}
 
 	++_frontendFrameCount;
@@ -271,7 +270,11 @@ void FrontendUpdateProcessInputList()
 	{
 		if(_inputStateData.UpHeld)
 		{
-			FrontendProcessInputListUp();
+// hack test screensave launch:
+_frontendLauncherState = kLauncherStateScreensaver;
+ScreensaverInitialise();
+
+//			FrontendProcessInputListUp();
 			return;
 		}
 		else if (_inputStateData.DownHeld)
