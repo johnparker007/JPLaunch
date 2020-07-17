@@ -62,6 +62,18 @@ void InputGetInput()
 		&& _inputASCIIInput == 0)
 	{
 		_inputHeldFrameCount = 0;
+
+		if (_frontendLauncherState != kLauncherStateScreensaver)
+		{
+			if (in_test_key() == 0)
+			{
+				++_inputFramesSinceInputCount;
+			}
+			else
+			{
+				_inputFramesSinceInputCount = 0;
+			}
+		}
 	}
 	else
 	{
@@ -71,6 +83,8 @@ void InputGetInput()
 		}
 
 		InputGetUppercaseASCIIInput();
+
+		_inputFramesSinceInputCount = 0;
 	}
 }
 

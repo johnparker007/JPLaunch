@@ -222,6 +222,14 @@ void FrontendUpdate()
 		return;
 	}
 
+	if (_frontendLauncherState != kLauncherStateScreensaver && _inputFramesSinceInputCount > kScreensaverIdleFramesBeforeShow)
+	{
+		_frontendLauncherState = kLauncherStateScreensaver;
+		ScreensaverInitialise();
+		_inputFramesSinceInputCount = 0;
+		return;
+	}
+
 	InputGetInput();
 
 	if (_nirvanaRestartNextUpdate)
@@ -270,11 +278,7 @@ void FrontendUpdateProcessInputList()
 	{
 		if(_inputStateData.UpHeld)
 		{
-// hack test screensave launch:
-_frontendLauncherState = kLauncherStateScreensaver;
-ScreensaverInitialise();
-
-//			FrontendProcessInputListUp();
+			FrontendProcessInputListUp();
 			return;
 		}
 		else if (_inputStateData.DownHeld)

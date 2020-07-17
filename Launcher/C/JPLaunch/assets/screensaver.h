@@ -5,9 +5,12 @@
 
 #define kScreensaverFrameIndexPaddedMaximumLength	(5)
 
+#define kScreensaverIdleFramesBeforeShow	(2000)
+
 void ScreensaverInitialise();
 void ScreensaverUpdate();
 void ScreensaverLoadCurrentFrameScreen();
+void ScreensaverExit();
 
 int _screensaverCurrentFrame;
 _Bool _screensaverPositiveSpeed;

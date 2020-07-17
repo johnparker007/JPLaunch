@@ -31,6 +31,11 @@ void ScreensaverUpdate()
 		_screensaverPositiveSpeed = TRUE;
 		_screensaverCurrentFrame = 1; // so we don't show the zeroth frame twice
 	}
+
+	if (in_test_key() != 0)
+	{
+		ScreensaverExit();
+	}
 }
 
 void ScreensaverLoadCurrentFrameScreen()
@@ -59,4 +64,13 @@ void ScreensaverLoadCurrentFrameScreen()
 	IOLoadBytes(&basicData, kFrontendBasicDataPageLength, 16384);
 
 	//_nirvanaRestartNextUpdate = TRUE;
+}
+
+void ScreensaverExit()
+{
+	const char* kLibraryPath = "/jplaunch/library";
+	IOChangeDirectory(kLibraryPath, kFrontendBasicDataPageLength);
+
+	// quick hack until better 'Back' system implemented for use everywhere:
+	FrontendBackToGameList(TRUE);
 }

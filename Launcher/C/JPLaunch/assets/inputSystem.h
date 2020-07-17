@@ -31,6 +31,8 @@ struct InputState _inputStateData;
 unsigned char _inputASCIIInput;
 unsigned int _inputHeldFrameCount;
 
+unsigned int _inputFramesSinceInputCount;
+
 
 
 #endif
