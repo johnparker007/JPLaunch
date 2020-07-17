@@ -14,7 +14,7 @@ public class SpectrumFiles : MonoBehaviour
     public TextAsset JPLAUNCHTap = null;
     public TextAsset Ld16384_recompiled = null;
     public TextAsset MiniFzx = null;
-    public TextAsset LD25000 = null;
+    public TextAsset LD24576 = null;
     public TextAsset LD43000 = null;
     public TextAsset SearchWindowScr = null;
 
@@ -31,7 +31,7 @@ public class SpectrumFiles : MonoBehaviour
         WriteFile(JPLAUNCHTap, Installer.Configuration.ESXDOSRootPath + "/" + "JPLAUNCH.TAP");
         WriteFile(Ld16384_recompiled, Installer.OutputFolder + "/" + Install.kCodeFolder + "/" + "jpl16384");
         WriteFile(MiniFzx, Installer.OutputFolder + "/" + Install.kGraphicsFolder + "/" + "propfont");
-        WriteFile(LD25000, Installer.Configuration.ESXDOSRootPath + "/" + Install.kDotCommandsFolder + "/" + "LD25000");
+        WriteFile(LD24576, Installer.Configuration.ESXDOSRootPath + "/" + Install.kDotCommandsFolder + "/" + "LD24576");
         WriteFile(LD43000, Installer.Configuration.ESXDOSRootPath + "/" + Install.kDotCommandsFolder + "/" + "LD43000");
         WriteFile(SearchWindowScr, Installer.OutputFolder + "/" + Install.kGraphicsFolder + "/" + "srch_win");
     }

@@ -1348,7 +1348,7 @@ MonoBehaviour:
   JPLAUNCHTap: {fileID: 4900000, guid: 6e25384a1d1564448a7eb24aa35c8da3, type: 3}
   Ld16384_recompiled: {fileID: 4900000, guid: 581daa55c3a93804589881c3c5af3f23, type: 3}
   MiniFzx: {fileID: 4900000, guid: 2c790a6b52e097a4a891715e627ac767, type: 3}
-  LD25000: {fileID: 4900000, guid: ff3130c66b434274794d4f94b6354260, type: 3}
+  LD24576: {fileID: 4900000, guid: b6432df5302a32447b859e3873207b92, type: 3}
   LD43000: {fileID: 4900000, guid: 24741c68f123e1c4e85d3a14cf7a043c, type: 3}
   SearchWindowScr: {fileID: 4900000, guid: 09630fa786d76c848b11b0f38f689b54, type: 3}
   Installer: {fileID: 639835151}

@@ -10,7 +10,7 @@
 #include "font.c"
 
 
-#pragma output CRT_ORG_CODE          = 25000
+#pragma output CRT_ORG_CODE          = 24576
 #pragma output CLIB_OPT_PRINTF       = 0x00000400   // enable %c for printf only
 #pragma output CLIB_MALLOC_HEAP_SIZE = 0            // do not create a heap
 #pragma output REGISTER_SP           = -1           // do not change sp

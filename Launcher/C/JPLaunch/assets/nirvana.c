@@ -9,7 +9,7 @@ const unsigned char kNirvanaByte1Value7Rows = 230;
 const char * kNirvanaEnginePath23Rows = "../code/nirvana";
 const char * kNirvanaEnginePath7Rows = "../code/nirvana7";
 
-const unsigned int kStartAddressOfThisCFileCompiled = 25000; // where we loaded this z80 code block into ram
+const unsigned int kStartAddressOfThisCFileCompiled = 24576; // where we loaded this z80 code block into ram
 
 void NirvanaLoadEngine(_Bool rows23)
 {
