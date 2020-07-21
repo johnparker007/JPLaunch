@@ -72,9 +72,11 @@
 #define kConfigurationMenuOptionInputAcceleration	(2)
 #define kConfigurationMenuOptionKeyboardType		(3)
 #define kConfigurationMenuOptionJoystickType		(4)
+#define kConfigurationMenuOptionScreensaverType		(5)
+#define kConfigurationMenuOptionScreensaverDelayType (6)
 
-#define kConfigurationMenuOptionBack				(5)
-#define kConfigurationMenuOptionCount				(6)
+#define kConfigurationMenuOptionBack				(7)
+#define kConfigurationMenuOptionCount				(8)
 
 
 		
@@ -829,6 +831,12 @@ void FrontendProcessInputMenuLeft()
 	case kConfigurationMenuOptionJoystickType:
 		--_configurationData.JoystickType;
 		break;
+	case kConfigurationMenuOptionScreensaverType:
+		--_configurationData.ScreensaverType;
+		break;
+	case kConfigurationMenuOptionScreensaverDelayType:
+		--_configurationData.ScreensaverDelayType;
+		break;
 	}
 
 	FrontEndConfigurationMenuDrawRow(_frontendCurrentRow);
@@ -854,6 +862,12 @@ void FrontendProcessInputMenuRight()
 		break;
 	case kConfigurationMenuOptionJoystickType:
 		++_configurationData.JoystickType;
+		break;
+	case kConfigurationMenuOptionScreensaverType:
+		++_configurationData.ScreensaverType;
+		break;
+	case kConfigurationMenuOptionScreensaverDelayType:
+		++_configurationData.ScreensaverDelayType;
 		break;
 	}
 
@@ -1707,6 +1721,37 @@ void FrontEndConfigurationMenuDrawRow(unsigned char rowIndex)
 			break;
 		}
 		break;
+
+	case kConfigurationMenuOptionScreensaverType:
+		switch (_configurationData.ScreensaverType)
+		{
+		case ScreensaverTypeDisabled:
+			string = "Disabled";
+			break;
+		case ScreensaverTypeFractalZoom:
+			string = "Fractal Zoom";
+			break;
+		}
+		break;
+
+	case kConfigurationMenuOptionScreensaverDelayType:
+		switch (_configurationData.ScreensaverDelayType)
+		{
+		case ScreensaverDelayTypeTwoMinutes:
+			string = "2 Minutes";
+			break;
+		case ScreensaverDelayTypeThreeMinutes:
+			string = "3 Minutes";
+			break;
+		case ScreensaverDelayTypeFiveMinutes:
+			string = "5 Minutes";
+			break;
+		case ScreensaverDelayTypeTenMinutes:
+			string = "10 Minutes";
+			break;
+		}
+		break;
+
 	case kConfigurationMenuOptionNMISYSStartupPath:
 		string = "/newgames";
 		break;
@@ -1760,6 +1805,10 @@ _Bool FrontendConfigurationCurrentRowCanMoveLeft()
 		return _configurationData.KeyboardType > 0;
 	case kConfigurationMenuOptionJoystickType:
 		return _configurationData.JoystickType > 0;
+	case kConfigurationMenuOptionScreensaverType:
+		return _configurationData.ScreensaverType > 0;
+	case kConfigurationMenuOptionScreensaverDelayType:
+		return _configurationData.ScreensaverDelayType > 0;
 	default:
 		return FALSE;
 	}
@@ -1777,6 +1826,10 @@ _Bool FrontendConfigurationCurrentRowCanMoveRight()
 		return _configurationData.KeyboardType < KeyboardTypeCount - 1;
 	case kConfigurationMenuOptionJoystickType:
 		return _configurationData.JoystickType < JoystickTypeCount - 1;
+	case kConfigurationMenuOptionScreensaverType:
+		return _configurationData.ScreensaverType < ScreensaverTypeCount - 1;
+	case kConfigurationMenuOptionScreensaverDelayType:
+		return _configurationData.ScreensaverDelayType < ScreensaverDelayTypeCount - 1;
 	default:
 		return FALSE;
 	}

@@ -581,8 +581,10 @@ public class Install : MonoBehaviour
         FontDrawCharactersRightAligned("Input acceleration:", kSpectrumScreenWidth / 2, 7 * kSpectrumCharSize);
         FontDrawCharactersRightAligned("Keyboard type:", kSpectrumScreenWidth / 2, 9 * kSpectrumCharSize);
         FontDrawCharactersRightAligned("Joystick type:", kSpectrumScreenWidth / 2, 11 * kSpectrumCharSize);
+        FontDrawCharactersRightAligned("Screensaver Type:", kSpectrumScreenWidth / 2, 13 * kSpectrumCharSize);
+        FontDrawCharactersRightAligned("Screensaver Delay:", kSpectrumScreenWidth / 2, 15 * kSpectrumCharSize);
 
-        FontDrawCharactersCentred("Back", 13 * kSpectrumCharSize);
+        FontDrawCharactersCentred("Back", 17 * kSpectrumCharSize);
 
         byte[] screenMemory = GetByteArrayFromScreenTexture(kRowsPerPageFull);
 

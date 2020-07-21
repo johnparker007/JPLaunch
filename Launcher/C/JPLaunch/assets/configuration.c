@@ -16,6 +16,8 @@ void ConfigurationInitialise()
 		_configurationData.InputAccelerationMode = InputAccelerationModePageAndRow;
 		_configurationData.KeyboardType = KeyboardTypeNon48KWithCursor;
 		_configurationData.JoystickType = JoystickTypeDisabled;
+		_configurationData.ScreensaverType = ScreensaverTypeFractalZoom;
+		_configurationData.ScreensaverDelayType = ScreensaverDelayTypeTwoMinutes;
 
 		ConfigurationSave();
 	}

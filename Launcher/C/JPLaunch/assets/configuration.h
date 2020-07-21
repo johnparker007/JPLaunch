@@ -37,6 +37,23 @@ enum JoystickTypes
 	JoystickTypeCount
 };
 
+enum ScreensaverTypes
+{
+	ScreensaverTypeDisabled,
+	ScreensaverTypeFractalZoom,
+
+	ScreensaverTypeCount
+};
+
+enum ScreensaverDelayTypes
+{
+	ScreensaverDelayTypeTwoMinutes,
+	ScreensaverDelayTypeThreeMinutes,
+	ScreensaverDelayTypeFiveMinutes,
+	ScreensaverDelayTypeTenMinutes,
+
+	ScreensaverDelayTypeCount
+};
 
 struct ConfigurationData
 {
@@ -46,6 +63,8 @@ struct ConfigurationData
 	unsigned char InputAccelerationMode;
 	unsigned char KeyboardType;
 	unsigned char JoystickType;
+	unsigned char ScreensaverType;
+	unsigned char ScreensaverDelayType;
 };
 
 struct ConfigurationData _configurationData;
