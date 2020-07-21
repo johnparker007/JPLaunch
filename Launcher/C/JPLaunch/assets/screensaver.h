@@ -5,7 +5,8 @@
 
 #define kScreensaverFrameIndexPaddedMaximumLength	(5)
 
-#define kScreensaverIdleFramesBeforeShow	(2000)
+#define kScreensaverIdleSecondsBeforeShow	(10)
+#define kScreensaverIdleFramesBeforeShow	(kScreensaverIdleSecondsBeforeShow * 50) // * 50 FPS when idle
 
 void ScreensaverInitialise();
 void ScreensaverUpdate();

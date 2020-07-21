@@ -18,23 +18,27 @@ void ScreensaverInitialise()
 
 void ScreensaverUpdate()
 {
-	ScreensaverLoadCurrentFrameScreen();
+	while (TRUE)
+	{
+		ScreensaverLoadCurrentFrameScreen();
 
-	_screensaverCurrentFrame += _screensaverPositiveSpeed ? 1 : -1;
-	if (_screensaverCurrentFrame == kScreensaverFrameCount)
-	{
-		_screensaverPositiveSpeed = FALSE;
-		_screensaverCurrentFrame -= 2; // so we don't show the final frame twice
-	}
-	else if (_screensaverCurrentFrame < 0)
-	{
-		_screensaverPositiveSpeed = TRUE;
-		_screensaverCurrentFrame = 1; // so we don't show the zeroth frame twice
-	}
+		_screensaverCurrentFrame += _screensaverPositiveSpeed ? 1 : -1;
+		if (_screensaverCurrentFrame == kScreensaverFrameCount)
+		{
+			_screensaverPositiveSpeed = FALSE;
+			_screensaverCurrentFrame -= 2; // so we don't show the final frame twice
+		}
+		else if (_screensaverCurrentFrame < 0)
+		{
+			_screensaverPositiveSpeed = TRUE;
+			_screensaverCurrentFrame = 1; // so we don't show the zeroth frame twice
+		}
 
-	if (in_test_key() != 0)
-	{
-		ScreensaverExit();
+		if (in_test_key() != 0)
+		{
+			ScreensaverExit();
+			return;
+		}
 	}
 }
 

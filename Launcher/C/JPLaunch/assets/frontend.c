@@ -222,12 +222,20 @@ void FrontendUpdate()
 		return;
 	}
 
-	if (_frontendLauncherState != kLauncherStateScreensaver && _inputFramesSinceInputCount > kScreensaverIdleFramesBeforeShow)
+	if (_frontendLauncherState != kLauncherStateScreensaver)
 	{
-		_frontendLauncherState = kLauncherStateScreensaver;
-		ScreensaverInitialise();
-		_inputFramesSinceInputCount = 0;
-		return;
+		if (_inputFramesSinceInputCount > kScreensaverIdleFramesBeforeShow)
+		{
+			_frontendLauncherState = kLauncherStateScreensaver;
+			ScreensaverInitialise();
+			_inputFramesSinceInputCount = 0;
+			return;
+		}
+		else if(_inputFramesSinceInputCount > 1)
+		{
+			// we're idling in a menu, limit to 50FPS for accurate timing
+			intrinsic_halt(); 
+		}
 	}
 
 	InputGetInput();
