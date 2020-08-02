@@ -224,9 +224,10 @@ void FrontendUpdate()
 		return;
 	}
 
-	if (_frontendLauncherState != kLauncherStateScreensaver)
+	if (_frontendLauncherState != kLauncherStateScreensaver
+		&& _configurationData.ScreensaverType != ScreensaverTypeDisabled)
 	{
-		if (_inputFramesSinceInputCount > kScreensaverIdleFramesBeforeShow)
+		if (_inputFramesSinceInputCount > ScreensaverGetIdleFramesBeforeShow())
 		{
 			_frontendLauncherState = kLauncherStateScreensaver;
 			ScreensaverInitialise();

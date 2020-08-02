@@ -1,5 +1,12 @@
 #include "headers.h"
 
+#define kFramesPerMinute (50 * 60)
+
+int _screensaverFramesBeforeShow[] = {  2 * kFramesPerMinute,
+						3 * kFramesPerMinute,
+						5 * kFramesPerMinute,
+						10 * kFramesPerMinute };
+
 void ScreensaverInitialise()
 {
 	NIRVANAP_stop();
@@ -77,4 +84,9 @@ void ScreensaverExit()
 
 	// quick hack until better 'Back' system implemented for use everywhere:
 	FrontendBackToGameList(TRUE);
+}
+
+unsigned int ScreensaverGetIdleFramesBeforeShow()
+{
+	return _screensaverFramesBeforeShow[_configurationData.ScreensaverDelayType];
 }
