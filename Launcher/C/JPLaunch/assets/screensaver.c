@@ -82,6 +82,8 @@ void ScreensaverExit()
 	const char* kLibraryPath = "/jplaunch/library";
 	IOChangeDirectory(kLibraryPath, kFrontendBasicDataPageLength);
 
+	FrontendPaintTopRowAttributes();
+
 	// quick hack until better 'Back' system implemented for use everywhere:
 	FrontendBackToGameList(TRUE);
 }
