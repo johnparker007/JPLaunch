@@ -34,5 +34,6 @@ void FontPaintAttributesRowFastNoScrollBar(unsigned char pixelRow, char attribut
 void FontPaintScrollBar(char attributeValues[]);
 
 void FontDrawCharsProportional(char characters[], unsigned char x, unsigned char y);
+unsigned int FontGetProportionalStringWidth(char characters[]);
 
 #endif

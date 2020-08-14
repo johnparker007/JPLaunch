@@ -8,7 +8,7 @@ zcc +zx -vn -SO3 -startup=1 -clib=sdcc_iy --max-allocs-per-node20000 %MAIN_C_CLA
 
 @echo off
 
-set SD_CARD_JPLAUNCH_PATH=C:\Users\John\Desktop\ZEsarUX_win-8.1\_SD_CARD_ROOT_087\JPLAUNCH
+set SD_CARD_JPLAUNCH_PATH=C:\Users\John\Desktop\Desktop\ZEsarUX_win-8.1\_SD_CARD_ROOT_087\JPLAUNCH
 set INSTALLER_SPECTRUM_FILES_PATH=C:\projects\GitRepos\JPLaunch\Installer\UnityProject\JPLaunch\Assets\_App\SpectrumFiles
 
 set APP_CODE_BIN_TARGET_NAME=jplaunch

@@ -161,6 +161,8 @@ void FrontendLoadConfigurationMenuScreen();
 
 void FrontEndConfigurationMenuDrawRows();
 void FrontEndConfigurationMenuDrawRow(unsigned char rowIndex);
+const char* FrontEndConfigurationMenuGetString(unsigned char rowIndex);
+unsigned char FrontendConfigurationGetRowOptionIndex(unsigned char rowIndex);
 
 void FrontendConfigurationMenuDrawArrows(_Bool eraseArrows);
 

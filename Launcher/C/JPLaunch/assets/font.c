@@ -231,8 +231,6 @@ void FontPaintScrollBar(char attributeValues[])
 
 void FontDrawCharsProportional(char characters[], unsigned char x, unsigned char y)
 {
-
-
 	//fs.fgnd_attr = INK_WHITE | PAPER_BLACK;
 	//fs.fgnd_mask = 0;
 
@@ -241,4 +239,9 @@ void FontDrawCharsProportional(char characters[], unsigned char x, unsigned char
 
 	//fzx_puts(&fs, txt_intro);
 	fzx_puts(&fs, characters);
+}
+
+unsigned int FontGetProportionalStringWidth(char characters[])
+{
+	return fzx_string_extent(font, characters);
 }

@@ -79,6 +79,25 @@
 #define kConfigurationMenuOptionCount				(8)
 
 
+const char * kConfigurationRowOptionTextRow0[DefaultViewModeCount] = { "Full screen list", "Mini-list and image" };
+const char * kConfigurationRowOptionTextRow1[1] = { "" };
+const char * kConfigurationRowOptionTextRow2[InputAccelerationModeCount] = { "Page up/down and row up/down", "Page up/down", "Row up/down", "Disabled" };
+const char * kConfigurationRowOptionTextRow3[KeyboardTypeCount] = { "48K+ / 128K / +2 / +3", "48K" };
+const char * kConfigurationRowOptionTextRow4[JoystickTypeCount] = { "Disabled", "Sinclair", "Kempston", "Cursor" };
+const char * kConfigurationRowOptionTextRow5[ScreensaverTypeCount] = { "Disabled", "Fractal Zoom" };
+const char * kConfigurationRowOptionTextRow6[ScreensaverDelayTypeCount] = { "2 Minutes", "3 Minutes", "5 Minutes", "10 Minutes" };
+
+const char ** kConfigurationRowOptionText[kConfigurationMenuOptionCount - 1] = 
+{ 
+	kConfigurationRowOptionTextRow0,
+	kConfigurationRowOptionTextRow1,
+	kConfigurationRowOptionTextRow2,
+	kConfigurationRowOptionTextRow3,
+	kConfigurationRowOptionTextRow4,
+	kConfigurationRowOptionTextRow5,
+	kConfigurationRowOptionTextRow6,
+};
+
 		
 void * _basicTapFilenameAddress = (void *)(0x5cf7); // in use
 void * _basicSnaZ80IndexAddress = (void *)(0x5d4e); // in use 
@@ -818,6 +837,8 @@ void FrontendProcessInputMenuLeft()
 		return;
 	}
 
+	FrontendConfigurationMenuDrawArrows(TRUE);
+
 	switch (_frontendCurrentRow)
 	{
 	case kConfigurationMenuOptionDefaultView:
@@ -849,6 +870,8 @@ void FrontendProcessInputMenuRight()
 	{
 		return;
 	}
+
+	FrontendConfigurationMenuDrawArrows(TRUE);
 
 	switch (_frontendCurrentRow)
 	{
@@ -1660,103 +1683,7 @@ void FrontEndConfigurationMenuDrawRows()
 
 void FrontEndConfigurationMenuDrawRow(unsigned char rowIndex)
 {
-	const char* string;
-	switch (rowIndex)
-	{
-	case kConfigurationMenuOptionDefaultView:
-		switch (_configurationData.DefaultViewMode)
-		{
-		case DefaultViewModeFullScreenList:
-			string = "Full screen list";
-			break;
-		case DefaultViewModeMiniListAndImage:
-			string = "Mini-list and image";
-			break;
-		}
-		break;
-
-	case kConfigurationMenuOptionInputAcceleration:
-		switch (_configurationData.InputAccelerationMode)
-		{
-		case InputAccelerationModePageAndRow:
-			string = "Page up/down and row up/down";
-			break;
-		case InputAccelerationModePage:
-			string = "Page up/down";
-			break;
-		case InputAccelerationModeRow:
-			string = "Row up/down";
-			break;
-		case InputAccelerationModeDisabled:
-			string = "Disabled";
-			break;
-		}
-		break;
-
-	case kConfigurationMenuOptionKeyboardType:
-		switch (_configurationData.KeyboardType)
-		{
-		case KeyboardTypeNon48KWithCursor:
-			string = "48K+ / 128K / +2 / +3";
-			break;
-		case KeyboardType48KWithoutCursor:
-			string = "48K";
-			break;
-		}
-		break;
-
-	case kConfigurationMenuOptionJoystickType:
-		switch (_configurationData.JoystickType)
-		{
-		case JoystickTypeDisabled:
-			string = "Disabled";
-			break;
-		case JoystickTypeSinclair:
-			string = "Sinclair";
-			break;
-		case JoystickTypeKempston:
-			string = "Kempston";
-			break;
-		case JoystickTypeCursor:
-			string = "Cursor";
-			break;
-		}
-		break;
-
-	case kConfigurationMenuOptionScreensaverType:
-		switch (_configurationData.ScreensaverType)
-		{
-		case ScreensaverTypeDisabled:
-			string = "Disabled";
-			break;
-		case ScreensaverTypeFractalZoom:
-			string = "Fractal Zoom";
-			break;
-		}
-		break;
-
-	case kConfigurationMenuOptionScreensaverDelayType:
-		switch (_configurationData.ScreensaverDelayType)
-		{
-		case ScreensaverDelayTypeTwoMinutes:
-			string = "2 Minutes";
-			break;
-		case ScreensaverDelayTypeThreeMinutes:
-			string = "3 Minutes";
-			break;
-		case ScreensaverDelayTypeFiveMinutes:
-			string = "5 Minutes";
-			break;
-		case ScreensaverDelayTypeTenMinutes:
-			string = "10 Minutes";
-			break;
-		}
-		break;
-
-	case kConfigurationMenuOptionNMISYSStartupPath:
-		string = "/newgames";
-		break;
-	}
+	const char * string = FrontEndConfigurationMenuGetString(rowIndex);
 
 	// TODO much faster way of clearing this:
 
@@ -1767,6 +1694,34 @@ void FrontEndConfigurationMenuDrawRow(unsigned char rowIndex)
 	FontDrawCharsProportional((char *)string, (unsigned char)(128 + 8), charY * 8);
 }
 
+const char * FrontEndConfigurationMenuGetString(unsigned char rowIndex)
+{
+	return kConfigurationRowOptionText[rowIndex][FrontendConfigurationGetRowOptionIndex(rowIndex)];
+}
+
+unsigned char FrontendConfigurationGetRowOptionIndex(unsigned char rowIndex)
+{
+	switch (rowIndex)
+	{
+	case kConfigurationMenuOptionDefaultView:
+		return _configurationData.DefaultViewMode;
+	case kConfigurationMenuOptionNMISYSStartupPath:
+		return 1;
+	case kConfigurationMenuOptionInputAcceleration:
+		return _configurationData.InputAccelerationMode;
+	case kConfigurationMenuOptionKeyboardType:
+		return _configurationData.KeyboardType;
+	case kConfigurationMenuOptionJoystickType:
+		return _configurationData.JoystickType;
+	case kConfigurationMenuOptionScreensaverType:
+		return _configurationData.ScreensaverType;
+	case kConfigurationMenuOptionScreensaverDelayType:
+		return _configurationData.ScreensaverDelayType;
+	}
+
+	return 0;
+}
+
 void FrontendConfigurationMenuDrawArrows(_Bool eraseArrows)
 {
 	if (!FrontendConfigurationCurrentRowCanMoveLeft() && !FrontendConfigurationCurrentRowCanMoveRight())
@@ -1774,23 +1729,29 @@ void FrontendConfigurationMenuDrawArrows(_Bool eraseArrows)
 		return;
 	}
 
-	unsigned char charY = 3 + (_frontendCurrentRow * 2);
+	const unsigned int kCharXLeft = 16;
 
-	if (!eraseArrows && _frontendFrameCount % 128 < 64)
+	// TOIMPROVE: precalc these at app startup to a ragged array to match the strings ragged array
+	const char * currentOptionString = FrontEndConfigurationMenuGetString(_frontendCurrentRow);
+	unsigned int currentOptionStringWidth = FontGetProportionalStringWidth((char*)currentOptionString);
+	unsigned int charXRight = 16 + 1 + (currentOptionStringWidth / 8) + 1;
+
+	unsigned char charY = 3 + (_frontendCurrentRow * 2);
+	if (!eraseArrows && _frontendFrameCount % 16 < 8)
 	{
 		if (FrontendConfigurationCurrentRowCanMoveLeft())
 		{
-			FontDrawCharsNullTerminated("<", 16, charY);
+			FontDrawCharsNullTerminated("<", kCharXLeft, charY);
 		}
 		if (FrontendConfigurationCurrentRowCanMoveRight())
 		{
-			FontDrawCharsNullTerminated(">", 31, charY);
+			FontDrawCharsNullTerminated(">", charXRight, charY);
 		}
 	}
 	else
 	{
-		FontDrawCharsNullTerminated(" ", 16, charY);
-		FontDrawCharsNullTerminated(" ", 31, charY);
+		FontDrawCharsNullTerminated(" ", kCharXLeft, charY);
+		FontDrawCharsNullTerminated(" ", charXRight, charY);
 	}
 }
 
