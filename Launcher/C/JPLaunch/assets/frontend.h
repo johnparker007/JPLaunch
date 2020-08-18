@@ -76,11 +76,15 @@ unsigned char _frontendSearchInputString[kFrontendSearchInputStringMaximumLength
 unsigned char _frontendSearchInputStringLength;
 unsigned char _frontendSearchCursorPosition;
 
+
+
+
 void FrontendInitialise();
 void FrontendInitialiseScreen();
 void FrontendPaintTopRowAttributes();
 void FrontendPaintNirvanaRowsAttributes(_Bool includeScrollbar, unsigned char rowCount);
 void FrontendInitialiseAttributeValues();
+void FrontendInitialiseConfigurationOptionRowStringWidths();
 
 void FrontendUpdate();
 

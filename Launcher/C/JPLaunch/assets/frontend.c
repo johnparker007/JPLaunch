@@ -78,6 +78,16 @@
 #define kConfigurationMenuOptionBack				(7)
 #define kConfigurationMenuOptionCount				(8)
 
+const unsigned int kConfigurationRowOptionCounts[] = 
+{ 
+	DefaultViewModeCount,
+	1,
+	InputAccelerationModeCount,
+	KeyboardTypeCount,
+	JoystickTypeCount,
+	ScreensaverTypeCount,
+	ScreensaverDelayTypeCount
+};
 
 const char * kConfigurationRowOptionTextRow0[DefaultViewModeCount] = { "Full screen list", "Mini-list and image" };
 const char * kConfigurationRowOptionTextRow1[1] = { "" };
@@ -98,7 +108,26 @@ const char ** kConfigurationRowOptionText[kConfigurationMenuOptionCount - 1] =
 	kConfigurationRowOptionTextRow6,
 };
 
-		
+// can't declare this at runtime with malloc, as heap is disabled (#pragma output CLIB_MALLOC_HEAP_SIZE = 0)
+const int kConfigurationRowOptionTextRowStringWidths0[DefaultViewModeCount] = { 0, 0 };
+const int kConfigurationRowOptionTextRowStringWidths1[1] = { 0 };
+const int kConfigurationRowOptionTextRowStringWidths2[InputAccelerationModeCount] = { 0, 0, 0, 0 };
+const int kConfigurationRowOptionTextRowStringWidths3[KeyboardTypeCount] = { 0, 0 };
+const int kConfigurationRowOptionTextRowStringWidths4[JoystickTypeCount] = { 0, 0, 0, 0 };
+const int kConfigurationRowOptionTextRowStringWidths5[ScreensaverTypeCount] = { 0, 0 };
+const int kConfigurationRowOptionTextRowStringWidths6[ScreensaverDelayTypeCount] = { 0, 0, 0, 0 };
+
+int* _configurationRowOptionStringWidths[kConfigurationMenuOptionCount - 1] =
+{
+	kConfigurationRowOptionTextRowStringWidths0,
+	kConfigurationRowOptionTextRowStringWidths1,
+	kConfigurationRowOptionTextRowStringWidths2,
+	kConfigurationRowOptionTextRowStringWidths3,
+	kConfigurationRowOptionTextRowStringWidths4,
+	kConfigurationRowOptionTextRowStringWidths5,
+	kConfigurationRowOptionTextRowStringWidths6,
+};
+
 void * _basicTapFilenameAddress = (void *)(0x5cf7); // in use
 void * _basicSnaZ80IndexAddress = (void *)(0x5d4e); // in use 
 
@@ -116,6 +145,7 @@ unsigned char *_listPageFileIndexAddressLowByte;
 
 unsigned char *_listPageFileFormatAddress;
 
+
 void FrontendInitialise()
 {
 	_frontendCurrentRow = 0;
@@ -126,6 +156,8 @@ void FrontendInitialise()
 	FontInitialise();
 
 	FrontendInitialiseAttributeValues();
+	FrontendInitialiseConfigurationOptionRowStringWidths();
+
 	FrontendInitialiseScreen();
 
 	FrontendLoadGameListScreen();
@@ -189,6 +221,18 @@ void FrontendInitialiseAttributeValues()
 	_frontendMenuSelectedAttributeStartIndex = 0;
 }
 
+void FrontendInitialiseConfigurationOptionRowStringWidths()
+{
+	for (int optionRow = 0; optionRow < kConfigurationMenuOptionCount - 1; ++optionRow)
+	{
+		for (int stringIndex = 0; stringIndex < kConfigurationRowOptionCounts[optionRow]; ++stringIndex)
+		{
+			_configurationRowOptionStringWidths[optionRow][stringIndex] =
+				FontGetProportionalStringWidth((char*)kConfigurationRowOptionText[optionRow][stringIndex]);
+		}
+	}
+}
+
 void FrontendInitialiseScreen()
 {
 	// clear top third screen to cover up leftovers from loading in top bar 
@@ -243,10 +287,10 @@ void FrontendUpdate()
 		return;
 	}
 
-	if (_frontendLauncherState != kLauncherStateScreensaver
-		&& _configurationData.ScreensaverType != ScreensaverTypeDisabled)
+	if (_frontendLauncherState != kLauncherStateScreensaver)
 	{
-		if (_inputFramesSinceInputCount > ScreensaverGetIdleFramesBeforeShow())
+		if (_inputFramesSinceInputCount > ScreensaverGetIdleFramesBeforeShow() 
+			&& _configurationData.ScreensaverType != ScreensaverTypeDisabled) // do this check second to get consistent frontend framerate whether screensave enabled/disabled
 		{
 			_frontendLauncherState = kLauncherStateScreensaver;
 			ScreensaverInitialise();
@@ -1731,9 +1775,9 @@ void FrontendConfigurationMenuDrawArrows(_Bool eraseArrows)
 
 	const unsigned int kCharXLeft = 16;
 
-	// TOIMPROVE: precalc these at app startup to a ragged array to match the strings ragged array
-	const char * currentOptionString = FrontEndConfigurationMenuGetString(_frontendCurrentRow);
-	unsigned int currentOptionStringWidth = FontGetProportionalStringWidth((char*)currentOptionString);
+	unsigned int currentOptionStringWidth =
+		_configurationRowOptionStringWidths[_frontendCurrentRow][FrontendConfigurationGetRowOptionIndex(_frontendCurrentRow)];
+
 	unsigned int charXRight = 16 + 1 + (currentOptionStringWidth / 8) + 1;
 
 	unsigned char charY = 3 + (_frontendCurrentRow * 2);
