@@ -552,7 +552,7 @@ public class Install : MonoBehaviour
     {
         SpectrumScreenTexture2D.SetPixels(_blankScreen);
 
-        FontDrawCharacters("JPLaunch v" + Application.version, 1, 0);
+        FontDrawCharacters("JPLaunch", 1, 0);
         FontDrawRainbowStripesUDGs();
 
         FontDrawCharactersCentred("Run NMI.SYS", 3 * kSpectrumCharSize);
@@ -634,12 +634,16 @@ public class Install : MonoBehaviour
         FontDrawCharacters("About", 1, 0);
         FontDrawRainbowStripesUDGs();
 
-        //FontDrawCharactersCentred("Run NMI.SYS", 3 * kSpectrumCharSize);
-        //FontDrawCharactersCentred("Reset to BASIC", 5 * kSpectrumCharSize);
-        //FontDrawCharactersCentred("Configuration", 7 * kSpectrumCharSize);
-        //FontDrawCharactersCentred("Help", 9 * kSpectrumCharSize);
-        //FontDrawCharactersCentred("About", 11 * kSpectrumCharSize);
-        //FontDrawCharactersCentred("Back", 13 * kSpectrumCharSize);
+        FontDrawCharactersCentred("JPLaunch v" + Application.version, 3 * kSpectrumCharSize);
+        FontDrawCharactersCentred("Developed by John Parker", 6 * kSpectrumCharSize);
+        FontDrawCharactersCentred("Special thanks to:", 9 * kSpectrumCharSize);
+        FontDrawCharactersCentred("Cheveron Group for proportional font, ESXDOS help", 11 * kSpectrumCharSize);
+        FontDrawCharactersCentred("Einar Saukas for Nirvana engine, proportional font renderer", 12 * kSpectrumCharSize);
+        FontDrawCharactersCentred("The z88dk team", 13 * kSpectrumCharSize);
+        FontDrawCharactersCentred("TODO Beta testers: ............", 14 * kSpectrumCharSize);
+        FontDrawCharactersCentred("https://github.com/johnparker007/JPLaunch", 17 * kSpectrumCharSize);
+
+        FontDrawCharactersCentred("*** PRESS ANY KEY ***", 23 * kSpectrumCharSize);
 
         SpectrumScreenTexture2D.Apply(false);
 
