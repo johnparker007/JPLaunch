@@ -62,10 +62,13 @@
 #define kSearchWindowPixelDataReadAddress (48952)
 #define kSearchWindowPixelDataWriteAddress (16384 + 2048)
 
-#define kExitMenuOptionNMI		(0)
-#define kExitMenuOptionReset	(1)
-#define kExitMenuOptionBack		(2)
-#define kExitMenuOptionCount	(3)
+#define kExitMenuOptionNMI				(0)
+#define kExitMenuOptionReset			(1)
+#define kExitMenuOptionConfiguration	(2)
+#define kExitMenuOptionHelp				(3)
+#define kExitMenuOptionAbout			(4)
+#define kExitMenuOptionBack				(5)
+#define kExitMenuOptionCount			(6)
 
 #define kConfigurationMenuOptionDefaultView			(0)
 #define kConfigurationMenuOptionNMISYSStartupPath	(1)
@@ -985,6 +988,17 @@ void FrontendProcessInputExitMenuSelect()
 		__asm
 		call 0;
 		__endasm;
+		break;
+	case kExitMenuOptionConfiguration:
+		NIRVANAP_stop();
+		FrontendDrawCurrentRowUnselectedNoScrollBar();
+		FrontendProcessInputListConfiguration();
+		break;
+	case kExitMenuOptionHelp:
+		// TODO
+		break;
+	case kExitMenuOptionAbout:
+		// TODO
 		break;
 	case kExitMenuOptionBack:
 		FrontendProcessInputMenuBack();

@@ -550,12 +550,15 @@ public class Install : MonoBehaviour
     {
         SpectrumScreenTexture2D.SetPixels(_blankScreen);
 
-        FontDrawCharacters("Exit", 1, 0);
+        FontDrawCharacters("JPLaunch", 1, 0);
         FontDrawRainbowStripesUDGs();
 
         FontDrawCharactersCentred("Run NMI.SYS", 3 * kSpectrumCharSize);
         FontDrawCharactersCentred("Reset to BASIC", 5 * kSpectrumCharSize);
-        FontDrawCharactersCentred("Back", 7 * kSpectrumCharSize);
+        FontDrawCharactersCentred("Configuration", 7 * kSpectrumCharSize);
+        FontDrawCharactersCentred("Help", 9 * kSpectrumCharSize);
+        FontDrawCharactersCentred("About", 11 * kSpectrumCharSize);
+        FontDrawCharactersCentred("Back", 13 * kSpectrumCharSize);
 
         SpectrumScreenTexture2D.Apply(false);
 
