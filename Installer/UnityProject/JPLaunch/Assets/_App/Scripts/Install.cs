@@ -544,13 +544,15 @@ public class Install : MonoBehaviour
     {
         GenerateSystemMenuExit();
         GenerateSystemMenuConfiguration();
+        GenerateSystemMenuHelp();
+        GenerateSystemMenuAbout();
     }
 
     private void GenerateSystemMenuExit()
     {
         SpectrumScreenTexture2D.SetPixels(_blankScreen);
 
-        FontDrawCharacters("JPLaunch", 1, 0);
+        FontDrawCharacters("JPLaunch v" + Application.version, 1, 0);
         FontDrawRainbowStripesUDGs();
 
         FontDrawCharactersCentred("Run NMI.SYS", 3 * kSpectrumCharSize);
@@ -595,6 +597,58 @@ public class Install : MonoBehaviour
             _installer.OutputFolder + "/"
             + kGraphicsFolder + "/"
             + "config";
+
+        SDFileManager.WriteAllBytesAsync(filename, screenMemory);
+    }
+
+    private void GenerateSystemMenuHelp()
+    {
+        SpectrumScreenTexture2D.SetPixels(_blankScreen);
+
+        FontDrawCharacters("Help", 1, 0);
+        FontDrawRainbowStripesUDGs();
+
+        //FontDrawCharactersCentred("Run NMI.SYS", 3 * kSpectrumCharSize);
+        //FontDrawCharactersCentred("Reset to BASIC", 5 * kSpectrumCharSize);
+        //FontDrawCharactersCentred("Configuration", 7 * kSpectrumCharSize);
+        //FontDrawCharactersCentred("Help", 9 * kSpectrumCharSize);
+        //FontDrawCharactersCentred("About", 11 * kSpectrumCharSize);
+        //FontDrawCharactersCentred("Back", 13 * kSpectrumCharSize);
+
+        SpectrumScreenTexture2D.Apply(false);
+
+        byte[] screenMemory = GetByteArrayFromScreenTexture(kRowsPerPageFull);
+
+        string filename =
+            _installer.OutputFolder + "/"
+            + kGraphicsFolder + "/"
+            + "help";
+
+        SDFileManager.WriteAllBytesAsync(filename, screenMemory);
+    }
+
+    private void GenerateSystemMenuAbout()
+    {
+        SpectrumScreenTexture2D.SetPixels(_blankScreen);
+
+        FontDrawCharacters("About", 1, 0);
+        FontDrawRainbowStripesUDGs();
+
+        //FontDrawCharactersCentred("Run NMI.SYS", 3 * kSpectrumCharSize);
+        //FontDrawCharactersCentred("Reset to BASIC", 5 * kSpectrumCharSize);
+        //FontDrawCharactersCentred("Configuration", 7 * kSpectrumCharSize);
+        //FontDrawCharactersCentred("Help", 9 * kSpectrumCharSize);
+        //FontDrawCharactersCentred("About", 11 * kSpectrumCharSize);
+        //FontDrawCharactersCentred("Back", 13 * kSpectrumCharSize);
+
+        SpectrumScreenTexture2D.Apply(false);
+
+        byte[] screenMemory = GetByteArrayFromScreenTexture(kRowsPerPageFull);
+
+        string filename =
+            _installer.OutputFolder + "/"
+            + kGraphicsFolder + "/"
+            + "about";
 
         SDFileManager.WriteAllBytesAsync(filename, screenMemory);
     }

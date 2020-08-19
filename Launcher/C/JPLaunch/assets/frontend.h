@@ -30,7 +30,9 @@
 #define kLauncherStateShowLoadingScreenFull (6)
 #define kLauncherStateExitMenu (7)
 #define kLauncherStateConfigurationMenu (8)
-#define kLauncherStateScreensaver (9)
+#define kLauncherStateHelpScreen (9)
+#define kLauncherStateAboutScreen (10)
+#define kLauncherStateScreensaver (11)
 
 
 unsigned char _frontendFrameCount;
@@ -128,6 +130,8 @@ void FrontendProcessInputConfigurationMenuRight();
 void FrontendProcessInputConfigurationMenuSelect();
 void FrontendProcessInputConfigurationMenuBack();
 
+void FrontendUpdateProcessInputInfoScreen();
+
 unsigned int FrontendGetCurrentListPageCount();
 unsigned char FrontendGetCurrentPageRowCount();
 void FrontendSetCurrentPageRowCount(int value);
@@ -160,8 +164,7 @@ void FrontendShowLoadingScreenFile(_Bool partial);
 unsigned char FrontendGetFileFormat(unsigned char rowIndex);
 void FrontendLoadGameListScreen();
 void FrontendLoadSearchListScreen();
-void FrontendLoadExitMenuScreen();
-void FrontendLoadConfigurationMenuScreen();
+void FrontendLoadScreen(const char* screenPath);
 
 void FrontEndConfigurationMenuDrawRows();
 void FrontEndConfigurationMenuDrawRow(unsigned char rowIndex);

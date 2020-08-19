@@ -341,6 +341,10 @@ void FrontendUpdate()
 		FrontendConfigurationMenuDrawArrows(FALSE); 
 		FrontendUpdateProcessInputConfigurationMenu();
 		break;
+	case kLauncherStateHelpScreen:
+	case kLauncherStateAboutScreen:
+		FrontendUpdateProcessInputInfoScreen();
+		break;
 	case kLauncherStateScreensaver:
 		ScreensaverUpdate();
 		break;
@@ -616,7 +620,7 @@ void FrontendProcessInputGameListBack()
 	FrontendDrawCurrentRowSelectedNoScrollBar();
 
 	_frontendLauncherState = kLauncherStateExitMenu;
-	FrontendLoadExitMenuScreen();
+	FrontendLoadScreen("../graphics/exit");
 
 	_inputWaitForNoInput = TRUE;
 }
@@ -640,7 +644,7 @@ void FrontendProcessInputListConfiguration()
 	FrontendDrawCurrentRowSelectedNoScrollBar();
 
 	_frontendLauncherState = kLauncherStateConfigurationMenu;
-	FrontendLoadConfigurationMenuScreen();
+	FrontendLoadScreen("../graphics/config");
 	FrontEndConfigurationMenuDrawRows();
 
 	_inputWaitForNoInput = TRUE;
@@ -995,10 +999,18 @@ void FrontendProcessInputExitMenuSelect()
 		FrontendProcessInputListConfiguration();
 		break;
 	case kExitMenuOptionHelp:
-		// TODO
+		NIRVANAP_stop();
+		FrontendDrawCurrentRowUnselectedNoScrollBar();
+		_frontendLauncherState = kLauncherStateHelpScreen;
+		FrontendLoadScreen("../graphics/help");
+		_inputWaitForNoInput = TRUE;
 		break;
 	case kExitMenuOptionAbout:
-		// TODO
+		NIRVANAP_stop();
+		FrontendDrawCurrentRowUnselectedNoScrollBar();
+		_frontendLauncherState = kLauncherStateAboutScreen;
+		FrontendLoadScreen("../graphics/about");
+		_inputWaitForNoInput = TRUE;
 		break;
 	case kExitMenuOptionBack:
 		FrontendProcessInputMenuBack();
@@ -1069,11 +1081,13 @@ void FrontendProcessInputConfigurationMenuSelect()
 
 void FrontendProcessInputConfigurationMenuBack()
 {
-	// TODO save config
-
 	FrontendProcessInputMenuBack();
 }
 
+void FrontendUpdateProcessInputInfoScreen()
+{
+	FrontendUpdateProcessInputLoadingScreenFull(); // temp solution to await keypress in shared function
+}
 
 // TOIMPROVE - check if these [0] are necessary, or if there's a cleaner way
 unsigned int FrontendGetCurrentListPageCount()
@@ -1707,26 +1721,13 @@ void FrontendLoadSearchListScreen()
 	_nirvanaRestartNextUpdate = TRUE;
 }
 
-void FrontendLoadExitMenuScreen()
+void FrontendLoadScreen(const char * screenPath)
 {
 #ifdef kDebugFakeLoadDelayForEmulator
 	IOFakeScreenLoadDelay();
 #endif
 
-	const char * kExitMenuScreenPath = "../graphics/exit";
-	IOLoadBytes(kExitMenuScreenPath, kFrontendBasicDataPageLength, 16384);
-
-	NIRVANAP_start();
-}
-
-void FrontendLoadConfigurationMenuScreen()
-{
-#ifdef kDebugFakeLoadDelayForEmulator
-	IOFakeScreenLoadDelay();
-#endif
-
-	const char * kConfigurationMenuScreenPath = "../graphics/config";
-	IOLoadBytes(kConfigurationMenuScreenPath, kFrontendBasicDataPageLength, 16384);
+	IOLoadBytes(screenPath, kFrontendBasicDataPageLength, 16384);
 
 	NIRVANAP_start();
 }
